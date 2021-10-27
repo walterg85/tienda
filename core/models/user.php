@@ -8,9 +8,9 @@
 			$pdo = new Conexion();
 			$cmd = '
 				INSERT INTO user
-					(owner, email, password, type, register_date, oauth_provider, roles, active)
+					(owner, email, password, type, register_date, oauth_provider, active)
 				VALUES
-					(:owner, :email, :password, :type, now(), "system", 1, 1)
+					(:owner, :email, :password, :type, now(), "system", 1)
 			';
 
 			$parametros = array(
@@ -32,10 +32,10 @@
 
 		public function login($uname) {
 			$pdo = new Conexion();
-			$cmd = 'SELECT id, name, last_name, email, password FROM user WHERE email =:email AND active = 1';
+			$cmd = 'SELECT id, email, password, type FROM user WHERE owner =:uname AND active = 1';
 
 			$parametros = array(
-				':email' => $email
+				':uname' => $uname
 			);
 
 			$sql = $pdo->prepare($cmd);
