@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 26-10-2021 a las 23:18:40
+-- Tiempo de generación: 27-10-2021 a las 00:04:57
 -- Versión del servidor: 8.0.17
 -- Versión de PHP: 7.3.10
 
@@ -105,16 +105,16 @@ CREATE TABLE `setting` (
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
-  `owner` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',
-  `email` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',
-  `password` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',
-  `type` int(11) NOT NULL DEFAULT '0',
-  `register_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `oauth_provider` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',
+  `owner` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `email` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `password` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `register_date` datetime DEFAULT NULL,
+  `oauth_provider` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `roles` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `token` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',
-  `current_session` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
-  `active` int(11) NOT NULL DEFAULT '0'
+  `token` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `current_session` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `active` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Catalogo de usuarios de sistema' ROW_FORMAT=DYNAMIC;
 
 --
@@ -149,8 +149,7 @@ ALTER TABLE `setting`
 -- Indices de la tabla `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`) USING BTREE,
-  ADD UNIQUE KEY `email` (`email`) USING BTREE;
+  ADD PRIMARY KEY (`id`) USING BTREE;
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
