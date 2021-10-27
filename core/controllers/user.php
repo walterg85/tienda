@@ -15,7 +15,7 @@
 			$data = array(
 				'owner' => 'admin',
 				'email' => '',
-				'password' => encriptPass('12345'),
+				'password' => encryptPass('12345'),
 				'type' => 1
 			);
 			$tmpResponse	= $userModel->createUser($data);
@@ -82,7 +82,7 @@
 		}
 	}
 
-	function encriptPass($strPassword) {
+	function encryptPass($strPassword) {
 		$options = [
 		    'cost' => 12
 		];
