@@ -37,6 +37,13 @@
                 font-size: 3.5rem;
             }
         }
+
+        hr {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            border: 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -74,7 +81,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
+                            <a class="nav-link" href="settings.php">
                                 <i class="bi bi-sliders"></i> Settings
                             </a>
                         </li>
