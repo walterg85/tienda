@@ -22,7 +22,52 @@
 			header("Content-Type: application/json; charset=UTF-8");
 			
 			exit(json_encode($response));
+		} else if($vars['_method'] == 'updateData'){
+			$settingsModel = new Settingsmodel();
+
+			$newPassword = ($vars['password'] == '') ? '' : encryptPass($vars['password']);
+
+			$usData = array(
+				'owner' => $vars['owner'],
+				'email' => $vars['email'],
+				'password' => $newPassword
+			);
+
+			$setData = array(
+				'shipingCost' => $vars['shipingCost'],
+				'shipingFree' => $vars['shipingFree']
+			);
+
+			$tmpResponse = $settingsModel->updateData($usData, $setData);
+
+			if($tmpResponse){
+				$response = array(
+					'codeResponse' => 200,
+					'message' => 'Updated information.'
+				);
+
+				$_SESSION['authData']->isDefault = (password_verify('12345', $tmpResponse->password)) ? 1 : 0;
+				$_SESSION['authData']->email = $vars['email'];
+			}else{
+				$response = array(
+					'codeResponse' => 0,
+					'message' => 'Outdated information'
+				);
+			}
+
+			header('HTTP/1.1 200 Ok');
+			header("Content-Type: application/json; charset=UTF-8");
+			
+			exit(json_encode($response));
 		}
+	}
+
+	function encryptPass($strPassword) {
+		$options = [
+		    'cost' => 12
+		];
+
+		return password_hash($strPassword, PASSWORD_BCRYPT, $options);
 	}
 
 	header('HTTP/1.1 400 Bad Request');
