@@ -1,3 +1,9 @@
+<?php
+    session_start();
+    if (!isset($_SESSION['isLoged']))
+        header("Location: login.html");
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
