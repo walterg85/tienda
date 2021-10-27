@@ -35,6 +35,7 @@
 
 					$_SESSION['isLoged'] = TRUE;
 					$_SESSION['authData'] = $tmpResponse;
+					$_SESSION['authData']->isDefault = 0;
 
 					if($vars['password'] == '12345')
 						$_SESSION['authData']->isDefault = 1;

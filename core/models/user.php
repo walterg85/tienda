@@ -61,7 +61,7 @@
 
 		public function login($uname) {
 			$pdo = new Conexion();
-			$cmd = 'SELECT id, email, password, type FROM user WHERE owner =:uname AND active = 1';
+			$cmd = 'SELECT id, email, password, type, owner FROM user WHERE owner =:uname AND active = 1';
 
 			$parametros = array(
 				':uname' => $uname

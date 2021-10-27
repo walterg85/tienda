@@ -7,19 +7,19 @@
     <h1 class="h2">Settings</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Save changes</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnUpdateData"><i class="bi bi-check2"></i> Save changes</button>
         </div>
     </div>
 </div>
 
 <div class="row g-3">
     <div class="col-3">
-        <label for="inputCost" class="form-label">Shipping Cost</label>
-        <input type="text" class="form-control shipingCost" placeholder="Shipping Cost" aria-label="Shipping Cost" id="inputCost">
+        <label for="inputshipingCost" class="form-label">Shipping Cost</label>
+        <input type="text" class="form-control" placeholder="Shipping Cost" aria-label="Shipping Cost" id="inputshipingCost">
     </div>
     <div class="col-3">
-        <label for="inputFree" class="form-label">Free Shipping</label>
-        <input type="text" class="form-control shipingFree" placeholder="Free Shipping" aria-label="Free Shipping" id="inputFree">
+        <label for="inputshipingFree" class="form-label">Free Shipping</label>
+        <input type="text" class="form-control" placeholder="Free Shipping" aria-label="Free Shipping" id="inputshipingFree">
     </div>
 </div>
 
@@ -28,11 +28,11 @@
 <div class="row g-3">
     <div class="col-3">
         <label for="inputUname" class="form-label">User name</label>
-        <input type="text" class="form-control" placeholder="User name" aria-label="User name" id="inputUname" readonly>
+        <input type="text" class="form-control" placeholder="User name" aria-label="User name" id="inputUname" readonly value="<?php echo $_SESSION['authData']->owner; ?>">
     </div>
     <div class="col-4">
         <label for="inputMail" class="form-label">Email</label>
-        <input type="mail" class="form-control" placeholder="Enter a email" aria-label="Enter a email" id="inputMail">
+        <input type="mail" class="form-control" placeholder="Enter a email" aria-label="Enter a email" id="inputMail" value="<?php echo $_SESSION['authData']->email; ?>">
     </div>
     <div class="col-3">
         <label for="inputPass" class="form-label">Change Password</label>
@@ -44,6 +44,8 @@
     $(document).ready(function(){
         currentPage = "Settings";
 
+        $("#btnUpdateData").click( fnUpdateData);
+
         //listar Valores de configuracion
         fnGetconfig();
     });
@@ -54,8 +56,31 @@
         };
         $.post("../core/controllers/setting.php", objData, function(result) {
              $.each( result.data, function( index, item){
-                $(`.${item.parameter}`).val(item.value);
+                $(`#input${item.parameter}`).val(item.value);
              });
+        });
+    }
+
+    function fnUpdateData(){
+        $("#btnUpdateData").attr("disabled","disabled");
+        $("#btnUpdateData").html('<i class="bi bi-clock-history"></i> Updating');
+
+        let objData = {
+            "_method":"updateData",
+            "shipingCost": $("#inputshipingCost").val(),
+            "shipingFree": $("#inputshipingFree").val(),
+            "owner": $("#inputUname").val(),
+            "email": $("#inputMail").val(),
+            "password": $("#inputPass").val()
+
+        };
+
+        $.post("../core/controllers/setting.php", objData, function(result) {
+            alert(result.message);
+            isNew = <?php echo $_SESSION['authData']->isDefault; ?>;
+
+            $("#btnUpdateData").removeAttr("disabled");
+            $("#btnUpdateData").html('<i class="bi bi-check2"></i> Save changes');
         });
     }
 </script>
