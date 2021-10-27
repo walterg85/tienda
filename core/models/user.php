@@ -4,6 +4,35 @@
 	        require_once '../dbConnection.php';
 	    }
 
+	    public function initDefault($usData, $setData){
+	    	$pdo = new Conexion();
+
+	    	$cmd = '
+	    		DELETE FROM user WHERE owner = "admin";
+	    		DELETE FROM setting WHERE parameter in("shipingCost", "shipingFree");
+	    	';
+
+	    	$sql = $pdo->prepare($cmd);
+			$sql->execute();
+
+			$this->createUser($usData);
+
+			$cmd = '
+				INSERT INTO setting (parameter, value) 
+				VALUES ("shipingCost", :shipingCost), ("shipingFree", :shipingFree);
+	    	';
+
+			$parametros = array(
+				':shipingCost' => $setData['shipingCost'],
+				':shipingFree' => $setData['shipingFree']
+			);
+
+	    	$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+
+			return TRUE;
+	    }
+
 		public function createUser($userData) {
 			$pdo = new Conexion();
 			$cmd = '

@@ -81,7 +81,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="settings.php">
+                            <a class="nav-link" id="linkSetting" href="settings.php">
                                 <i class="bi bi-sliders"></i> Settings
                             </a>
                         </li>
@@ -100,5 +100,16 @@
     <!-- Datatables -->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+
+    <script type="text/javascript">
+        var isNew = <?php echo $_SESSION['authData']->isDefault; ?>,
+            currentPage = "";
+
+        $(document).ready(function(){
+            if(isNew == 1 && currentPage != "Settings")
+                document.getElementById("linkSetting").click();
+
+        });
+    </script>
 </body>
 </html>
