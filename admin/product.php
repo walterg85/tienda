@@ -13,7 +13,7 @@
     <h1 class="h2">Products</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasProduct"><i class="bi bi-plus-lg"></i> Add Product</button>
+            <button type="button" class="btn btn-outline-secondary btnPanel" data-bs-toggle="offcanvas" data-bs-target="#offcanvasProduct"><i class="bi bi-plus-lg"></i> Add Product</button>
         </div>
     </div>
 </div>
@@ -130,8 +130,8 @@
                 <input class="form-control" type="file" id="image4">
             </div>
 
-            <div class="d-grid gap-2 col-6 mx-auto my-5">
-                <button class="btn btn-success" type="button" id="addProduct">
+            <div class="d-grid gap-2 my-5">
+                <button class="btn btn-success btn-lg" type="button" id="addProduct">
                     <i class="bi bi-check2"></i> Save
                 </button>
             </div>
@@ -140,12 +140,22 @@
 </div>
 
 <script type="text/javascript">
-    var productPhotos   = [],
+    var productPhotos   = {},
         maxCroppedWidth = 420,
         maxCroppedHeight = 300,
         dataTableProduct = null;
 
     $(document).ready(function(){
+        $(".removePhoto").click( function(){
+            let datas = $(this).data();
+            $(`#${datas.control}`).parent().removeClass('d-none');
+            $(`.img${datas.pic}`).addClass('d-none');
+
+            productPhotos[datas.control] = null;
+        });
+
+        $("#addProduct").click( registerProduct);
+
         initComponent();
         loadCategories();
     });
@@ -161,6 +171,37 @@
                 optList += `<option value="${item.id}">${item.name}</option>`;
             });
             $(optList).appendTo("#inputCategory");
+        });
+    }
+
+    function registerProduct(){
+        let form = $("#addProductForm")[0],
+            formData = new FormData(form);
+
+        formData.append("_method", "POST");
+
+        $.each(productPhotos, function( index, value ) {
+            if(value)
+                formData.append("imagesproduct[]", value, `${index}.jpg`);
+        });
+
+        $.ajax({
+            url: '../core/controllers/product.php',
+            data: formData,
+            type: 'POST',
+            dataType: 'json',
+            success: function(response){
+
+                $("#addProductForm")[0].reset();
+                $("btnPanel").click();
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
         });
     }
 
@@ -346,7 +387,7 @@
                     .parent().removeClass('d-none');
 
                 canvas.toBlob(function (blob){
-                    teamPhoto = blob;
+                    productPhotos[curentInput.id] = blob;
                 });
             }
         });
