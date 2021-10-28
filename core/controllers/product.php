@@ -17,10 +17,7 @@
 				'inputDescription'		=> $vars['inputDescription'],
 				'inputDescriptionSp'	=> $vars['inputDescriptionSp'],
 				'inputPrice'			=> floatval($vars['inputPrice']),
-				'inputSalePrice'		=> floatval($vars['inputSalePrice']),
-				'inputUnit' 			=> $vars['inputUnit'],
-				'inputCategory' 		=> $vars['inputCategory'],
-				'productId' 			=> $vars['productId']
+				'inputSalePrice'		=> floatval($vars['inputSalePrice'])
 			);
 
 			$productModel = new Productmodel();
@@ -32,7 +29,7 @@
 				$productId = $tmpResponse[1];
 
 				if (!empty($_FILES['imagesproduct'])){
-					$folder   = "assets/img/products/{$productId}";
+					$folder   = "assets/img/product/{$productId}";
 					mkdir(dirname(__FILE__, 3) . "/{$folder}", 0777, true);
 
 					$imagesprod = $_FILES['imagesproduct'];
@@ -55,6 +52,8 @@
 						$productModel->updateThumbnails($productId, $images[0], json_encode($images, JSON_FORCE_OBJECT));
 				}
 
+				$productModel->insertCategory($productId, $vars['inputCategory']);
+
 				$response = array(
 					'codeResponse' => 200
 				);
@@ -63,6 +62,26 @@
 					'codeResponse' => 0
 				);
 			}
+
+			header('HTTP/1.1 200 Ok');
+			header("Content-Type: application/json; charset=UTF-8");
+			
+			exit(json_encode($response));
+		} else if($vars['_method'] == 'GET'){
+			$productModel 	= new Productmodel();
+			$productList 	= $productModel->getProduct();
+
+			if($productList){
+				foreach ($productList as $key => $value) {
+					$productList[$key]['categoria'] = $productModel->getCategories($value['id']);
+				}
+			}
+
+			$response = array(
+				'codeResponse' => 200,
+				'data' => $productList,
+				'message' => 'Ok'
+			);
 
 			header('HTTP/1.1 200 Ok');
 			header("Content-Type: application/json; charset=UTF-8");
