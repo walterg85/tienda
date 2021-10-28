@@ -8,7 +8,7 @@
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="input-group me-2">
             <input type="text" class="form-control" placeholder="Category name" aria-label="Category name" aria-describedby="btnAddCategory" id="inputName" autocomplete="off">
-            <button class="btn btn-outline-secondary" type="button" id="btnAddCategory"><i class="bi bi-check2"></i> Add Category</button>
+            <button class="btn btn-outline-secondary" type="button" id="btnAddCategory"><i class="bi bi-plus-lg"></i> Add Category</button>
         </div>
     </div>
 </div>
@@ -38,7 +38,7 @@
 
         $.post("../core/controllers/category.php", objData, function(result) {
             $("#btnAddCategory").removeAttr("disabled");
-            $("#btnAddCategory").html('<i class="bi bi-check2"></i> Add Category');
+            $("#btnAddCategory").html('<i class="bi bi-plus-lg"></i> Add Category');
 
             $("#inputName").val("");
 
