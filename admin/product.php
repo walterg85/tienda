@@ -79,41 +79,90 @@
                 </div>
                 <div class="col-6 mb-3">
                     <label for="inputCategory" class="form-label">Category</label>
-                    <select class="form-select" id="inputCategory" name="inputCategory">
-                        <option value="0" selected>Select Category</option>
-                    </select>
+                    <select class="form-select" id="inputCategory" name="inputCategory"></select>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-3 d-none img1"><img src="#" class="img-thumbnail" alt="Product image" id="img1"></div>
-                <div class="col-3 d-none img2"><img src="#" class="img-thumbnail" alt="Product image" id="img2"></div>
-                <div class="col-3 d-none img3"><img src="#" class="img-thumbnail" alt="Product image" id="img3"></div>
-                <div class="col-3 d-none img4"><img src="#" class="img-thumbnail" alt="Product image" id="img4"></div>
+            <div class="row mb-3">
+                <div class="col-3 d-none img1">
+                    <img src="#" class="img-thumbnail" alt="Product image" id="img1">
+                    <span class="top-0 start-100 badge rounded-pill bg-danger removePhoto" data-control="image1" data-pic="1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                </div>
+                <div class="col-3 d-none img2">
+                    <img src="#" class="img-thumbnail" alt="Product image" id="img2">
+                    <span class="top-0 start-100 badge rounded-pill bg-danger removePhoto" data-control="image2" data-pic="2">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                </div>
+                <div class="col-3 d-none img3">
+                    <img src="#" class="img-thumbnail" alt="Product image" id="img3">
+                    <span class="top-0 start-100 badge rounded-pill bg-danger removePhoto" data-control="image3" data-pic="3">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                </div>
+                <div class="col-3 d-none img4">
+                    <img src="#" class="img-thumbnail" alt="Product image" id="img4">
+                    <span class="top-0 start-100 badge rounded-pill bg-danger removePhoto" data-control="image4" data-pic="4">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                </div>
             </div>
-
 
             <div class="mb-3">
                 <label for="image1" class="form-label">Add Image</label>
-                <input class="form-control" type="file" id="image1" name="image1">
+                <input class="form-control" type="file" id="image1">
             </div>
-            <div class="d-grid gap-2">
-                <button type="button" name="addProduct" class="btn btn-success">Save</button>
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+            <div class="mb-3">
+                <label for="image2" class="form-label">Add Image</label>
+                <input class="form-control" type="file" id="image2">
+            </div>
+
+            <div class="mb-3">
+                <label for="image3" class="form-label">Add Image</label>
+                <input class="form-control" type="file" id="image3">
+            </div>
+
+            <div class="mb-3">
+                <label for="image4" class="form-label">Add Image</label>
+                <input class="form-control" type="file" id="image4">
+            </div>
+
+            <div class="d-grid gap-2 col-6 mx-auto my-5">
+                <button class="btn btn-success" type="button" id="addProduct">
+                    <i class="bi bi-check2"></i> Save
+                </button>
             </div>
         </form>
     </div>
 </div>
 
 <script type="text/javascript">
-    var teamPhoto   = null,
+    var productPhotos   = [],
         maxCroppedWidth = 420,
         maxCroppedHeight = 300,
         dataTableProduct = null;
 
     $(document).ready(function(){
         initComponent();
+        loadCategories();
     });
+
+    function loadCategories(){
+        let objData = {
+            "_method":"Get"
+        };
+
+        $.post("../core/controllers/category.php", objData, function(result) {
+            let optList = '<option value="0" selected>Select Category</option>';
+            $.each( result.data, function( index, item){
+                optList += `<option value="${item.id}">${item.name}</option>`;
+            });
+            $(optList).appendTo("#inputCategory");
+        });
+    }
 
     function initComponent() {
         // Controlar tipo de objeto que intentan subir
@@ -136,18 +185,109 @@
         // Image Cropper
         let picture = null,
             image       = $("#previewCrop")[0],
-            inputFile   = $("#image1")[0],
+            inputFile1   = $("#image1")[0],
+            inputFile2   = $("#image2")[0],
+            inputFile3   = $("#image3")[0],
+            inputFile4   = $("#image4")[0],
             $modal      = $('#modalCrop'),
-            cropper     = null;
+            cropper     = null,
+            curentInput = null; 
 
-        inputFile.addEventListener("change", function(e){
-            $(".img1").removeClass("d-none");
+        inputFile1.addEventListener("change", function(e){
             picture   = $("#img1");
             let files = e.target.files,
                 done  = function (url){
-                    inputFile.value = "";
+                    inputFile1.value = "";
                     image.src = url;
                     $modal.modal('show');
+                    curentInput = inputFile1;
+                },
+                reader,
+                file,
+                url;
+
+            if (files && files.length > 0){
+                file = files[0];
+
+                if (URL){
+                    done(URL.createObjectURL(file));
+                }
+                else if (FileReader){
+                    reader = new FileReader();
+                    reader.onload = function(e){
+                        done(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        inputFile2.addEventListener("change", function(e){
+            picture   = $("#img2");
+            let files = e.target.files,
+                done  = function (url){
+                    inputFile2.value = "";
+                    image.src = url;
+                    $modal.modal('show');
+                    curentInput = inputFile2;
+                },
+                reader,
+                file,
+                url;
+
+            if (files && files.length > 0){
+                file = files[0];
+
+                if (URL){
+                    done(URL.createObjectURL(file));
+                }
+                else if (FileReader){
+                    reader = new FileReader();
+                    reader.onload = function(e){
+                        done(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        inputFile3.addEventListener("change", function(e){
+            picture   = $("#img3");
+            let files = e.target.files,
+                done  = function (url){
+                    inputFile3.value = "";
+                    image.src = url;
+                    $modal.modal('show');
+                    curentInput = inputFile3;
+                },
+                reader,
+                file,
+                url;
+
+            if (files && files.length > 0){
+                file = files[0];
+
+                if (URL){
+                    done(URL.createObjectURL(file));
+                }
+                else if (FileReader){
+                    reader = new FileReader();
+                    reader.onload = function(e){
+                        done(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        inputFile4.addEventListener("change", function(e){
+            picture   = $("#img4");
+            let files = e.target.files,
+                done  = function (url){
+                    inputFile4.value = "";
+                    image.src = url;
+                    $modal.modal('show');
+                    curentInput = inputFile4;
                 },
                 reader,
                 file,
@@ -186,6 +326,8 @@
         });
 
         $("#cropImage").unbind().click( function(){
+            curentInput.parentNode.classList.add("d-none");
+
             let initialPhotoURL,
                 canvas;
 
@@ -200,7 +342,8 @@
                 initialPhotoURL = picture.attr("src");
                 picture
                     .attr("src", canvas.toDataURL())
-                    .removeClass("d-none");
+                    .removeClass("d-none")
+                    .parent().removeClass('d-none');
 
                 canvas.toBlob(function (blob){
                     teamPhoto = blob;
