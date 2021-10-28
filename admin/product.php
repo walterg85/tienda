@@ -156,8 +156,9 @@
 
         $("#addProduct").click( registerProduct);
 
-        initComponent();
+        getProducts();
         loadCategories();
+        initComponent();
     });
 
     function loadCategories(){
@@ -193,7 +194,14 @@
             success: function(response){
 
                 $("#addProductForm")[0].reset();
-                $("btnPanel").click();
+                $(".btnPanel").click();
+
+                productPhotos = {};
+
+                $(`#image1, #image2, #image3, #image4`).parent().removeClass('d-none');
+                $(`.img1, .img2, .img3, .img4`).addClass('d-none');
+
+                getProducts();
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -202,6 +210,105 @@
             cache: false,
             contentType: false,
             processData: false
+        });
+    }
+
+    function getProducts(){
+        let objData = {
+            "_method":"GET"
+        };
+
+        if (dataTableProduct != null)
+            dataTableProduct.destroy();
+
+        $.post("../core/controllers/product.php", objData, function(result) {
+            let mypaging =  false;
+
+            if( (result.data).length > 20 )
+                mypaging = true;
+
+            dataTableProduct = $("#productList").DataTable({
+                data: result.data,
+                order: [[ 0, "desc" ]],
+                columns:
+                [
+                    {
+                        data: 'id',
+                        title: '#',
+                        width: "20px",
+                        render: function(data, type, row) {
+                            return pad(data, 5);
+                        }
+                    },
+                    {
+                        title: 'thumbnails',
+                        data: 'thumbnail',
+                        orderable: false,
+                        class: "text-center",
+                        width: "100px",
+                        render: function ( data, type, row ) {
+                            return `
+                                <img src="../${data}" class="rounded" alt="Image product" width="100">
+                            `;
+                        }
+                    },
+                    {
+                        data: 'categoria',
+                        title: 'Category',
+                        render: function ( data, type, row ) {
+                            return data.name;
+                        }
+                    },
+                    {
+                        data: 'name',
+                        title: 'Name'
+                    },
+                    {
+                        data: 'descriptions',
+                        title: 'Descriptions'
+                    },
+                    {
+                        title: '',
+                        data: null,
+                        orderable: false,
+                        class: "text-center",
+                        render: function ( data, type, row ) {
+                            return `
+                                <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteProduct" title="Delete"><i class="bi bi-trash"></i></a>
+                            `;
+                        }
+                    }
+                ],
+                "fnDrawCallback":function(oSettings){
+                    $(".btnDeleteProduct").unbind().click(function(){
+                        let data = getData($(this), dataTableProduct),
+                            buton = $(this);
+
+                        if (confirm(`do you want to delete this product (${data.name})?`)){
+                            buton.attr("disabled","disabled");
+                            buton.html('<i class="bi bi-clock-history"></i>');
+
+                            let objData = {
+                                "_method":"Delete",
+                                "categoryId": data.id
+                            };
+
+                            $.post("../core/controllers/category.php", objData, function(result) {
+                                buton.removeAttr("disabled");
+                                buton.html('<i class="bi bi-trash"></i>');
+
+                                fnGetCategories();
+                            });
+
+                        }
+                    });
+                },
+                searching: false,
+                pageLength: 20,
+                info: false,
+                lengthChange: false,
+                paging: mypaging
+            });
         });
     }
 

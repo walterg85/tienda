@@ -6,27 +6,22 @@
 	        require_once '../dbConnection.php';
 	    }
 
-		public function register($data)
-		{
+		public function register($data) {
 			$pdo = new Conexion();
 			$cmd = '
 				INSERT INTO product
-						(sku, name, descriptions, price, discount, discount_available, unit, weight, dimensions, stock, create_date, active)
+						(name, descriptions, price, sale_price, optional_name, optional_description, create_date, active)
 				VALUES
-					(:sku, :name, :descriptions, :price, :discount, :discount_available, :unit, :weight, :dimensions, :stock, now(), 1)
+					(:name, :descriptions, :price, :sale_price, :optional_name, :optional_description, now(), 1)
 			';
 
 			$parametros = array(
-				':sku' 					=> $data['inputSku'],
 				':name' 				=> $data['inputName'],
 				':descriptions' 		=> $data['inputDescription'],
 				':price' 				=> $data['inputPrice'],
-				':discount' 			=> $data['inputDiscount'],
-				':discount_available'	=> $data['inputDiscountAvailable'],
-				':unit' 				=> $data['inputUnit'],
-				':weight' 				=> $data['inputWeight'],
-				':dimensions' 			=> $data['inputDimensions'],
-				':stock' 				=> $data['inputStock']
+				':sale_price' 			=> $data['inputSalePrice'],
+				':optional_name'		=> $data['inputNameSp'],
+				':optional_description' => $data['inputDescriptionSp']
 			);
 
 			try{
@@ -38,8 +33,7 @@
 		    }
 		}
 
-		public function updateThumbnails($productId, $thumbnails, $images)
-		{
+		public function updateThumbnails($productId, $thumbnails, $images) {
 			$pdo = new Conexion();
 			$cmd = 'UPDATE product SET thumbnail =:thumbnail, images =:images WHERE id =:productId';
 
@@ -53,5 +47,62 @@
 			$sql->execute($parametros);
 
 			return TRUE;
+		}
+
+		public function insertCategory($productId, $categoryId) {
+			$pdo = new Conexion();
+			$cmd = 'INSERT INTO  product_category (category_id, product_id) VALUES (:category_id, :product_id)';
+
+			$parametros = array(
+				':category_id' => $categoryId,
+				':product_id' => $productId
+			);
+
+			$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+
+			return TRUE;
+		}
+
+		public function getProduct() {
+			$pdo = new Conexion();
+
+			$cmd = '
+				SELECT
+					id, 
+					name,
+					optional_name,
+					descriptions, 
+					optional_description,
+					price,
+					sale_price, 
+					thumbnail, 
+					images, 
+					create_date
+				FROM 
+					product
+				WHERE active = 1
+			';
+
+			$sql = $pdo->prepare($cmd);
+			$sql->execute();
+
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+
+		public function getCategories($productId) {
+			$pdo = new Conexion();
+
+			$parametros = array(
+				':product_id' => $productId
+			);
+
+			$cmd = 'SELECT id, name FROM category WHERE id = ( select category_id from product_category where product_id =:product_id )';
+			
+			$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+			$sql->setFetchMode(PDO::FETCH_OBJ);
+
+			return $sql->fetch();
 		}
 	}
