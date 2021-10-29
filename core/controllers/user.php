@@ -24,7 +24,7 @@
 					unset($tmpResponse->password);
 
 					$headers = array('alg' => 'HS256', 'typ' => 'JWT');
-					$payload = array('username' => $vars['uanme'], 'exp' => (time() + 86400));
+					$payload = array('username' => $vars['uname'], 'exp' => (time() + 86400));
 					$tmpResponse->token = generate_jwt($headers, $payload);
 
 					$response = array(
