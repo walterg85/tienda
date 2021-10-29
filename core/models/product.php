@@ -105,4 +105,18 @@
 
 			return $sql->fetch();
 		}
+
+		public function deleteProduct($productId) {
+			$pdo 	= new Conexion();
+			$cmd 	= 'UPDATE product SET active = 0 WHERE id =:productId';
+
+			$parametros = array(
+				':productId' => $productId
+			);
+
+			$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+
+			return TRUE;
+		}
 	}

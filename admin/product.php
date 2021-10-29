@@ -62,11 +62,11 @@
             </div>
             <div class="mb-3">
                 <label for="inputDescription" class="form-label">Description</label>
-                <input type="text" in="inputDescription" name="inputDescription" class="form-control" autocomplete="off">
+                <input type="text" id="inputDescription" name="inputDescription" class="form-control" autocomplete="off">
             </div>
             <div class="mb-3">
                 <label for="inputDescriptionSp" class="form-label">Description Spanish</label>
-                <input type="text" in="inputDescriptionSp" name="inputDescriptionSp" class="form-control" autocomplete="off">
+                <input type="text" id="inputDescriptionSp" name="inputDescriptionSp" class="form-control" autocomplete="off">
             </div>
             <div class="row">
                 <div class="col-3 mb-3">
@@ -143,7 +143,12 @@
     var productPhotos   = {},
         maxCroppedWidth = 420,
         maxCroppedHeight = 300,
-        dataTableProduct = null;
+        dataTableProduct = null,
+        formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2
+        });
 
     $(document).ready(function(){
         $(".removePhoto").click( function(){
@@ -253,13 +258,6 @@
                         }
                     },
                     {
-                        data: 'categoria',
-                        title: 'Category',
-                        render: function ( data, type, row ) {
-                            return data.name;
-                        }
-                    },
-                    {
                         data: 'name',
                         title: 'Name'
                     },
@@ -268,12 +266,34 @@
                         title: 'Descriptions'
                     },
                     {
+                        data: 'categoria',
+                        title: 'Category',
+                        render: function ( data, type, row ) {
+                            return data.name;
+                        }
+                    },
+                    {
+                        data: 'price',
+                        title: 'Price',
+                        render: function (data, type, row) {
+                            return formatter.format(data);
+                        }
+                    },
+                    {
+                        data: 'sale_price',
+                        title: 'Sale price',
+                        render: function (data, type, row) {
+                            return formatter.format(data);
+                        }
+                    },
+                    {
                         title: '',
                         data: null,
                         orderable: false,
                         class: "text-center",
                         render: function ( data, type, row ) {
                             return `
+                                <a href="javascript:void(0);" class="btn btn-outline-secondary btnEditProduct me-2" title="Edit"><i class="bi bi-eye"></i></a>
                                 <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteProduct" title="Delete"><i class="bi bi-trash"></i></a>
                             `;
                         }
@@ -290,17 +310,42 @@
 
                             let objData = {
                                 "_method":"Delete",
-                                "categoryId": data.id
+                                "productId": data.id
                             };
 
-                            $.post("../core/controllers/category.php", objData, function(result) {
+                            $.post("../core/controllers/product.php", objData, function(result) {
                                 buton.removeAttr("disabled");
                                 buton.html('<i class="bi bi-trash"></i>');
 
-                                fnGetCategories();
+                                getProducts();
                             });
 
                         }
+                    });
+
+                    $(".btnEditProduct").unbind().click(function(){
+                        let data = getData($(this), dataTableProduct),
+                            buton = $(this),
+                            currentImages = JSON.parse(data.images);
+
+                        $("#inputName").val(data.name);
+                        $("#inputNameSp").val(data.optional_name);
+                        $("#inputDescription").val(data.descriptions);
+                        $("#inputDescriptionSp").val(data.optional_description);
+                        $("#inputPrice").val(data.price);
+                        $("#inputSalePrice").val(data.sale_price);
+                        $("#inputCategory").val(data.categoria.id);
+
+                        $.each( currentImages, function( index, item){
+                            let control = (item.split('/').pop()).substring(0,6),
+                                pic = control.substring(5,6);
+
+                            $(`.img${pic}`).removeClass('d-none');
+                            $(`#img${pic}`).attr("src", `../${item}`);
+                            $(`#${control}`).parent().addClass('d-none');
+                        });
+
+                        $(".btnPanel").click();
                     });
                 },
                 searching: false,
