@@ -15,6 +15,7 @@
     <div class="container">
         <h1>Welcome</h1>
         <a href="#">Español</a>
+        <a href="javascript:void(0);" class="ms-2" id="checkCart" data-bs-toggle="modal" data-bs-target="#mdlCheckCart">View cart <span class="badge bg-warning rounded-pill">0</span></a>
 
         <!-- Products -->
         <div class="text-center col-lg-3 col-md-4 col-6 my-3 itemClone d-none">
@@ -42,6 +43,34 @@
         <div class="row" id="ListProduct"></div>
     </div>
 
+    <!-- Modal para ver items agregados al carrito -->
+    <div class="modal fade" tabindex="-1" id="mdlCheckCart" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">My Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="list-group" id="cartListItem"></div>
+                    <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex gap-3 py-3 cartItemClone d-none" aria-current="true">
+                        <img src="#" alt="twbs" width="32" class="rounded-circle flex-shrink-0 prdImg">
+                        <div class="d-flex gap-2 w-100 justify-content-between">
+                            <div>
+                                <h6 class="mb-0 prodName">Womens Shoes</h6>
+                            </div>
+                            <small class="prodPrice">$55.99</small>
+                        </div>
+                    </a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Keep Shopping</button>
+                    <button type="button" class="btn btn-primary">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <!-- Jquery -->
@@ -64,7 +93,7 @@
                 "_method":"GET"
             };
 
-            $.post("core/controllers/product.php", objData, function(result) {                
+            $.post("core/controllers/product.php", objData, function(result) {
                 $.each( result.data, function( index, item){
                     let productCard = $(".itemClone").clone();
 
@@ -81,9 +110,44 @@
 
                     productCard.find(".card-img-top").attr("src", `${item.thumbnail}`);
 
+                    productCard.find(".btnAddtocart").data("item", item);
+
                     productCard.removeClass("d-none itemClone");
                     $(productCard).appendTo("#ListProduct");
                 });
+
+                $(".btnAddtocart").unbind().click(function(){
+                    let currentItem = $(this).data("item"),
+                        newItem = {},
+                        currentCart = [JSON.parse(localStorage.getItem("currentCart"))];
+
+                    console.log(currentCart);
+
+                    if(!currentCart){
+                        localStorage.setItem("currentCart", "[]");
+                        currentCart = [];
+                    }
+
+                    console.log(currentCart);
+
+                    newItem.id = currentItem.id;
+                    newItem.name = currentItem.name;
+                    newItem.descriptions = currentItem.descriptions;
+                    newItem.thumbnail = currentItem.thumbnail;
+
+                    if( (currentItem.sale_price).length > 0 && currentItem.sale_price > 0){
+                        newItem.price = currentItem.sale_price;
+                    }else{
+                        newItem.price = currentItem.price;
+                    }
+
+                    currentCart.push(newItem);
+                    localStorage.setItem("currentCart", JSON.stringify(newItem));
+                });
+            });
+
+            $("#mdlCheckCart").unbind().on('shown.bs.modal', function(){
+                console.log("32");
             });
         }
     </script>
