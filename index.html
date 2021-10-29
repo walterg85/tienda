@@ -109,7 +109,7 @@
                     }
 
                     productCard.find(".card-img-top").attr("src", `${item.thumbnail}`);
-                    productCard.find(".card-img-top").parent().attr("href", `product/index.html`);
+                    productCard.find(".card-img-top").parent().attr("href", `product/index.html?pid=${item.id}`);
 
                     productCard.find(".btnAddtocart").data("item", item);
 
