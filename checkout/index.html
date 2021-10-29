@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap, CSS & Icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <title>Checkout | IntelAtlas</title>
+  </head>
+  <body> 
+    <!-- Include the PayPal JavaScript SDK; replace "test" with your own sandbox Business account app client ID -->
+    <script src="https://www.paypal.com/sdk/js?client-id=ATTvB3Pjt7K6c0Pm7km72twwH3GI-3FnaqZvgwWbqfRU-RmndDwSuRXN21dFmc0-hpDxQC4P3MP_wC2H&currency=USD&disable-funding=credit"></script>
+
+    <div class="container">
+    <main>
+      <div class="py-5 text-center">
+        <a href="/"><img class="d-block mx-auto mb-4" src="../assets/img/logo.png" alt="logo" height="100"></a>
+        
+        <h2>Checkout</h2>
+        <p class="lead">You have 14 days to return your product if not satisfied.</p>
+      </div>
+
+      <div class="row g-5">
+        <div class="col-md-7 col-lg-8">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Your cart</span>
+            <span class="badge bg-primary rounded-pill">2</span>
+          </h4>
+          <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+                <div>
+                <h6 class="my-0">Women's glove</h6>
+                <small class="text-muted">Beautiful women's glove</small>
+                </div>
+                <span class="text-muted">$45.50</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+                <div>
+                <h6 class="my-0">Men's glove</h6>
+                <small class="text-muted">Beautiful men's glove</small>
+                </div>
+                <span class="text-muted">$45.50</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Shipping (USD)</span>
+              <strong>
+               $4.99
+              </strong>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Total (USD)</span>
+              <strong>$95.99</strong>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-5 col-lg-4">
+            <div class="mt-md-5" id="paypal-button-container"></div>          
+        </div>
+      </div>
+    </main>
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+      <p class="mb-1">&copy; 2021 Intel Atlas</p>
+    </footer>
+  </div> 
+
+  <script>
+      paypal.Buttons({
+
+
+        // Sets up the transaction when a payment button is clicked
+
+        createOrder: function(data, actions) {
+
+          return actions.order.create({
+
+            purchase_units: [{
+
+              amount: {
+
+                value: '95.99' // Can reference variables or functions. Example: `value: document.getElementById('...').value`
+
+              }
+
+            }]
+
+          });
+
+        },
+
+
+        // Finalize the transaction after payer approval
+
+        onApprove: function(data, actions) {
+
+          return actions.order.capture().then(function(orderData) {
+
+            // Successful capture! For dev/demo purposes:
+
+                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+                var transaction = orderData.purchase_units[0].payments.captures[0];
+
+                 window.location.replace("/order/?paypalId=" + transaction.id);
+
+          });
+
+        }
+
+      }).render('#paypal-button-container');
+    </script>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+  </body>
+</html>
