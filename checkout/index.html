@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,65 +10,58 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <title>Checkout | IntelAtlas</title>
-  </head>
-  <body> 
+</head>
+<body> 
     <!-- Include the PayPal JavaScript SDK; replace "test" with your own sandbox Business account app client ID -->
     <script src="https://www.paypal.com/sdk/js?client-id=ATTvB3Pjt7K6c0Pm7km72twwH3GI-3FnaqZvgwWbqfRU-RmndDwSuRXN21dFmc0-hpDxQC4P3MP_wC2H&currency=USD&disable-funding=credit"></script>
-
     <div class="container">
-    <main>
-      <div class="py-5 text-center">
-        <a href="/"><img class="d-block mx-auto mb-4" src="../assets/img/logo.png" alt="logo" height="100"></a>
-        
-        <h2>Checkout</h2>
-        <p class="lead">You have 14 days to return your product if not satisfied.</p>
-      </div>
+        <main>
+            <div class="py-5 text-center">
+                <a href="/"><img class="d-block mx-auto mb-4" src="../assets/img/logo.png" alt="logo" height="100"></a>
+                <h2>Checkout</h2>
+                <p class="lead">You have 14 days to return your product if not satisfied.</p>
+            </div>
+            <div class="row g-5">
+                <div class="col-md-7 col-lg-8">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-primary">Your cart</span>
+                        <span class="badge bg-primary rounded-pill qtyCart">2</span>
+                    </h4>
+                    <ul class="list-group mb-3" id="cartListItem"></ul>
+                    <li class="list-group-item d-flex justify-content-between lh-sm cartItemClone d-none">
+                        <img src="#" alt="twbs" height="32" class="rounded flex-shrink-0 prdImg">
 
-      <div class="row g-5">
-        <div class="col-md-7 col-lg-8">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-primary">Your cart</span>
-            <span class="badge bg-primary rounded-pill">2</span>
-          </h4>
-          <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                <h6 class="my-0">Women's glove</h6>
-                <small class="text-muted">Beautiful women's glove</small>
+                        <div class="input-group input-group-sm contBtn ms-2" style="width:90px; height: fit-content;">
+                            <button class="btn btn-outline-secondary btnDown" type="button">-</button>
+                            <input type="text" class="form-control intQty text-center" disabled>
+                            <button class="btn btn-outline-secondary btnUp" type="button">+</button>
+                        </div>
+
+                        <div class="w-50 ms-2">
+                            <h6 class="my-0 prodName">Women's glove</h6>
+                        </div>
+                        <span class="text-muted prodPrice">$45.50</span>
+                        <a href="javascript:void(0);" class="text-danger btnRemove ms-2">X</a>
+                    </li>
+                    <p class="lead text-danger text-end" id="lblTotal"></p>
                 </div>
-                <span class="text-muted">$45.50</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                <h6 class="my-0">Men's glove</h6>
-                <small class="text-muted">Beautiful men's glove</small>
+                <div class="col-md-5 col-lg-4">
+                    <div class="mt-md-5" id="paypal-button-container"></div>          
                 </div>
-                <span class="text-muted">$45.50</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-              <span>Shipping (USD)</span>
-              <strong>
-               $4.99
-              </strong>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-              <span>Total (USD)</span>
-              <strong>$95.99</strong>
-            </li>
-          </ul>
-        </div>
-        <div class="col-md-5 col-lg-4">
-            <div class="mt-md-5" id="paypal-button-container"></div>          
-        </div>
-      </div>
-    </main>
+            </div>
+        </main>
 
-    <footer class="my-5 pt-5 text-muted text-center text-small">
-      <p class="mb-1">&copy; 2021 Intel Atlas</p>
-    </footer>
-  </div> 
+        <footer class="my-5 pt-5 text-muted text-center text-small">
+          <p class="mb-1">&copy; 2021 Intel Atlas</p>
+        </footer>
+    </div> 
 
-  <script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script>
       paypal.Buttons({
 
 
@@ -114,7 +107,90 @@
       }).render('#paypal-button-container');
     </script>
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2
+        });
+
+        $(document).ready(function(){
+            printList();
+            countCartItem();
+        });
+
+        function printList() {
+            let currentCart = JSON.parse(localStorage.getItem("currentCart"));
+            $("#cartListItem").html("");
+
+            $.each( currentCart, function( index, item){
+                let listItem = $(".cartItemClone").clone();
+
+                listItem.find(".prdImg").attr("src", `../${item.thumbnail}`);
+                listItem.find(".prodName").html(item.name);
+                listItem.find(".prodPrice").html(formatter.format(item.price));
+                listItem.find(".intQty").val(item.qty);
+
+                listItem.find(".contBtn").data("item", item);
+                listItem.data("item", item);
+
+                listItem.removeClass("d-none cartItemClone");
+                $(listItem).appendTo("#cartListItem");
+            });
+
+            $(".btnDown").unbind().click( function () {
+                let currentCart = JSON.parse(localStorage.getItem("currentCart")),
+                    data = $(this).parent().data("item"),
+                    actualQty = currentCart[data.id].qty;
+
+                if(actualQty > 1){
+                    currentCart[data.id].qty = actualQty - 1;
+                    localStorage.setItem("currentCart", JSON.stringify(currentCart));
+                    printList();
+                }
+            });
+
+            $(".btnUp").unbind().click( function () {
+                let currentCart = JSON.parse(localStorage.getItem("currentCart")),
+                    data = $(this).parent().data("item"),
+                    actualQty = currentCart[data.id].qty;
+
+                if(actualQty > 0){
+                    currentCart[data.id].qty = actualQty + 1;
+                    localStorage.setItem("currentCart", JSON.stringify(currentCart));
+                    printList();
+                }
+            });
+
+            $(".btnRemove").unbind().click( function(){
+                let currentCart = JSON.parse(localStorage.getItem("currentCart")),
+                    data = $(this).parent().data("item");
+
+                delete currentCart[data.id];
+                localStorage.setItem("currentCart", JSON.stringify(currentCart));
+                printList();
+                countCartItem();
+            });
+
+            resumen();
+        }
+
+        function countCartItem(){
+            let currentCart = JSON.parse(localStorage.getItem("currentCart"));
+            if(currentCart)
+                $(".qtyCart").html(Object.keys(currentCart).length);
+        }
+
+        function resumen(){
+            let currentCart = JSON.parse(localStorage.getItem("currentCart")),
+                grantotal = 0;
+
+            $.each(currentCart, function(index, item){
+                grantotal += item.price * item.qty;
+            });
+
+            $("#lblTotal").html(`<strong>${formatter.format(grantotal)}</strong>`);
+        }
+    </script>
   </body>
 </html>
