@@ -51,7 +51,10 @@
 
 		public function insertCategory($productId, $categoryId) {
 			$pdo = new Conexion();
-			$cmd = 'INSERT INTO  product_category (category_id, product_id) VALUES (:category_id, :product_id)';
+			$cmd = '
+				DELETE FROM product_category WHERE product_id =:product_id;
+				INSERT INTO  product_category (category_id, product_id) VALUES (:category_id, :product_id);
+			';
 
 			$parametros = array(
 				':category_id' => $categoryId,
@@ -118,5 +121,34 @@
 			$sql->execute($parametros);
 
 			return TRUE;
+		}
+
+		public function updates($data) {
+			$pdo = new Conexion();
+			$cmd = '
+				UPDATE product SET
+					name =:name, 
+					optional_name =:optional_name,
+					descriptions =:descriptions, 
+					optional_description =:optional_description,
+					price =:price, 
+					sale_price =:sale_price
+				WHERE id =:productId
+			';
+
+			$parametros = array(
+				':name' 				=> $data['inputName'],
+				':descriptions' 		=> $data['inputDescription'],
+				':price' 				=> $data['inputPrice'],
+				':sale_price' 			=> $data['inputSalePrice'],
+				':optional_name'		=> $data['inputNameSp'],
+				':optional_description' => $data['inputDescriptionSp'],
+				'productId'				=> $data['productId']
+			);
+
+			$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+
+			return [ TRUE, $data['productId'] ];
 		}
 	}

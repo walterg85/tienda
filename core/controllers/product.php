@@ -23,17 +23,26 @@
 			$productModel = new Productmodel();
 			if($vars['productId'] == 0){
 				$tmpResponse = $productModel->register($prodData);
-			}			
+			} else {
+				$productId = $vars['productId'];
+				$prodData['productId'] = $productId;				
+				$tmpResponse = $productModel->updates($prodData);
+
+				$deletesImages = json_decode($vars['deletesImages'], TRUE);
+				foreach ($deletesImages as $key => $value) {
+					$oldImg = dirname(__FILE__, 3) ."/assets/img/product/{$productId}/{$value}";
+					@unlink( $oldImg );
+				}
+			}
 
 			if($tmpResponse[0]){
 				$productId = $tmpResponse[1];
+				$folder = "assets/img/product/{$productId}";
 
 				if (!empty($_FILES['imagesproduct'])){
-					$folder   = "assets/img/product/{$productId}";
 					mkdir(dirname(__FILE__, 3) . "/{$folder}", 0777, true);
 
 					$imagesprod = $_FILES['imagesproduct'];
-					$images		= array();
 					foreach($imagesprod['name'] as $key => $imagesproduct) {
 						$_FILES['imagesproduct[]']['name']		= $imagesprod['name'][$key];
 			            $_FILES['imagesproduct[]']['type']		= $imagesprod['type'][$key];
@@ -44,12 +53,13 @@
 						$filename = $imagesprod['name'][$key];
 						$tempname = $imagesprod['tmp_name'][$key];
 
-						if (move_uploaded_file($tempname, "../../{$folder}/{$filename}"))
-							array_push($images, "{$folder}/{$filename}");
+						move_uploaded_file($tempname, "../../{$folder}/{$filename}");
 					}
+				}
 
-					if(count($images) > 0)
-						$productModel->updateThumbnails($productId, $images[0], json_encode($images, JSON_FORCE_OBJECT));
+				if( is_dir( dirname(__FILE__, 3) . "/{$folder}" ) ) {
+					$images = getProdutsPhotos(dirname(__FILE__, 3) . "/{$folder}", $productId);
+					$productModel->updateThumbnails($productId, $images[0], json_encode($images, JSON_FORCE_OBJECT));
 				}
 
 				$productModel->insertCategory($productId, $vars['inputCategory']);
@@ -95,6 +105,34 @@
 			exit();
 		}
 	}
+
+	function getProdutsPhotos($dir, $producId) {
+       $result = array();
+       $cdir   = scandir($dir);
+
+       foreach ($cdir as $key => $value)
+       {
+          if (!in_array($value,array(".","..")))
+          {
+             if (is_dir($dir . DIRECTORY_SEPARATOR . $value))
+             {
+                if (!is_dir_empty( $dir . DIRECTORY_SEPARATOR . $value ))
+                    $result[$value] = getProdutsPhotos($dir . DIRECTORY_SEPARATOR . $value, $producId);
+             }
+             else
+             {
+                $result[] = "assets/img/product/{$producId}/{$value}";
+             }
+          }
+       }
+
+       return $result;
+    }
+
+    function is_dir_empty($dir) {
+      if (!is_readable($dir)) return NULL;
+      return (count(scandir($dir)) == 2);
+    }
 
 	header('HTTP/1.1 400 Bad Request');
 	header("Content-Type: application/json; charset=UTF-8");
