@@ -49,6 +49,12 @@
 </body>
 
     <script type="text/javascript">
+        var formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2
+        });
+
         $(document).ready(function(){
             getProducts();
         });
@@ -65,12 +71,12 @@
                     productCard.find(".card-title").html(item.name);
                     productCard.find(".card-text").html(item.descriptions);
 
-                    if( (item.sale_price).length > 0 ){
-                        productCard.find(".lblOldPrice").html(item.price).removeClass("d-none");
-                        productCard.find(".lblPrice").html(item.sale_price);
+                    if( (item.sale_price).length > 0 && item.sale_price > 0){
+                        productCard.find(".lblOldPrice").html( formatter.format(item.price)).removeClass("d-none");
+                        productCard.find(".lblPrice").html(formatter.format(item.sale_price));
                         productCard.find(".brandPrice").removeClass("d-none");
                     }else{
-                        productCard.find(".lblPrice").html(item.price);
+                        productCard.find(".lblPrice").html( formatter.format(item.price) );
                     }
 
                     productCard.find(".card-img-top").attr("src", `${item.thumbnail}`);
