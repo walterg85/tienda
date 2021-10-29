@@ -151,4 +151,34 @@
 
 			return [ TRUE, $data['productId'] ];
 		}
+
+		public function getProductId($productId) {
+			$pdo = new Conexion();
+
+			$cmd = '
+				SELECT
+					id, 
+					name,
+					optional_name,
+					descriptions, 
+					optional_description,
+					price,
+					sale_price, 
+					thumbnail, 
+					images, 
+					create_date
+				FROM 
+					product
+				WHERE active = 1 AND id =:id
+			';
+
+			$parametros = array(
+				':id' => $productId
+			);
+
+			$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
 	}
