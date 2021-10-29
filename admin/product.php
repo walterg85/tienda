@@ -49,7 +49,7 @@
     </div>
     <div class="offcanvas-body">
         <form id="addProductForm">
-            <input type="hidden" name="productId" value="0">
+            <input type="hidden" name="productId" id="productId" value="0">
             <div class="row">
                 <div class="col mb-3">
                     <label for="inputName" class="form-label">Name</label>
@@ -148,7 +148,8 @@
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 2
-        });
+        }),
+        deletesImages = [];
 
     $(document).ready(function(){
         $(".removePhoto").click( function(){
@@ -157,6 +158,22 @@
             $(`.img${datas.pic}`).addClass('d-none');
 
             productPhotos[datas.control] = null;
+
+            if( $("#productId").val() != 0 )
+                deletesImages.push(`${datas.control}.jpg`);
+        });
+
+        var myOffcanvas = document.getElementById('offcanvasProduct');
+        myOffcanvas.addEventListener('hidden.bs.offcanvas', function () {
+            $("#productId").val("0");
+            $("#addProductForm")[0].reset();
+
+            productPhotos = {};
+            deletesImages = [];
+
+            $(`#image1, #image2, #image3, #image4`).parent().removeClass('d-none');
+            $(`.img1, .img2, .img3, .img4`).addClass('d-none');
+            $(`#img1, #img2, #img3, #img4`).attr("src", "#");
         });
 
         $("#addProduct").click( registerProduct);
@@ -191,23 +208,18 @@
                 formData.append("imagesproduct[]", value, `${index}.jpg`);
         });
 
+        console.log(deletesImages);
+
+        formData.append("deletesImages", JSON.stringify(deletesImages));
+
         $.ajax({
             url: '../core/controllers/product.php',
             data: formData,
             type: 'POST',
             dataType: 'json',
             success: function(response){
-
-                $("#addProductForm")[0].reset();
                 $(".btnPanel").click();
-
-                productPhotos = {};
-
-                $(`#image1, #image2, #image3, #image4`).parent().removeClass('d-none');
-                $(`.img1, .img2, .img3, .img4`).addClass('d-none');
-
                 getProducts();
-
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(textStatus);
@@ -293,7 +305,7 @@
                         class: "text-center",
                         render: function ( data, type, row ) {
                             return `
-                                <a href="javascript:void(0);" class="btn btn-outline-secondary btnEditProduct me-2" title="Edit"><i class="bi bi-eye"></i></a>
+                                <a href="javascript:void(0);" class="btn btn-outline-secondary btnEditProduct me-2" title="Edit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasProduct"><i class="bi bi-eye"></i></a>
                                 <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteProduct" title="Delete"><i class="bi bi-trash"></i></a>
                             `;
                         }
@@ -328,6 +340,7 @@
                             buton = $(this),
                             currentImages = JSON.parse(data.images);
 
+                        $("#productId").val(data.id);
                         $("#inputName").val(data.name);
                         $("#inputNameSp").val(data.optional_name);
                         $("#inputDescription").val(data.descriptions);
@@ -344,8 +357,6 @@
                             $(`#img${pic}`).attr("src", `../${item}`);
                             $(`#${control}`).parent().addClass('d-none');
                         });
-
-                        $(".btnPanel").click();
                     });
                 },
                 searching: false,
