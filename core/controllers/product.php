@@ -87,6 +87,12 @@
 			header("Content-Type: application/json; charset=UTF-8");
 			
 			exit(json_encode($response));
+		} else if($vars['_method'] == 'Delete'){
+			$productModel 	 = new Productmodel();
+			$productModel->deleteProduct($vars['productId']);
+
+			header('HTTP/1.1 200 Ok');		
+			exit();
 		}
 	}
 
