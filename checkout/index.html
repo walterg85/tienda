@@ -207,9 +207,8 @@
                     };
 
                     $.post("../core/controllers/checkout.php", objData, function(result) {
-                        console.log(result);
-                        //localStorage.removeItem("currentCart");
-                        //window.location.replace(`../order/index.html?orderId=${result.id}`);
+                        localStorage.removeItem("currentCart");
+                        window.location.replace(`../order/index.html?orderId=${result.id}`);
                     });
                 }else{
                     alert("Payment was not processed correctly, please try again.");

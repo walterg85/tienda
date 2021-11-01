@@ -20,18 +20,14 @@
 				'shipping_address' => $vars['shipping_address'],
 				'payment_data' => $vars['payment_data']
 			);
-// var_dump($orderData);
-// exit();
 
 			$order = $checkoutModel->createOrder($orderData);
-
-			echo $order;
-			exit();
 
 			if($order){
 				$response = array(
 					'codeResponse' => 200,
-					'message' => 'Registered order'
+					'message' => 'Registered order',
+					'id' => $order
 				);
 				$checkoutModel->createOrderDetail( json_decode($vars['order'], TRUE), $order );
 			}else{
@@ -40,6 +36,18 @@
 					'message' => 'order not registered'
 				);
 			}
+
+			header('HTTP/1.1 200 Ok');
+			header("Content-Type: application/json; charset=UTF-8");
+			
+			exit(json_encode($response));
+		} else if($vars['_method'] == '_GET') {
+			$checkoutModel 	= new Checkoutmodel();
+
+			$response = array(
+				'codeResponse' => 200,
+				'data' => $checkoutModel->getOrder( $vars['currentOrderId'] )
+			);
 
 			header('HTTP/1.1 200 Ok');
 			header("Content-Type: application/json; charset=UTF-8");
