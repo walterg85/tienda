@@ -68,7 +68,9 @@
             currency: 'USD',
             minimumFractionDigits: 2
         }),
-        grantotal = 0;
+        grantotal = 0,
+        ship_price = 0,
+        orderDetails = [];
 
     $(document).ready(function(){
         printList();
@@ -139,10 +141,22 @@
 
     function resumen(){
         grantotal = 0;
+        ship_price = 0;
+        orderDetails = [];
+
         let currentCart = JSON.parse(localStorage.getItem("currentCart"));
 
         $.each(currentCart, function(index, item){
             grantotal += parseFloat(parseFloat(item.price) * parseFloat(item.qty));
+
+            let row = {
+                "product_id": index,
+                "price": item.price,
+                "quantity": item.qty,
+                "amount" : parseFloat(parseFloat(item.price) * parseFloat(item.qty))
+            };
+
+            orderDetails.push(row);
         });
 
         let objData = {
@@ -159,6 +173,7 @@
             if(grantotal < shipingFree){
                 $(".lblShipCost").html(formatter.format(shipingCost));
                 grantotal += shipingCost;
+                ship_price = shipingCost;
             }
 
             $("#lblTotal").html(`<strong>${formatter.format(grantotal)}</strong>`);
@@ -167,51 +182,39 @@
 </script>
 
 <script>
-  paypal.Buttons({
+    paypal.Buttons({
+        // Sets up the transaction when a payment button is clicked
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: grantotal
+                    }
+                }]
+            });
+        },
+        // Finalize the transaction after payer approval
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(orderData) {
+                if(orderData.status == "COMPLETED"){
+                    let objData = {
+                        "_method":"_POST",
+                        "amount": grantotal,
+                        "ship_price": ship_price,
+                        "shipping_address": JSON.stringify(orderData.purchase_units[0].shipping.address),
+                        "payment_data": JSON.stringify(orderData),
+                        "order": orderDetails
+                    };
 
-
-    // Sets up the transaction when a payment button is clicked
-
-    createOrder: function(data, actions) {
-
-      return actions.order.create({
-
-        purchase_units: [{
-
-          amount: {
-
-            value: grantotal // Can reference variables or functions. Example: `value: document.getElementById('...').value`
-
-          }
-
-        }]
-
-      });
-
-    },
-
-
-    // Finalize the transaction after payer approval
-
-    onApprove: function(data, actions) {
-
-      return actions.order.capture().then(function(orderData) {
-
-        // Successful capture! For dev/demo purposes:
-
-            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-
-            var transaction = orderData.purchase_units[0].payments.captures[0];
-
-            console.log(transaction);
-
-             //window.location.replace("/order/?paypalId=" + transaction.id);
-
-      });
-
-    }
-
-  }).render('#paypal-button-container');
+                    $.post("../core/controllers/checkout.php", objData, function(result) {
+                        window.location.replace(`../order/index.html?orderId=${result.id}`);
+                    });
+                }else{
+                    alert("Payment was not processed correctly, please try again.");
+                }
+            });
+        }
+    }).render('#paypal-button-container');
 </script>
   </body>
 </html>

@@ -118,6 +118,67 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Catalogo de usuarios de sistema' ROW_FORMAT=DYNAMIC;
 
 --
+-- Estructura de tabla para la tabla `order`
+--
+
+CREATE TABLE `order` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` INT(11) NOT NULL DEFAULT '0',
+  `amount` FLOAT NOT NULL DEFAULT '0',
+  `ship_price` FLOAT NULL DEFAULT NULL,
+  `shipping_address` INT(11) NOT NULL DEFAULT '0',
+  `order_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `ship_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `shipper_id` INT(11) NOT NULL DEFAULT '0',
+  `shipper_tracking` VARCHAR(250) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_0900_ai_ci',
+  `payment_data` VARCHAR(10000) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_0900_ai_ci',
+  `status` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`) USING BTREE
+)
+COMMENT='lista de pedidos'
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+;
+
+--
+-- Estructura de tabla para la tabla `order_detail`
+--
+CREATE TABLE `order_detail` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `order_id` INT(11) NOT NULL DEFAULT '0',
+  `product_id` INT(11) NOT NULL DEFAULT '0',
+  `price` FLOAT NOT NULL DEFAULT '0',
+  `discount` INT(11) NOT NULL DEFAULT '0',
+  `discount_available` FLOAT NOT NULL DEFAULT '0',
+  `quantity` INT(11) NOT NULL DEFAULT '0',
+  `amount` FLOAT NOT NULL DEFAULT '0',
+  `selected_options` VARCHAR(1000) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_0900_ai_ci',
+  PRIMARY KEY (`id`) USING BTREE
+)
+COMMENT='detalles de la orden generada'
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+;
+
+--
+-- Estructura de tabla para la tabla `order_log`
+--
+CREATE TABLE `order_log` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `order_id` INT(11) NOT NULL DEFAULT '0',
+  `status` INT(11) NOT NULL DEFAULT '0',
+  `update_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `comments` VARCHAR(250) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_0900_ai_ci',
+  PRIMARY KEY (`id`) USING BTREE
+)
+COMMENT='Herramienta para seguimiento de cambio de estado'
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+;
+
+
+
+--
 -- Índices para tablas volcadas
 --
 
