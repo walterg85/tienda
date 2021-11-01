@@ -203,11 +203,13 @@
                         "ship_price": ship_price,
                         "shipping_address": JSON.stringify(orderData.purchase_units[0].shipping.address),
                         "payment_data": JSON.stringify(orderData),
-                        "order": orderDetails
+                        "order": JSON.stringify(orderDetails)
                     };
 
                     $.post("../core/controllers/checkout.php", objData, function(result) {
-                        window.location.replace(`../order/index.html?orderId=${result.id}`);
+                        console.log(result);
+                        //localStorage.removeItem("currentCart");
+                        //window.location.replace(`../order/index.html?orderId=${result.id}`);
                     });
                 }else{
                     alert("Payment was not processed correctly, please try again.");
