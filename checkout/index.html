@@ -43,6 +43,7 @@
                         <span class="text-muted prodPrice">$45.50</span>
                         <a href="javascript:void(0);" class="text-danger btnRemove ms-2">X</a>
                     </li>
+                    <p class="text-end mb-0">Shipping Cost <span class="lblShipCost"></span></p>
                     <p class="lead text-danger text-end" id="lblTotal"></p>
                 </div>
                 <div class="col-md-5 col-lg-4">
@@ -56,141 +57,161 @@
         </footer>
     </div> 
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
-    <!-- Jquery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-    <script>
-      paypal.Buttons({
-
-
-        // Sets up the transaction when a payment button is clicked
-
-        createOrder: function(data, actions) {
-
-          return actions.order.create({
-
-            purchase_units: [{
-
-              amount: {
-
-                value: '95.99' // Can reference variables or functions. Example: `value: document.getElementById('...').value`
-
-              }
-
-            }]
-
-          });
-
-        },
-
-
-        // Finalize the transaction after payer approval
-
-        onApprove: function(data, actions) {
-
-          return actions.order.capture().then(function(orderData) {
-
-            // Successful capture! For dev/demo purposes:
-
-                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-
-                var transaction = orderData.purchase_units[0].payments.captures[0];
-
-                 window.location.replace("/order/?paypalId=" + transaction.id);
-
-          });
-
-        }
-
-      }).render('#paypal-button-container');
-    </script>
-
-    <script type="text/javascript">
-        var formatter = new Intl.NumberFormat('en-US', {
+<script type="text/javascript">
+    var formatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 2
+        }),
+        grantotal = 0;
+
+    $(document).ready(function(){
+        printList();
+        countCartItem();
+    });
+
+    function printList() {
+        let currentCart = JSON.parse(localStorage.getItem("currentCart"));
+        $("#cartListItem").html("");
+
+        $.each( currentCart, function( index, item){
+            let listItem = $(".cartItemClone").clone();
+
+            listItem.find(".prdImg").attr("src", `../${item.thumbnail}`);
+            listItem.find(".prodName").html(item.name);
+            listItem.find(".prodPrice").html(formatter.format(item.price));
+            listItem.find(".intQty").val(item.qty);
+
+            listItem.find(".contBtn").data("item", item);
+            listItem.data("item", item);
+
+            listItem.removeClass("d-none cartItemClone");
+            $(listItem).appendTo("#cartListItem");
         });
 
-        $(document).ready(function(){
+        $(".btnDown").unbind().click( function () {
+            let currentCart = JSON.parse(localStorage.getItem("currentCart")),
+                data = $(this).parent().data("item"),
+                actualQty = currentCart[data.id].qty;
+
+            if(actualQty > 1){
+                currentCart[data.id].qty = actualQty - 1;
+                localStorage.setItem("currentCart", JSON.stringify(currentCart));
+                printList();
+            }
+        });
+
+        $(".btnUp").unbind().click( function () {
+            let currentCart = JSON.parse(localStorage.getItem("currentCart")),
+                data = $(this).parent().data("item"),
+                actualQty = currentCart[data.id].qty;
+
+            if(actualQty > 0){
+                currentCart[data.id].qty = actualQty + 1;
+                localStorage.setItem("currentCart", JSON.stringify(currentCart));
+                printList();
+            }
+        });
+
+        $(".btnRemove").unbind().click( function(){
+            let currentCart = JSON.parse(localStorage.getItem("currentCart")),
+                data = $(this).parent().data("item");
+
+            delete currentCart[data.id];
+            localStorage.setItem("currentCart", JSON.stringify(currentCart));
             printList();
             countCartItem();
         });
 
-        function printList() {
-            let currentCart = JSON.parse(localStorage.getItem("currentCart"));
-            $("#cartListItem").html("");
+        resumen();
+    }
 
-            $.each( currentCart, function( index, item){
-                let listItem = $(".cartItemClone").clone();
+    function countCartItem(){
+        let currentCart = JSON.parse(localStorage.getItem("currentCart"));
+        if(currentCart)
+            $(".qtyCart").html(Object.keys(currentCart).length);
+    }
 
-                listItem.find(".prdImg").attr("src", `../${item.thumbnail}`);
-                listItem.find(".prodName").html(item.name);
-                listItem.find(".prodPrice").html(formatter.format(item.price));
-                listItem.find(".intQty").val(item.qty);
+    function resumen(){
+        grantotal = 0;
+        let currentCart = JSON.parse(localStorage.getItem("currentCart"));
 
-                listItem.find(".contBtn").data("item", item);
-                listItem.data("item", item);
+        $.each(currentCart, function(index, item){
+            grantotal += parseFloat(parseFloat(item.price) * parseFloat(item.qty));
+        });
 
-                listItem.removeClass("d-none cartItemClone");
-                $(listItem).appendTo("#cartListItem");
-            });
+        let objData = {
+            "_method":"Get"
+        };
 
-            $(".btnDown").unbind().click( function () {
-                let currentCart = JSON.parse(localStorage.getItem("currentCart")),
-                    data = $(this).parent().data("item"),
-                    actualQty = currentCart[data.id].qty;
+        $.post("../core/controllers/setting.php", objData, function(result) {
+            let data = result.data,
+                shipingCost = parseFloat(data[0].value),
+                shipingFree = parseFloat(data[1].value);
 
-                if(actualQty > 1){
-                    currentCart[data.id].qty = actualQty - 1;
-                    localStorage.setItem("currentCart", JSON.stringify(currentCart));
-                    printList();
-                }
-            });
+            $(".lblShipCost").html("$0.00");
 
-            $(".btnUp").unbind().click( function () {
-                let currentCart = JSON.parse(localStorage.getItem("currentCart")),
-                    data = $(this).parent().data("item"),
-                    actualQty = currentCart[data.id].qty;
-
-                if(actualQty > 0){
-                    currentCart[data.id].qty = actualQty + 1;
-                    localStorage.setItem("currentCart", JSON.stringify(currentCart));
-                    printList();
-                }
-            });
-
-            $(".btnRemove").unbind().click( function(){
-                let currentCart = JSON.parse(localStorage.getItem("currentCart")),
-                    data = $(this).parent().data("item");
-
-                delete currentCart[data.id];
-                localStorage.setItem("currentCart", JSON.stringify(currentCart));
-                printList();
-                countCartItem();
-            });
-
-            resumen();
-        }
-
-        function countCartItem(){
-            let currentCart = JSON.parse(localStorage.getItem("currentCart"));
-            if(currentCart)
-                $(".qtyCart").html(Object.keys(currentCart).length);
-        }
-
-        function resumen(){
-            let currentCart = JSON.parse(localStorage.getItem("currentCart")),
-                grantotal = 0;
-
-            $.each(currentCart, function(index, item){
-                grantotal += item.price * item.qty;
-            });
+            if(grantotal < shipingFree){
+                $(".lblShipCost").html(formatter.format(shipingCost));
+                grantotal += shipingCost;
+            }
 
             $("#lblTotal").html(`<strong>${formatter.format(grantotal)}</strong>`);
-        }
-    </script>
+        });
+    }
+</script>
+
+<script>
+  paypal.Buttons({
+
+
+    // Sets up the transaction when a payment button is clicked
+
+    createOrder: function(data, actions) {
+
+      return actions.order.create({
+
+        purchase_units: [{
+
+          amount: {
+
+            value: grantotal // Can reference variables or functions. Example: `value: document.getElementById('...').value`
+
+          }
+
+        }]
+
+      });
+
+    },
+
+
+    // Finalize the transaction after payer approval
+
+    onApprove: function(data, actions) {
+
+      return actions.order.capture().then(function(orderData) {
+
+        // Successful capture! For dev/demo purposes:
+
+            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+            var transaction = orderData.purchase_units[0].payments.captures[0];
+
+            console.log(transaction);
+
+             //window.location.replace("/order/?paypalId=" + transaction.id);
+
+      });
+
+    }
+
+  }).render('#paypal-button-container');
+</script>
   </body>
 </html>
