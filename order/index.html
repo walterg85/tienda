@@ -163,7 +163,7 @@
                         productCard.find(".lblPrice").html( formatter.format(item.price) );
                     }
 
-                    productCard.find(".card-img-top").attr("src", `${item.thumbnail}`);
+                    productCard.find(".card-img-top").attr("src", `../${item.thumbnail}`);
                     productCard.find(".card-img-top").parent().attr("href", `product/index.html?pid=${item.id}`);
 
                     productCard.find(".btnAddtocart").data("item", item);
@@ -219,7 +219,7 @@
             $.each( currentCart, function( index, item){
                 let listItem = $(".cartItemClone").clone();
 
-                listItem.find(".prdImg").attr("src", item.thumbnail);
+                listItem.find(".prdImg").attr("src", `../${item.thumbnail}`);
                 listItem.find(".prodName").html(item.name);
                 listItem.find(".prodPrice").html(formatter.format(item.price));
                 listItem.find(".intQty").val(item.qty);
