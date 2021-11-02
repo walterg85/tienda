@@ -123,22 +123,25 @@ CREATE TABLE `user` (
 
 CREATE TABLE `order` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `customer_id` INT(11) NOT NULL DEFAULT '0',
-  `amount` FLOAT NOT NULL DEFAULT '0',
+  `customer_id` INT(11) NULL DEFAULT NULL,
+  `amount` FLOAT NULL DEFAULT NULL,
   `ship_price` FLOAT NULL DEFAULT NULL,
-  `shipping_address` INT(11) NOT NULL DEFAULT '0',
-  `order_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `ship_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `shipper_id` INT(11) NOT NULL DEFAULT '0',
-  `shipper_tracking` VARCHAR(250) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_0900_ai_ci',
-  `payment_data` VARCHAR(10000) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_0900_ai_ci',
-  `status` INT(11) NOT NULL DEFAULT '0',
+  `shipping_address` VARCHAR(500) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
+  `order_date` DATETIME NULL DEFAULT NULL,
+  `ship_date` DATETIME NULL DEFAULT NULL,
+  `shipper_id` INT(11) NULL DEFAULT NULL,
+  `shipper_tracking` VARCHAR(250) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
+  `payment_data` VARCHAR(10000) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
+  `coupon` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
+  `status` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 )
 COMMENT='lista de pedidos'
 COLLATE='utf8mb4_0900_ai_ci'
 ENGINE=InnoDB
+AUTO_INCREMENT=8
 ;
+
 
 --
 -- Estructura de tabla para la tabla `order_detail`

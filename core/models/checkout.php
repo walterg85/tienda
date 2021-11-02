@@ -8,9 +8,9 @@
 			$pdo = new Conexion();
 			$cmd = '
 				INSERT INTO tienda.order
-						(customer_id, amount, ship_price, shipping_address, order_date, payment_data, status)
+						(customer_id, amount, ship_price, shipping_address, order_date, payment_data, coupon, status)
 				VALUES
-					(:customer_id, :amount, :ship_price, :shipping_address, now(), :payment_data, 1)
+					(:customer_id, :amount, :ship_price, :shipping_address, now(), :payment_data, :coupon, 1)
 			';
 
 			$parametros = array(
@@ -18,7 +18,8 @@
 				':amount' 			=> $data['amount'],
 				':ship_price' 		=> $data['ship_price'],
 				':shipping_address'	=> $data['shipping_address'],
-				':payment_data'		=> $data['payment_data']
+				':payment_data'		=> $data['payment_data'],
+				':coupon'			=> $data['coupon']
 			);
 
 			$order_id = 0;
@@ -107,4 +108,19 @@
 
 			return $data;
 	    }
+
+	    public function GetCoupon($code) {
+			$pdo = new Conexion();
+			$cmd = 'SELECT valor, tipo FROM coupon WHERE codigo =:code AND status = 1';
+
+			$parametros = array(
+				':code' => $code
+			);
+
+			$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+			$sql->setFetchMode(PDO::FETCH_OBJ);
+
+			return $sql->fetch();
+		}	
 	}
