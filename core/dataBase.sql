@@ -126,18 +126,18 @@ CREATE TABLE `order` (
   `customer_id` INT(11) NULL DEFAULT NULL,
   `amount` FLOAT NULL DEFAULT NULL,
   `ship_price` FLOAT NULL DEFAULT NULL,
-  `shipping_address` VARCHAR(500) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
+  `shipping_address` VARCHAR(500) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
   `order_date` DATETIME NULL DEFAULT NULL,
   `ship_date` DATETIME NULL DEFAULT NULL,
   `shipper_id` INT(11) NULL DEFAULT NULL,
-  `shipper_tracking` VARCHAR(250) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
-  `payment_data` VARCHAR(10000) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
-  `coupon` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
+  `shipper_tracking` VARCHAR(250) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+  `payment_data` VARCHAR(10000) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+  `coupon` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
   `status` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 )
 COMMENT='lista de pedidos'
-COLLATE='utf8mb4_0900_ai_ci'
+COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 AUTO_INCREMENT=8
 ;
@@ -155,11 +155,11 @@ CREATE TABLE `order_detail` (
   `discount_available` FLOAT NOT NULL DEFAULT '0',
   `quantity` INT(11) NOT NULL DEFAULT '0',
   `amount` FLOAT NOT NULL DEFAULT '0',
-  `selected_options` VARCHAR(1000) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_0900_ai_ci',
+  `selected_options` VARCHAR(1000) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
   PRIMARY KEY (`id`) USING BTREE
 )
 COMMENT='detalles de la orden generada'
-COLLATE='utf8mb4_0900_ai_ci'
+COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
@@ -171,11 +171,11 @@ CREATE TABLE `order_log` (
   `order_id` INT(11) NOT NULL DEFAULT '0',
   `status` INT(11) NOT NULL DEFAULT '0',
   `update_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `comments` VARCHAR(250) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_0900_ai_ci',
+  `comments` VARCHAR(250) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
   PRIMARY KEY (`id`) USING BTREE
 )
 COMMENT='Herramienta para seguimiento de cambio de estado'
-COLLATE='utf8mb4_0900_ai_ci'
+COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
