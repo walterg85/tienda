@@ -82,6 +82,31 @@
                     <select class="form-select" id="inputCategory" name="inputCategory"></select>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <label class="form-label">Sizes</label><br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="chsm" name="chsizes" value="sm">
+                        <label class="form-check-label" for="chsm">Small</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="chm" name="chsizes" value="m">
+                        <label class="form-check-label" for="chm">Medium</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="chl" name="chsizes" value="l">
+                        <label class="form-check-label" for="chl">Large</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="chxl" name="chsizes" value="xl">
+                        <label class="form-check-label" for="chxl">Extra large</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="inputColors" class="form-label">Colors (separated by commas)</label>
+                <input type="text" id="inputColors" name="inputColors" class="form-control" autocomplete="off" placeholder="Red, Orange, Gray">
+            </div>
 
             <div class="row mb-3">
                 <div class="col-3 d-none img1">
@@ -198,17 +223,29 @@
     }
 
     function registerProduct(){
+        let mySizes = document.getElementsByName('chsizes'),
+            pSizes = [],
+            pColors = [$("#inputColors").val()],
+            pConfig = [];
+
+        for (var sizes of mySizes) {
+            if (sizes.checked)
+                pSizes.push(sizes.value);
+        }
+
+        pConfig.push({"sizes":pSizes});
+        pConfig.push({"colors":pColors});
+
         let form = $("#addProductForm")[0],
             formData = new FormData(form);
 
         formData.append("_method", "POST");
+        formData.append("pConfig", JSON.stringify(pConfig));
 
         $.each(productPhotos, function( index, value ) {
             if(value)
                 formData.append("imagesproduct[]", value, `${index}.jpg`);
         });
-
-        console.log(deletesImages);
 
         formData.append("deletesImages", JSON.stringify(deletesImages));
 
@@ -357,6 +394,22 @@
                             $(`#img${pic}`).attr("src", `../${item}`);
                             $(`#${control}`).parent().addClass('d-none');
                         });
+
+                        if(data.dimensions && data.dimensions != "0"){
+                            let pConfig = JSON.parse(data.dimensions);
+
+                            $.each(pConfig, function(index, item){
+                                console.log(item);
+                                if(item.colors)
+                                    $("#inputColors").val(item.colors);
+
+                                if(item.sizes){
+                                    $.each(item.sizes, function(idx, itm){
+                                        $(`#ch${itm}`).prop("checked", true);
+                                    });
+                                }
+                            });
+                        }
                     });
                 },
                 searching: false,

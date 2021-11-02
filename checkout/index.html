@@ -94,8 +94,8 @@
                 if(result.data){
                     let codigo = result.data;
                     if(codigo.tipo == 1){
-                        descuento = grantotal * parseFloat( codigo.valor / 100);
-                        $(".lblCoupon").html(`Discount ${codigo.valor}% (${descuento})`);
+                        descuento = (grantotal * parseFloat( codigo.valor / 100)).toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];;
+                        $(".lblCoupon").html(`Discount ${codigo.valor}% ($${descuento})`);
                         $(".lblCoupon").parent().removeClass("d-none");
                     }else{
                         descuento = parseFloat( codigo.valor );
@@ -211,8 +211,8 @@
                 ship_price = shipingCost;
             }
 
-            if(descuento > 0){
-                grantotal = grantotal - descuento;
+            if(parseFloat(descuento) > 0){
+                grantotal = grantotal - parseFloat(descuento);
             }
 
             $("#lblTotal").html(`<strong>Pay ${formatter.format(grantotal)}</strong>`);

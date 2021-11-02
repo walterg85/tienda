@@ -14,10 +14,11 @@
 			$prodData = array(
 				'inputName' 			=> $vars['inputName'],
 				'inputNameSp' 			=> $vars['inputNameSp'],
-				'inputDescription'		=> $vars['inputDescription'],
+				'inputDescription'	=> $vars['inputDescription'],
 				'inputDescriptionSp'	=> $vars['inputDescriptionSp'],
 				'inputPrice'			=> floatval($vars['inputPrice']),
-				'inputSalePrice'		=> floatval($vars['inputSalePrice'])
+				'inputSalePrice'		=> floatval($vars['inputSalePrice']),
+				'dimensions'			=> $vars['pConfig']
 			);
 
 			$productModel = new Productmodel();
