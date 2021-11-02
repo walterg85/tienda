@@ -14,11 +14,12 @@
 			$checkoutModel = new Checkoutmodel();
 
 			$orderData = array(
-				'customer_id' => ( !isset($_SESSION['isLoged']) ) ? $_SESSION['authData']->id : 0,
+				'customer_id' => ( isset($_SESSION['isLoged']) ) ? $_SESSION['authData']->id : 0,
 				'amount' => $vars['amount'],
 				'ship_price' => $vars['ship_price'],
 				'shipping_address' => $vars['shipping_address'],
-				'payment_data' => $vars['payment_data']
+				'payment_data' => $vars['payment_data'],
+				'coupon' => $vars['coupon']
 			);
 
 			$order = $checkoutModel->createOrder($orderData);
@@ -47,6 +48,18 @@
 			$response = array(
 				'codeResponse' => 200,
 				'data' => $checkoutModel->getOrder( $vars['currentOrderId'] )
+			);
+
+			header('HTTP/1.1 200 Ok');
+			header("Content-Type: application/json; charset=UTF-8");
+			
+			exit(json_encode($response));
+		} else if($vars['_method'] == 'GetCoupon') {
+			$checkoutModel 	= new Checkoutmodel();
+
+			$response = array(
+				'codeResponse' => 200,
+				'data' => $checkoutModel->GetCoupon( $vars['code'] )
 			);
 
 			header('HTTP/1.1 200 Ok');

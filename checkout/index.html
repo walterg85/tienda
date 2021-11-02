@@ -17,7 +17,7 @@
     <div class="container">
         <main>
             <div class="py-5 text-center">
-                <a href="/"><img class="d-block mx-auto mb-4" src="../assets/img/logo.png" alt="logo" height="100"></a>
+                <a href="javascript:void(0);"><img class="d-block mx-auto mb-4" src="../assets/img/logo.png" alt="logo" height="100"></a>
                 <h2>Checkout</h2>
                 <p class="lead">You have 14 days to return your product if not satisfied.</p>
             </div>
@@ -43,7 +43,14 @@
                         <span class="text-muted prodPrice">$45.50</span>
                         <a href="javascript:void(0);" class="text-danger btnRemove ms-2">X</a>
                     </li>
-                    <p class="text-end mb-0">Shipping Cost <span class="lblShipCost"></span></p>
+
+                    <div class="input-group mb-2 w-50 float-end">
+                        <input type="text" class="form-control" placeholder="Coupon Code" id="inputCode" autocomplete="off">
+                        <button class="btn btn-outline-secondary" type="button" id="applyCoupon"><i class="bi bi-check2"></i> Apply coupon</button>
+                    </div><br><br>
+
+                    <p class="text-end mb-0 float-none">Shipping Cost <span class="lblShipCost"></span></p>
+                    <p class="text-end mb-0 d-none">Coupon <span class="lblCoupon"></span></p>
                     <p class="lead text-danger text-end" id="lblTotal"></p>
                 </div>
                 <div class="col-md-5 col-lg-4">
@@ -70,11 +77,39 @@
         }),
         grantotal = 0,
         ship_price = 0,
-        orderDetails = [];
+        orderDetails = [],
+        descuento = 0;
 
     $(document).ready(function(){
         printList();
         countCartItem();
+
+        $("#applyCoupon").click( function(){
+            let objData = {
+                "_method":"GetCoupon",
+                "code": $("#inputCode").val()
+            };
+
+            $.post("../core/controllers/checkout.php", objData, function(result) {
+                if(result.data){
+                    let codigo = result.data;
+                    if(codigo.tipo == 1){
+                        descuento = grantotal * parseFloat( codigo.valor / 100);
+                        $(".lblCoupon").html(`Discount ${codigo.valor}% (${descuento})`);
+                        $(".lblCoupon").parent().removeClass("d-none");
+                    }else{
+                        descuento = parseFloat( codigo.valor );
+                        $(".lblCoupon").html(`Discount ${formatter.format(descuento)}`);
+                        $(".lblCoupon").parent().removeClass("d-none");
+                    }                    
+                }else{
+                    descuento = 0;
+                    alert("This coupon does not exist.");
+                }
+
+                resumen();
+            });
+        });
     });
 
     function printList() {
@@ -176,7 +211,11 @@
                 ship_price = shipingCost;
             }
 
-            $("#lblTotal").html(`<strong>${formatter.format(grantotal)}</strong>`);
+            if(descuento > 0){
+                grantotal = grantotal - descuento;
+            }
+
+            $("#lblTotal").html(`<strong>Pay ${formatter.format(grantotal)}</strong>`);
         });
     }
 </script>
@@ -188,7 +227,7 @@
             return actions.order.create({
                 purchase_units: [{
                     amount: {
-                        value: grantotal
+                        value: parseFloat(grantotal).toFixed(2)
                     }
                 }]
             });
@@ -203,7 +242,8 @@
                         "ship_price": ship_price,
                         "shipping_address": JSON.stringify(orderData.purchase_units[0].shipping.address),
                         "payment_data": JSON.stringify(orderData),
-                        "order": JSON.stringify(orderDetails)
+                        "order": JSON.stringify(orderDetails),
+                        "coupon": $("#inputCode").val()
                     };
 
                     $.post("../core/controllers/checkout.php", objData, function(result) {
