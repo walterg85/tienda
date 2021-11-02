@@ -10,9 +10,9 @@
 			$pdo = new Conexion();
 			$cmd = '
 				INSERT INTO product
-						(name, descriptions, price, sale_price, optional_name, optional_description, create_date, active)
+						(name, descriptions, price, sale_price, optional_name, optional_description, create_date, dimensions, active)
 				VALUES
-					(:name, :descriptions, :price, :sale_price, :optional_name, :optional_description, now(), 1)
+					(:name, :descriptions, :price, :sale_price, :optional_name, :optional_description, now(), :dimensions, 1)
 			';
 
 			$parametros = array(
@@ -21,7 +21,8 @@
 				':price' 				=> $data['inputPrice'],
 				':sale_price' 			=> $data['inputSalePrice'],
 				':optional_name'		=> $data['inputNameSp'],
-				':optional_description' => $data['inputDescriptionSp']
+				':optional_description' => $data['inputDescriptionSp'],
+				':dimensions'			=>  $data['dimensions']
 			);
 
 			try{
@@ -81,7 +82,8 @@
 					sale_price, 
 					thumbnail, 
 					images, 
-					create_date
+					create_date,
+					dimensions
 				FROM 
 					product
 				WHERE active = 1
@@ -132,7 +134,8 @@
 					descriptions =:descriptions, 
 					optional_description =:optional_description,
 					price =:price, 
-					sale_price =:sale_price
+					sale_price =:sale_price,
+					dimensions =:dimensions
 				WHERE id =:productId
 			';
 
@@ -143,7 +146,8 @@
 				':sale_price' 			=> $data['inputSalePrice'],
 				':optional_name'		=> $data['inputNameSp'],
 				':optional_description' => $data['inputDescriptionSp'],
-				'productId'				=> $data['productId']
+				'productId'				=> $data['productId'],
+				':dimensions'			=>  $data['dimensions']
 			);
 
 			$sql = $pdo->prepare($cmd);
@@ -166,7 +170,8 @@
 					sale_price, 
 					thumbnail, 
 					images, 
-					create_date
+					create_date,
+					dimensions
 				FROM 
 					product
 				WHERE active = 1 AND id =:id
