@@ -7,13 +7,144 @@
     <h1 class="h2">Coupons</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="input-group me-2">
-            <input type="text" class="form-control" placeholder="Coupon Code" id="inputCode" autocomplete="off">
-            <button class="btn btn-outline-secondary" type="button" id="btnAddCategory"><i class="bi bi-plus-lg"></i> Add coupon</button>
+            <input type="text" class="form-control" placeholder="Coupon Code" id="inputCode" autocomplete="off" style="width: 40%;">
+            <input type="text" class="form-control" placeholder="Value" id="inputValue" autocomplete="off">
+            <select class="form-select" id="cboTipo">
+                <option value="1">%</option>
+                <option value="2">$</option>
+            </select>
+            <button class="btn btn-outline-secondary btn-sm" type="button" id="btnAddCoupon"><i class="bi bi-plus-lg"></i> Add coupon</button>
         </div>
     </div>
 </div>
 
-<table class="table" id="categoryList"><thead class="table-light"></thead></table>
+<table class="table" id="couponList"><thead class="table-light"></thead></table>
+
+<script type="text/javascript">
+    let dataTableCoupon = null,
+        formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2
+        });
+
+    $(document).ready(function(){
+        currentPage = "Coupon";
+
+        $("#btnAddCoupon").click( fnRegisterCoupon);
+
+        //listar cupones
+        fnGetCoupons();
+    });
+
+    function fnRegisterCoupon(){
+        $("#btnAddCoupon").attr("disabled","disabled");
+        $("#btnAddCoupon").html('<i class="bi bi-clock-history"></i> Registering');
+
+        let objData = {
+            "_method":"_POST",
+            "code": $("#inputCode").val(),
+            "value": $("#inputValue").val(),
+            "tipo": $("#cboTipo").val()
+        };
+
+        $.post("../core/controllers/coupon.php", objData, function(result) {
+            $("#btnAddCoupon").removeAttr("disabled");
+            $("#btnAddCoupon").html('<i class="bi bi-plus-lg"></i> Add Category');
+
+            $("#inputCode").val("");
+            $("#inputValue").val("");
+            $("#cboTipo").val(1);
+
+            fnGetCoupons();
+        });
+    }
+
+    function fnGetCoupons(){
+        let objData = {
+            "_method":"Get"
+        };
+
+        if (dataTableCoupon != null)
+            dataTableCoupon.destroy();
+
+        $.post("../core/controllers/coupon.php", objData, function(result) {
+            let mypaging =  false;
+
+            if( (result.data).length > 20 )
+                mypaging = true;
+
+            dataTableCoupon = $("#couponList").DataTable({
+                data: result.data,
+                order: [[ 0, "desc" ]],
+                columns:
+                [
+                    {
+                        data: 'id',
+                        title: '#',
+                        width: "20px"
+                    },
+                    {
+                        data: 'codigo',
+                        title: 'Code'
+                    },
+                    {
+                        data: null,
+                        title: 'Discount',
+                        render: function(data, type, row){
+                            if(row.tipo == 1){
+                                return `%${row.valor}`;
+                            }else{
+                                return `${formatter.format(row.valor)}`;
+                            }
+                        }
+                    },
+                    {
+                        title: '',
+                        data: null,
+                        orderable: false,
+                        class: "text-center",
+                        render: function ( data, type, row )
+                        {
+                            return `
+                                <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteCoupon" title="Delete"><i class="bi bi-trash"></i></a>
+                            `;
+                        }
+                    }
+                ],
+                "fnDrawCallback":function(oSettings){
+                    $(".btnDeleteCoupon").unbind().click(function(){
+                        let data = getData($(this), dataTableCoupon),
+                            buton = $(this);
+
+                        if (confirm(`do you want to delete this coupon (${data.codigo})?`)){
+                            buton.attr("disabled","disabled");
+                            buton.html('<i class="bi bi-clock-history"></i>');
+
+                            let objData = {
+                                "_method":"Delete",
+                                "couponId": data.id
+                            };
+
+                            $.post("../core/controllers/coupon.php", objData, function(result) {
+                                buton.removeAttr("disabled");
+                                buton.html('<i class="bi bi-trash"></i>');
+
+                                fnGetCoupons();
+                            });
+
+                        }
+                    });
+                },
+                searching: false,
+                pageLength: 20,
+                info: false,
+                lengthChange: false,
+                paging: mypaging
+            });
+        });
+    }
+</script>
 
 
 

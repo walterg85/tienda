@@ -176,6 +176,23 @@ COLLATE='utf8mb4_0900_ai_ci'
 ENGINE=InnoDB
 ;
 
+--
+-- Estructura de tabla para la tabla `coupon`
+--
+CREATE TABLE `coupon` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `codigo` VARCHAR(50) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci',
+  `valor` FLOAT NULL DEFAULT NULL,
+  `tipo` INT(11) NULL DEFAULT NULL,
+  `status` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=2
+;
+
+
 
 
 --
