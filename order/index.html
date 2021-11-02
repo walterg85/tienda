@@ -24,21 +24,21 @@
             </div>
             
             <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-                <div class="col-10 col-sm-8 col-lg-6">
+                <div class="col-10 col-sm-8 col-lg-6" id="contenedorItem">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-primary">Total Items</span>
-                        <span class="badge bg-primary rounded-pill lblItems">2</span>
+                        <span class="badge bg-primary rounded-pill lblItems"></span>
                     </h4>
-                    <a href="javascript:Void(0);" class="list-group-item list-group-item-action d-flex gap-3 py-3 d-none prodsItemClone" aria-current="true">
-                        <img src="#" alt="twbs" height="32" class="rounded-circle flex-shrink-0">
+                </div>
+                <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex gap-3 py-3 d-none prodsItemClone" aria-current="true">
+                        <img src="#" alt="twbs" height="32" class="rounded-circle flex-shrink-0 imagep">
                         <div class="d-flex gap-2 w-100 justify-content-between">
                             <div>
                                 <h6 class="mb-0 lblNameItem"></h6>
                             </div>
                             <small class="opacity-50 text-nowrap lblPriceProd"></small>
                         </div>
-                    </a>
-                </div>            
+                    </a>         
                 <div class="col-lg-6">
                     <h1 class="display-5 fw-bold lh-1 mb-3">Order: <text class="lblOrderId"></text></h1>
                     <p class="lead">Order status: <text class="lblStatus"></text></p>
@@ -291,8 +291,46 @@
             };
 
             $.post("../core/controllers/checkout.php", objData, function(result) {
-                console.log(result);
+                $(".lblOrderId").html( pad(result.data.order.id, 5) );
+
+                switch(result.data.order.status) {
+                    case "1":
+                        $(".lblStatus").html("New order");
+                        break;
+                    case "2":
+                        $(".lblStatus").html("Sent to your address");
+                        break;
+                    case "3":
+                        $(".lblStatus").html("Canceled");
+                        break;
+                }
+
+                let paypalorder = JSON.parse(result.data.order.payment_data);
+
+                $(".lblPaypalId").html( paypalorder.purchase_units[0].payments.captures[0].id );
+
+                $(".lblShipingCost").html( (result.data.order.ship_price == 0) ? 'Free' : formatter.format(result.data.order.ship_price) );
+
+                $(".lblTotal").html( formatter.format(result.data.order.amount) );
+
+                $.each(result.data.detail, function(index, prod){
+                    let item = $(".prodsItemClone").clone();
+
+                    item.find(".imagep").attr("src", `../${prod.thumbnail}`);
+                    item.find(".lblNameItem").html(`${prod.quantity} - ${prod.name}`);
+                    item.find(".lblPriceProd").html( formatter.format(prod.price) );
+
+                    item.removeClass("d-none prodsItemClone");
+                    $(item).appendTo("#contenedorItem");
+                });
+
+                $(".lblItems").html( (result.data.detail).length );
             });
+        }
+
+        function pad (str, max) {
+            str = str.toString();
+            return str.length < max ? pad("0" + str, max) : str;
         }
     </script>
 </html>

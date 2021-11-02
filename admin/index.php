@@ -85,6 +85,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="coupons.php">
+                                <i class="bi bi-award"></i> Coupons
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" id="linkSetting" href="settings.php">
                                 <i class="bi bi-sliders"></i> Settings
                             </a>

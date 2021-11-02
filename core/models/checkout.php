@@ -94,7 +94,17 @@
 			$data['order'] = $sql->fetch();
 
 			$cmd = '
-	    		SELECT id, product_id, amount, ship_price, shipping_address, order_date, payment_data, status FROM tienda.order_detail WHERE order_id =:order_id
+	    		SELECT 
+					p.name, ot.price, ot.quantity, ot.amount, p.thumbnail 
+				FROM tienda.order_detail AS ot 
+				INNER JOIN product AS p ON ot.product_id = p.id
+				WHERE ot.order_id =:order_id
 	    	';
+
+	    	$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+			$data['detail'] = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+			return $data;
 	    }
 	}
