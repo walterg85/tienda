@@ -162,6 +162,52 @@
             $(".btnCheckout").click( function(){
                 window.location.href = "checkout/index.html"
             });
+
+            $("#mdlAddtoCart").click( function() {
+                let currentItem = $(this).data("item"),
+                    newItem = {},
+                    currentCart = JSON.parse(localStorage.getItem("currentCart")),
+                    config = JSON.parse(currentItem.dimensions),
+                    size = null,
+                    color = null,
+                    newItemId = currentItem.id;
+
+                if(!currentCart){
+                    localStorage.setItem("currentCart", "{}");
+                    currentCart = {};
+                }
+
+                if((config[0].sizes).length > 0){
+                    size = $("input[type=radio][name=chsizes]:checked").val();
+                    newItemId += `|s-${size}`;
+                }
+
+                if(config[1].colors[0] != ""){
+                    color = $("input[type=radio][name=chcolors]:checked").val();
+                    newItemId += `|c-${color}`;
+                }
+
+                newItem.id = currentItem.id;
+                newItem.name = currentItem.name;
+                newItem.descriptions = currentItem.descriptions;
+                newItem.thumbnail = currentItem.thumbnail;
+
+                if( (currentItem.sale_price).length > 0 && currentItem.sale_price > 0){
+                    newItem.price = currentItem.sale_price;
+                }else{
+                    newItem.price = currentItem.price;
+                }
+
+                if(currentCart[newItemId]){
+                    currentCart[newItemId].qty = currentCart[currentItem.id].qty + 1;
+                }else{
+                    newItem.qty = 1;
+                    currentCart[newItemId] = newItem;
+                }
+
+                localStorage.setItem("currentCart", JSON.stringify(currentCart));
+                countCartItem();
+            });
         });
 
         function getProducts() {
@@ -246,11 +292,12 @@
 
                         if((config[0].sizes).length > 0){
                             $(".dvSizes").removeClass("d-none");
+                            $(".toRemoves").remove();
 
                             $.each(config[0].sizes, function(index, item){
                                 let dv = $(".chSizes").clone();
 
-                                dv.find(".chk").val(item);
+                                dv.find(".chk").val(item).attr("id", `ch${item}`);
 
                                 if(item == "sm")
                                     dv.find(".lbl").html("Small");
@@ -264,22 +311,33 @@
                                 if(item == "xl")
                                     dv.find(".lbl").html("Extra large");
 
+                                dv.find(".lbl").attr("for", `ch${item}`);
+                                
+                                if(index == 0)
+                                    dv.find(".chk").prop("checked", true);
+
                                 dv.removeClass("d-none chSizes");
+                                dv.addClass("toRemoves");
                                 $(dv).appendTo(".dvSizes");
                             });
                         }
 
                         if(config[1].colors[0] != ""){
                             $(".dvColors").removeClass("d-none");
+                            $(".toRemovec").remove();
 
                             let items = (config[1].colors[0]).split(",");
                             $.each(items, function(index, item){
                                 let dv = $(".chColors").clone();
 
-                                dv.find(".chk").val(item);
-                                dv.find(".lbl").html(item);
+                                dv.find(".chk").val(item).attr("id", `rd${item}`);
+                                dv.find(".lbl").html(item).attr("for", `rd${item}`);
+
+                                if(index == 0)
+                                    dv.find(".chk").prop("checked", true);
 
                                 dv.removeClass("d-none chColors");
+                                dv.addClass("toRemovec");
                                 $(dv).appendTo(".dvColors");
 
                             });
