@@ -27,6 +27,29 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Thumbnail</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Options</th>
+                </tr>
+            </thead>
+            <tbody id="tblDetalle"></tbody>
+            <tr class="rowClone d-none">
+                <th class="lblId" scope="row"></th>
+                <td class="lblImg"></td>
+                <td class="lblName"></td>
+                <td class="lblQty"></td>
+                <td class="lblPrice"></td>
+                <td class="lblAmount"></td>
+                <td class="lblOption"></td>
+            </tr>
+        </table>
     </div>
 </div>
 
@@ -132,7 +155,7 @@
                         width: "180px",
                         render: function ( data, type, row ) {
                             return `
-                                <a href="javascript:void(0);" class="btn btn-outline-secondary btnEditProduct me-2" title="View details" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOrder"><i class="bi bi-card-checklist"></i></a>
+                                <a href="javascript:void(0);" class="btn btn-outline-secondary btnDetailOrder me-2" title="View details" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOrder"><i class="bi bi-card-checklist"></i></a>
                                 <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteOrder me-2" title="Cancel order"><i class="bi bi-dash-circle"></i></a>
                                 <div class="btn-group" role="group">
                                     <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -150,6 +173,52 @@
                         }
                     }
                 ],
+                "fnDrawCallback":function(oSettings){
+                    $(".btnDetailOrder").unbind().click(function(){
+                        let data = getData($(this), dataTableOrder),
+                            buton = $(this);
+
+                        buton.attr("disabled","disabled");
+                        buton.html('<i class="bi bi-clock-history"></i>');
+
+                        let objData = {
+                            "_method":"getDetailOrder",
+                            "orderId": data.id
+                        };
+
+                        $.post("../core/controllers/checkout.php", objData, function(result) {
+                            buton.removeAttr("disabled");
+                            buton.html('<i class="bi bi-card-checklist"></i>');
+
+                            $("#tblDetalle").html("");
+                            $.each(result.data, function(index, item){
+                                let row = $(".rowClone").clone();
+
+                                row.find(".lblId").html(index + 1);
+                                row.find(".lblImg").html(`<img src="../${item.thumbnail}" alt="twbs" height="32" class="rounded flex-shrink-0">`);
+                                row.find(".lblName").html(item.name);
+                                row.find(".lblQty").html(item.quantity);
+                                row.find(".lblPrice").html(formatter.format(item.price));
+                                row.find(".lblAmount").html(formatter.format(item.amount));
+
+                                let options = JSON.parse(item.selected_options),
+                                    strOptions = '';
+
+                                if(options.size)
+                                    strOptions += `Size: ${options.size}`;
+
+                                if(options.color)
+                                    strOptions += ` Color: ${options.color}`;
+
+                                row.find(".lblOption").html(strOptions);
+
+                                row.removeClass("d-none rowClone");
+                                $(row).appendTo("#tblDetalle");
+                            });
+                        });
+
+                    });
+                },
                 searching: false,
                 pageLength: 20,
                 info: false,

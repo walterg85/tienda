@@ -134,22 +134,28 @@
 
 	    	$sql = $pdo->prepare($cmd);
 			$sql->execute();
-			// $sql->setFetchMode(PDO::FETCH_OBJ);
-
-			// $data['order'] = $sql->fetch();
-
-			// $cmd = '
-	  //   		SELECT 
-			// 		p.name, ot.price, ot.quantity, ot.amount, p.thumbnail, ot.selected_options 
-			// 	FROM tienda.order_detail AS ot 
-			// 	INNER JOIN product AS p ON ot.product_id = p.id
-			// 	WHERE ot.order_id =:order_id
-	  //   	';
-
-	  //   	$sql = $pdo->prepare($cmd);
-			// $sql->execute($parametros);
 			$data['order'] = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 			return $data;
+	    }
+
+	    public function getDetailOrder($orderId){
+	    	$pdo = new Conexion();
+
+	    	$cmd = '
+	    		SELECT 
+					p.name, ot.price, ot.quantity, ot.amount, p.thumbnail, ot.selected_options 
+				FROM tienda.order_detail AS ot 
+				INNER JOIN product AS p ON ot.product_id = p.id
+				WHERE ot.order_id =:order_id
+	    	';
+
+	    	$parametros = array(
+	    		':order_id' => $orderId
+	    	);
+
+	    	$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
 	    }
 	}

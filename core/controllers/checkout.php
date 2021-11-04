@@ -78,7 +78,19 @@
 			header("Content-Type: application/json; charset=UTF-8");
 			
 			exit(json_encode($response));
-		}
+		} else if($vars['_method'] == 'getDetailOrder') {
+			$checkoutModel 	= new Checkoutmodel();
+
+			$response = array(
+				'codeResponse' => 200,
+				'data' => $checkoutModel->getDetailOrder($vars['orderId'])
+			);
+
+			header('HTTP/1.1 200 Ok');
+			header("Content-Type: application/json; charset=UTF-8");
+			
+			exit(json_encode($response));
+		} 
 	}
 
 	header('HTTP/1.1 400 Bad Request');
