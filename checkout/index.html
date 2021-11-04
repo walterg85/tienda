@@ -117,10 +117,29 @@
         $("#cartListItem").html("");
 
         $.each( currentCart, function( index, item){
-            let listItem = $(".cartItemClone").clone();
+            let listItem = $(".cartItemClone").clone(),
+                size = '',
+                color = '';
+
+            if(item.size){
+                if(item.size == "sm")
+                    size = "Small";
+
+                if(item.size == "m")
+                    size = "Medium";
+
+                if(item.size == "l")
+                    size = "Large";
+
+                if(item.size == "xl")
+                    size = "Extra large";
+            }
+
+            if(item.color)
+                color = `${item.color}`;
 
             listItem.find(".prdImg").attr("src", `../${item.thumbnail}`);
-            listItem.find(".prodName").html(item.name);
+            listItem.find(".prodName").html(`${item.name} ${color} ${size}`);
             listItem.find(".prodPrice").html(formatter.format(item.price));
             listItem.find(".intQty").val(item.qty);
 
@@ -134,10 +153,19 @@
         $(".btnDown").unbind().click( function () {
             let currentCart = JSON.parse(localStorage.getItem("currentCart")),
                 data = $(this).parent().data("item"),
-                actualQty = currentCart[data.id].qty;
+                actualQty = 0,
+                itemId = data.id;
+
+            if(data.size)
+                itemId += `|s-${data.size}`;
+
+            if(data.color)
+                itemId += `|c-${data.color}`;
+
+            actualQty = currentCart[itemId].qty;
 
             if(actualQty > 1){
-                currentCart[data.id].qty = actualQty - 1;
+                currentCart[itemId].qty = actualQty - 1;
                 localStorage.setItem("currentCart", JSON.stringify(currentCart));
                 printList();
             }
@@ -146,10 +174,19 @@
         $(".btnUp").unbind().click( function () {
             let currentCart = JSON.parse(localStorage.getItem("currentCart")),
                 data = $(this).parent().data("item"),
-                actualQty = currentCart[data.id].qty;
+                actualQty = 0,
+                itemId = data.id;
+
+            if(data.size)
+                itemId += `|s-${data.size}`;
+
+            if(data.color)
+                itemId += `|c-${data.color}`;
+
+            actualQty = currentCart[itemId].qty;
 
             if(actualQty > 0){
-                currentCart[data.id].qty = actualQty + 1;
+                currentCart[itemId].qty = actualQty + 1;
                 localStorage.setItem("currentCart", JSON.stringify(currentCart));
                 printList();
             }
@@ -157,9 +194,17 @@
 
         $(".btnRemove").unbind().click( function(){
             let currentCart = JSON.parse(localStorage.getItem("currentCart")),
-                data = $(this).parent().data("item");
+                data = $(this).parent().data("item"),
+                itemId = data.id;
 
-            delete currentCart[data.id];
+
+            if(data.size)
+                itemId += `|s-${data.size}`;
+
+            if(data.color)
+                itemId += `|c-${data.color}`;
+
+            delete currentCart[itemId];
             localStorage.setItem("currentCart", JSON.stringify(currentCart));
             printList();
             countCartItem();
@@ -185,11 +230,21 @@
             grantotal += parseFloat(parseFloat(item.price) * parseFloat(item.qty));
 
             let row = {
-                "product_id": index,
+                "product_id": item.id,
                 "price": item.price,
                 "quantity": item.qty,
                 "amount" : parseFloat(parseFloat(item.price) * parseFloat(item.qty))
             };
+
+            let config = {};
+
+            if(item.size)
+                config.size = item.size;
+
+            if(item.color)
+                config.color = item.color;
+
+            row.config = JSON.stringify(config);
 
             orderDetails.push(row);
         });

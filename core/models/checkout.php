@@ -57,9 +57,9 @@
 			foreach ($data as $key => $value) {
 				$cmd = '
 					INSERT INTO order_detail
-							(order_id, product_id, price, quantity, amount)
+							(order_id, product_id, price, quantity, amount, selected_options)
 					VALUES
-						(:order_id, :product_id, :price, :quantity, :amount)
+						(:order_id, :product_id, :price, :quantity, :amount, :selected_options)
 				';
 
 				$parametros = array(
@@ -67,7 +67,8 @@
 					':product_id'	=> $value['product_id'],
 					':price' 		=> $value['price'],
 					':quantity'		=> $value['quantity'],
-					':amount'		=> $value['amount']
+					':amount'		=> $value['amount'],
+					':selected_options' => $value['config']
 				);
 
 				$sql = $pdo->prepare($cmd);
