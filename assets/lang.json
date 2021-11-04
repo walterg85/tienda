@@ -1,0 +1,26 @@
+{
+	"en":{
+		"buttonText": "Español",
+		"addToCart": "Add To Cart",
+		"home":{
+			"pageTitle":"Online Store",
+			"checkCart":"Cart",
+			"btnCheckout": "Checkout"
+		},
+		"checkout":{
+			"logout": "Desconectar"
+		}
+	},
+	"es":{
+		"buttonText": "English",
+		"addToCart": "Añadir al carrito",
+		"home":{
+			"pageTitle":"Tienda en line",
+			"checkCart":"Carrito",
+			"btnCheckout": "Pagar"
+		},
+		"checkout":{
+			"logout": "Desconectar"
+		}
+	}
+}
