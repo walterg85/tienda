@@ -3,6 +3,12 @@
     ob_start();
 ?>
 
+<style type="text/css">
+    .dropdown-menu {
+        width: 20rem !important;
+    }
+</style>
+
 <!-- cropperCSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.9/cropper.min.css" integrity="sha512-w+u2vZqMNUVngx+0GVZYM21Qm093kAexjueWOv9e9nIeYJb1iEfiHC7Y+VvmP/tviQyA5IR32mwN/5hTEJx6Ng==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -10,7 +16,9 @@
     <h1 class="h2">Orders</h1>
 </div>
 
-<table class="table" id="orderList"><thead class="table-light"></thead></table>
+<div class="table-responsive">
+    <table class="table" id="orderList"><thead class="table-light"></thead></table>
+</div>
 
 <!-- Panel lateral para ver detalles del envio -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasOrder" aria-labelledby="offcanvasWithBackdropLabel"  >
@@ -95,21 +103,24 @@
                             });
 
                             return strAddress;
-                        },
-                        width: "400px"
+                        }
                     },
                     {
                         data: 'payment_data',
-                        title: 'Payment details',
+                        title: 'Receive',
                         render: function(data, type, row) {
                             let paypalorder = JSON.parse(data),
-                                str = `Payer: ${paypalorder.purchase_units[0].payee.email_address}, Name: ${paypalorder.purchase_units[0].shipping.name.full_name}`
+                                str = `${paypalorder.purchase_units[0].shipping.name.full_name}`
 
-                            //paypalorder.purchase_units[0].payments.captures[0].id
-
-                            // console.log(paypalorder.purchase_units[0]);
-
-
+                            return str;
+                        }
+                    },
+                    {
+                        data: 'payment_data',
+                        title: 'Paypal reference',
+                        render: function(data, type, row) {
+                            let paypalorder = JSON.parse(data),
+                                str = `${paypalorder.purchase_units[0].payments.captures[0].id}`
                             return str;
                         }
                     },
@@ -118,9 +129,23 @@
                         data: null,
                         orderable: false,
                         class: "text-center",
+                        width: "180px",
                         render: function ( data, type, row ) {
                             return `
-                                <a href="javascript:void(0);" class="btn btn-outline-secondary btnEditProduct me-2" title="Edit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOrder"><i class="bi bi-card-checklist"></i></a>
+                                <a href="javascript:void(0);" class="btn btn-outline-secondary btnEditProduct me-2" title="View details" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOrder"><i class="bi bi-card-checklist"></i></a>
+                                <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteOrder me-2" title="Cancel order"><i class="bi bi-dash-circle"></i></a>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-geo-alt"></i>
+                                    </button>
+                                    <form class="dropdown-menu p-4 dropdown-menu-lg-end">
+                                        <div class="mb-3">
+                                            <label for="inputOrderId${row.id}" class="form-label">Enter the tracking guide and package name</label>
+                                            <input type="email" class="form-control" id="inputOrderId${row.id}" placeholder="#0000000, package name" autocomplete="off">
+                                        </div>
+                                        <button type="button" class="btn btn-success tmpSetTracking">Ok</button>
+                                    </form>
+                                </div>
                             `;
                         }
                     }
