@@ -57,9 +57,9 @@
 			foreach ($data as $key => $value) {
 				$cmd = '
 					INSERT INTO order_detail
-							(order_id, product_id, price, quantity, amount)
+							(order_id, product_id, price, quantity, amount, selected_options)
 					VALUES
-						(:order_id, :product_id, :price, :quantity, :amount)
+						(:order_id, :product_id, :price, :quantity, :amount, :selected_options)
 				';
 
 				$parametros = array(
@@ -67,7 +67,8 @@
 					':product_id'	=> $value['product_id'],
 					':price' 		=> $value['price'],
 					':quantity'		=> $value['quantity'],
-					':amount'		=> $value['amount']
+					':amount'		=> $value['amount'],
+					':selected_options' => $value['config']
 				);
 
 				$sql = $pdo->prepare($cmd);
@@ -96,7 +97,7 @@
 
 			$cmd = '
 	    		SELECT 
-					p.name, ot.price, ot.quantity, ot.amount, p.thumbnail 
+					p.name, ot.price, ot.quantity, ot.amount, p.thumbnail, ot.selected_options 
 				FROM tienda.order_detail AS ot 
 				INNER JOIN product AS p ON ot.product_id = p.id
 				WHERE ot.order_id =:order_id
@@ -122,5 +123,33 @@
 			$sql->setFetchMode(PDO::FETCH_OBJ);
 
 			return $sql->fetch();
-		}	
+		}
+
+		public function GetOrders(){
+	    	$pdo = new Conexion();
+
+	    	$cmd = '
+	    		SELECT id, customer_id, amount, ship_price, shipping_address, order_date, payment_data, status FROM tienda.order
+	    	';
+
+	    	$sql = $pdo->prepare($cmd);
+			$sql->execute();
+			// $sql->setFetchMode(PDO::FETCH_OBJ);
+
+			// $data['order'] = $sql->fetch();
+
+			// $cmd = '
+	  //   		SELECT 
+			// 		p.name, ot.price, ot.quantity, ot.amount, p.thumbnail, ot.selected_options 
+			// 	FROM tienda.order_detail AS ot 
+			// 	INNER JOIN product AS p ON ot.product_id = p.id
+			// 	WHERE ot.order_id =:order_id
+	  //   	';
+
+	  //   	$sql = $pdo->prepare($cmd);
+			// $sql->execute($parametros);
+			$data['order'] = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+			return $data;
+	    }
 	}
