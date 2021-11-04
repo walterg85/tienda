@@ -180,11 +180,13 @@
                 if((config[0].sizes).length > 0){
                     size = $("input[type=radio][name=chsizes]:checked").val();
                     newItemId += `|s-${size}`;
+                    newItem.size = size;
                 }
 
                 if(config[1].colors[0] != ""){
                     color = $("input[type=radio][name=chcolors]:checked").val();
                     newItemId += `|c-${color}`;
+                    newItem.color = color;
                 }
 
                 newItem.id = currentItem.id;
@@ -199,7 +201,7 @@
                 }
 
                 if(currentCart[newItemId]){
-                    currentCart[newItemId].qty = currentCart[currentItem.id].qty + 1;
+                    currentCart[newItemId].qty = currentCart[newItemId].qty + 1;
                 }else{
                     newItem.qty = 1;
                     currentCart[newItemId] = newItem;
@@ -207,6 +209,8 @@
 
                 localStorage.setItem("currentCart", JSON.stringify(currentCart));
                 countCartItem();
+
+                $("#mdlProDetalle").modal("hide");
             });
         });
 
@@ -290,6 +294,7 @@
                                 .parent().removeClass("d-none");
                         });
 
+                        $(".dvSizes").addClass("d-none");
                         if((config[0].sizes).length > 0){
                             $(".dvSizes").removeClass("d-none");
                             $(".toRemoves").remove();
@@ -322,6 +327,7 @@
                             });
                         }
 
+                        $(".dvColors").addClass("d-none");
                         if(config[1].colors[0] != ""){
                             $(".dvColors").removeClass("d-none");
                             $(".toRemovec").remove();
@@ -360,10 +366,29 @@
             $("#cartListItem").html("");
 
             $.each( currentCart, function( index, item){
-                let listItem = $(".cartItemClone").clone();
+                let listItem = $(".cartItemClone").clone(),
+                    size = '',
+                    color = '';
+
+                if(item.size){
+                    if(item.size == "sm")
+                        size = "Small";
+
+                    if(item.size == "m")
+                        size = "Medium";
+
+                    if(item.size == "l")
+                        size = "Large";
+
+                    if(item.size == "xl")
+                        size = "Extra large";
+                }
+
+                if(item.color)
+                    color = `${item.color}`;
 
                 listItem.find(".prdImg").attr("src", item.thumbnail);
-                listItem.find(".prodName").html(item.name);
+                listItem.find(".prodName").html(`${item.name} ${color} ${size}`);
                 listItem.find(".prodPrice").html(formatter.format(item.price));
                 listItem.find(".intQty").val(item.qty);
 
@@ -377,10 +402,19 @@
             $(".btnDown").unbind().click( function () {
                 let currentCart = JSON.parse(localStorage.getItem("currentCart")),
                     data = $(this).parent().data("item"),
-                    actualQty = currentCart[data.id].qty;
+                    actualQty = 0,
+                    itemId = data.id;
+
+                if(data.size)
+                    itemId += `|s-${data.size}`;
+
+                if(data.color)
+                    itemId += `|c-${data.color}`;
+
+                actualQty = currentCart[itemId].qty;
 
                 if(actualQty > 1){
-                    currentCart[data.id].qty = actualQty - 1;
+                    currentCart[itemId].qty = actualQty - 1;
                     localStorage.setItem("currentCart", JSON.stringify(currentCart));
                     printList();
                 }
@@ -389,10 +423,19 @@
             $(".btnUp").unbind().click( function () {
                 let currentCart = JSON.parse(localStorage.getItem("currentCart")),
                     data = $(this).parent().data("item"),
-                    actualQty = currentCart[data.id].qty;
+                    actualQty = 0,
+                    itemId = data.id;
+
+                if(data.size)
+                    itemId += `|s-${data.size}`;
+
+                if(data.color)
+                    itemId += `|c-${data.color}`;
+
+                actualQty = currentCart[itemId].qty;
 
                 if(actualQty > 0){
-                    currentCart[data.id].qty = actualQty + 1;
+                    currentCart[itemId].qty = actualQty + 1;
                     localStorage.setItem("currentCart", JSON.stringify(currentCart));
                     printList();
                 }
@@ -400,9 +443,17 @@
 
             $(".btnRemove").unbind().click( function(){
                 let currentCart = JSON.parse(localStorage.getItem("currentCart")),
-                    data = $(this).parent().data("item");
+                    data = $(this).parent().data("item"),
+                    itemId = data.id;
 
-                delete currentCart[data.id];
+
+                if(data.size)
+                    itemId += `|s-${data.size}`;
+
+                if(data.color)
+                    itemId += `|c-${data.color}`;
+
+                delete currentCart[itemId];
                 localStorage.setItem("currentCart", JSON.stringify(currentCart));
                 printList();
                 countCartItem();
