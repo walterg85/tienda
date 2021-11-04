@@ -129,7 +129,7 @@
 	    	$pdo = new Conexion();
 
 	    	$cmd = '
-	    		SELECT id, customer_id, amount, ship_price, shipping_address, order_date, payment_data, status FROM tienda.order
+	    		SELECT id, customer_id, amount, ship_price, shipping_address, order_date, payment_data, status, coupon, ship_date, shipper_tracking FROM tienda.order
 	    	';
 
 	    	$sql = $pdo->prepare($cmd);
@@ -157,5 +157,38 @@
 	    	$sql = $pdo->prepare($cmd);
 			$sql->execute($parametros);
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
+	    }
+
+	    public function cancelOrder($orderId){
+	    	$pdo = new Conexion();
+
+	    	$cmd = '
+	    		UPDATE tienda.order SET status = 0 WHERE id =:orderId
+	    	';
+
+	    	$parametros = array(
+	    		':orderId' => $orderId
+	    	);
+
+	    	$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+			return TRUE;
+	    }
+
+	    public function setTracking($orderId, $tracking){
+	    	$pdo = new Conexion();
+
+	    	$cmd = '
+	    		UPDATE tienda.order SET status = 2, ship_date = now(), shipper_tracking =:tracking   WHERE id =:orderId
+	    	';
+
+	    	$parametros = array(
+	    		':orderId' => $orderId,
+	    		':tracking' => $tracking
+	    	);
+
+	    	$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+			return TRUE;
 	    }
 	}

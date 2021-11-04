@@ -50,6 +50,9 @@
                 <td class="lblOption"></td>
             </tr>
         </table>
+        <p class="lblCoupon lead d-none"></p>
+        <p class="lblShipDate lead d-none"></p>
+        <p class="lblShipTrak lead d-none"></p>
     </div>
 </div>
 
@@ -148,28 +151,48 @@
                         }
                     },
                     {
+                        data: 'status',
+                        title: 'Status',
+                        render: function(data, type, row) {
+                            if(data == 0)
+                                return "Canceled";
+
+                            if(data == 1)
+                                return "New order";
+
+                            if(data == 2)
+                                return "Order sent";
+                        }
+                    },
+                    {
                         title: '',
                         data: null,
                         orderable: false,
                         class: "text-center",
                         width: "180px",
                         render: function ( data, type, row ) {
-                            return `
-                                <a href="javascript:void(0);" class="btn btn-outline-secondary btnDetailOrder me-2" title="View details" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOrder"><i class="bi bi-card-checklist"></i></a>
-                                <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteOrder me-2" title="Cancel order"><i class="bi bi-dash-circle"></i></a>
-                                <div class="btn-group" role="group">
-                                    <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-geo-alt"></i>
-                                    </button>
-                                    <form class="dropdown-menu p-4 dropdown-menu-lg-end">
-                                        <div class="mb-3">
-                                            <label for="inputOrderId${row.id}" class="form-label">Enter the tracking guide and package name</label>
-                                            <input type="email" class="form-control" id="inputOrderId${row.id}" placeholder="#0000000, package name" autocomplete="off">
-                                        </div>
-                                        <button type="button" class="btn btn-success tmpSetTracking">Ok</button>
-                                    </form>
-                                </div>
-                            `;
+                            let btn = `<a href="javascript:void(0);" class="btn btn-outline-secondary btnDetailOrder me-2" title="View details" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOrder"><i class="bi bi-card-checklist"></i></a>`;
+
+                            if(row.status > 0){
+                                return btn + `
+                                    
+                                    <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteOrder me-2" title="Cancel order"><i class="bi bi-dash-circle"></i></a>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-geo-alt"></i>
+                                        </button>
+                                        <form class="dropdown-menu p-4 dropdown-menu-lg-end">
+                                            <div class="mb-3">
+                                                <label for="inputOrderId${row.id}" class="form-label">Enter the tracking guide and package name</label>
+                                                <input type="text" class="form-control" id="inputOrderId${row.id}" placeholder="#0000000, package name" autocomplete="off">
+                                            </div>
+                                            <button type="button" class="btn btn-success tmpSetTracking">Ok</button>
+                                        </form>
+                                    </div>
+                                `;
+                            }else{
+                                return btn;
+                            }
                         }
                     }
                 ],
@@ -214,9 +237,78 @@
 
                                 row.removeClass("d-none rowClone");
                                 $(row).appendTo("#tblDetalle");
+
+                                if(data.coupon && data.coupon != ""){
+                                    $(".lblCoupon")
+                                                    .removeClass("d-none")
+                                                    .html(`Coupon used: ${data.coupon.toUpperCase()}`);
+                                }else{
+                                    $(".lblCoupon").addClass("d-none");
+                                }
+
+                                if(data.ship_date){
+                                    $(".lblShipDate")
+                                        .removeClass("d-none")
+                                        .html(`Order shipped from ${data.ship_date}`);
+
+                                    let track = (data.shipper_tracking).split(","),
+                                        strTrack = "";
+
+                                    if(track[0])
+                                        strTrack += `Follow-up guide: ${track[0]}`
+
+                                    if(track[1])
+                                        strTrack += ` Company: ${track[1]}`
+
+                                    $(".lblShipTrak")
+                                        .removeClass("d-none")
+                                        .html(strTrack);
+
+                                }else{
+                                    $(".lblShipDate, .lblShipTrak").addClass("d-none");
+                                }
+
                             });
                         });
 
+                    });
+
+                    $(".btnDeleteOrder").unbind().click(function(){
+                        let data = getData($(this), dataTableOrder),
+                            buton = $(this);
+
+                        if (confirm(`Are you sure to cancel this order?`)){
+                            buton.attr("disabled","disabled");
+                            buton.html('<i class="bi bi-clock-history"></i>');
+
+                            let objData = {
+                                "_method":"cancelOrder",
+                                "orderId": data.id
+                            };
+
+                            $.post("../core/controllers/checkout.php", objData, function(result) {
+                                buton.removeAttr("disabled");
+                                buton.html('<i class="bi bi-dash-circle"></i>');
+
+                                getOrders();
+                            });
+
+                        }
+                    });
+
+                    $(".tmpSetTracking").unbind().click(function(){
+                        let data = getData($(this), dataTableOrder),
+                            inputText = $(`#inputOrderId${data.id}`).val();
+
+                        let objData = {
+                            "_method":"setTracking",
+                            "orderId": data.id,
+                            "tracking": inputText
+                        };
+
+                        $.post("../core/controllers/checkout.php", objData, function(result) {
+                            getOrders();
+                        });
                     });
                 },
                 searching: false,

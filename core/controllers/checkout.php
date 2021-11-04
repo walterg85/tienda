@@ -90,6 +90,30 @@
 			header("Content-Type: application/json; charset=UTF-8");
 			
 			exit(json_encode($response));
+		} else if($vars['_method'] == 'cancelOrder') {
+			$checkoutModel 	= new Checkoutmodel();
+			$checkoutModel->cancelOrder($vars['orderId']);
+
+			$response = array(
+				'codeResponse' => 200
+			);
+
+			header('HTTP/1.1 200 Ok');
+			header("Content-Type: application/json; charset=UTF-8");
+			
+			exit(json_encode($response));
+		} else if($vars['_method'] == 'setTracking') {
+			$checkoutModel 	= new Checkoutmodel();
+			$checkoutModel->setTracking($vars['orderId'], $vars['tracking']);
+
+			$response = array(
+				'codeResponse' => 200
+			);
+
+			header('HTTP/1.1 200 Ok');
+			header("Content-Type: application/json; charset=UTF-8");
+			
+			exit(json_encode($response));
 		} 
 	}
 
