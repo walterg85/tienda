@@ -314,10 +314,30 @@
                 $(".lblTotal").html( formatter.format(result.data.order.amount) );
 
                 $.each(result.data.detail, function(index, prod){
-                    let item = $(".prodsItemClone").clone();
+                    let item = $(".prodsItemClone").clone(),
+                        config = JSON.parse(prod.selected_options),
+                        size = "",
+                        color = "";
+
+                    if(config.size){
+                        if(config.size == "sm")
+                            size = "Small";
+
+                        if(config.size == "m")
+                            size = "Medium";
+
+                        if(config.size == "l")
+                            size = "Large";
+
+                        if(config.size == "xl")
+                            size = "Extra large";
+                    }
+
+                    if(config.color)
+                        color = `${config.color}`;
 
                     item.find(".imagep").attr("src", `../${prod.thumbnail}`);
-                    item.find(".lblNameItem").html(`${prod.quantity} - ${prod.name}`);
+                    item.find(".lblNameItem").html(`${prod.quantity} - ${prod.name}  ${size}  ${color}`);
                     item.find(".lblPriceProd").html( formatter.format(prod.price) );
 
                     item.removeClass("d-none prodsItemClone");
