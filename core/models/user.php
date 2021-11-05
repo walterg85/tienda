@@ -9,7 +9,7 @@
 
 	    	$cmd = '
 	    		DELETE FROM user WHERE owner = "admin";
-	    		DELETE FROM setting WHERE parameter in("shipingCost", "shipingFree");
+	    		DELETE FROM setting WHERE parameter in("shipingCost", "shipingFree", "tax");
 	    	';
 
 	    	$sql = $pdo->prepare($cmd);
@@ -19,12 +19,13 @@
 
 			$cmd = '
 				INSERT INTO setting (parameter, value) 
-				VALUES ("shipingCost", :shipingCost), ("shipingFree", :shipingFree);
+				VALUES ("shipingCost", :shipingCost), ("shipingFree", :shipingFree), ("tax", :tax);
 	    	';
 
 			$parametros = array(
 				':shipingCost' => $setData['shipingCost'],
-				':shipingFree' => $setData['shipingFree']
+				':shipingFree' => $setData['shipingFree'],
+				':tax' => $setData['tax']
 			);
 
 	    	$sql = $pdo->prepare($cmd);

@@ -58,7 +58,8 @@
 
 			$setData = array(
 				'shipingCost' => '4.99',
-				'shipingFree' => '75.00'
+				'shipingFree' => '75.00',
+				'tax' => '8.0'
 			);
 
 			$tmpResponse = $userModel->initDefault($usData, $setData);
