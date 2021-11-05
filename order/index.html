@@ -293,18 +293,18 @@
             $.post("../core/controllers/checkout.php", objData, function(result) {
                 $(".lblOrderId").html( pad(result.data.order.id, 5) );
 
-                switch(result.data.order.status) {
-                    case "1":
-                        $(".lblStatus").html("New order");
-                        break;
-                    case "2":
-                        $(".lblStatus").html("Sent to your address");
-                        break;
-                    case "3":
-                        $(".lblStatus").html("Canceled");
-                        break;
-                }
+                if(result.data.order.status == 0)
+                    $(".lblStatus").html("Canceled");
 
+                if(result.data.order.status == 1)
+                    $(".lblStatus").html("New order");
+
+                if(result.data.order.status == 2)
+                    $(".lblStatus").html("Sent to your address");
+
+                if(result.data.order.status == 3)
+                    $(".lblStatus").html("Order completed");
+                
                 let paypalorder = JSON.parse(result.data.order.payment_data);
 
                 $(".lblPaypalId").html( paypalorder.purchase_units[0].payments.captures[0].id );
