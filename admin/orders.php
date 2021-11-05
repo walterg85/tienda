@@ -125,7 +125,7 @@
                                 strAddress = "";
 
                             $.each(objAddress, function(index, item){
-                                strAddress += `${index}: ${item}, `
+                                strAddress += `${item}, `
                             });
 
                             return strAddress;

@@ -124,6 +124,26 @@
 			header("Content-Type: application/json; charset=UTF-8");
 			
 			exit(json_encode($response));
+		} else if($vars['_method'] == 'getProductCat'){
+			$productModel 	= new Productmodel();
+			$productList 	= $productModel->getProductCat($vars['categoryId']);
+
+			if($productList){
+				foreach ($productList as $key => $value) {
+					$productList[$key]['categoria'] = $productModel->getCategories($value['id']);
+				}
+			}
+
+			$response = array(
+				'codeResponse' => 200,
+				'data' => $productList,
+				'message' => 'Ok'
+			);
+
+			header('HTTP/1.1 200 Ok');
+			header("Content-Type: application/json; charset=UTF-8");
+			
+			exit(json_encode($response));
 		}
 	}
 
