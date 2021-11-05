@@ -162,6 +162,9 @@
 
                             if(data == 2)
                                 return "Order sent";
+
+                            if(data == 3)
+                                return "Order completed";
                         }
                     },
                     {
@@ -171,9 +174,10 @@
                         class: "text-center",
                         width: "180px",
                         render: function ( data, type, row ) {
-                            let btn = `<a href="javascript:void(0);" class="btn btn-outline-secondary btnDetailOrder me-2" title="View details" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOrder"><i class="bi bi-card-checklist"></i></a>`;
+                            let btn = `<a href="javascript:void(0);" class="btn btn-outline-secondary btnDetailOrder me-2" title="View details" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOrder"><i class="bi bi-card-checklist"></i></a>`,
+                                btnFinih = `<button type="button" class="btn btn-danger btnFinalize ms-2">Finalize</button>`;
 
-                            if(row.status > 0){
+                            if(row.status == 1 || row.status == 2){
                                 return btn + `
                                     
                                     <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteOrder me-2" title="Cancel order"><i class="bi bi-dash-circle"></i></a>
@@ -187,6 +191,7 @@
                                                 <input type="text" class="form-control" id="inputOrderId${row.id}" placeholder="#0000000, package name" autocomplete="off">
                                             </div>
                                             <button type="button" class="btn btn-success tmpSetTracking">Ok</button>
+                                            ${ (row.shipper_tracking) ? btnFinih : '' }
                                         </form>
                                     </div>
                                 `;
@@ -309,6 +314,22 @@
                         $.post("../core/controllers/checkout.php", objData, function(result) {
                             getOrders();
                         });
+                    });
+
+                    $(".btnFinalize").unbind().click(function(){
+                        let data = getData($(this), dataTableOrder);
+
+                        if (confirm(`Do you want to finish this order?`)){
+
+                            let objData = {
+                                "_method":"finalizeOrder",
+                                "orderId": data.id
+                            };
+
+                            $.post("../core/controllers/checkout.php", objData, function(result) {
+                                getOrders();
+                            });
+                        }
                     });
                 },
                 searching: false,

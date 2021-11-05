@@ -191,4 +191,20 @@
 			$sql->execute($parametros);
 			return TRUE;
 	    }
+
+	    public function finalizeOrder($orderId){
+	    	$pdo = new Conexion();
+
+	    	$cmd = '
+	    		UPDATE tienda.order SET status = 3 WHERE id =:orderId
+	    	';
+
+	    	$parametros = array(
+	    		':orderId' => $orderId
+	    	);
+
+	    	$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+			return TRUE;
+	    }
 	}
