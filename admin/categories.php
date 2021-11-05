@@ -130,6 +130,18 @@
                         }
                     },
                     {
+                        title: 'thumbnails',
+                        data: 'thumbnail',
+                        orderable: false,
+                        class: "text-center",
+                        width: "100px",
+                        render: function ( data, type, row ) {
+                            return `
+                                <img src="../${data}" class="rounded" alt="Image cat" width="100">
+                            `;
+                        }
+                    },
+                    {
                         data: 'name',
                         title: 'Name'
                     },
