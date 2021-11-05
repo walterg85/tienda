@@ -48,11 +48,32 @@
                         <input type="text" class="form-control" placeholder="Coupon Code" id="inputCode" autocomplete="off">
                         <button class="btn btn-outline-secondary" type="button" id="applyCoupon"><i class="bi bi-check2"></i> Apply coupon</button>
                     </div><br><br>
+                    
+                    <table class="table w-50 float-end">
+                        <tbody>
+                            <tr>
+                                <td class="text-end">Shipping Cost</td>
+                                <td class="lblShipCost text-end"></td>
+                            </tr>
+                            <tr class="rowCoupon d-none">
+                                <td class="text-end labelCoupon">Coupon</td>
+                                <td class="lblCoupon text-end">0</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end">Subtotal</td>
+                                <td class="lblsubtotal text-end">0</td>
+                            </tr>
+                            <tr class="rowTax d-none">
+                                <td class="text-end labelTax">Tax</td>
+                                <td class="lblTax text-end">0</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end">Total</td>
+                                <td class="lblTotal text-end">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                    <p class="text-end mb-0 float-none">Shipping Cost <span class="lblShipCost"></span></p>
-                    <p class="text-end mb-0 d-none">Coupon <span class="lblCoupon"></span></p>
-                    <p class="text-end mb-0 d-none">Tax <span class="lblTax"></span></p>
-                    <p class="lead text-danger text-end" id="lblTotal"></p>
                 </div>
                 <div class="col-md-5 col-lg-4">
                     <div class="mt-md-5" id="paypal-button-container"></div>          
@@ -76,6 +97,7 @@
             currency: 'USD',
             minimumFractionDigits: 2
         }),
+        subTotal = 0,
         grantotal = 0,
         ship_price = 0,
         orderDetails = [],
@@ -95,12 +117,14 @@
                 if(result.data){
                     let codigo = result.data;
                     if(codigo.tipo == 1){
-                        descuento = (grantotal * parseFloat( codigo.valor / 100)).toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];;
-                        $(".lblCoupon").html(`Discount ${codigo.valor}% ($${descuento})`);
+                        descuento = (subTotal * parseFloat( codigo.valor / 100)).toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+                        $(".labelCoupon").html(`Discount ${codigo.valor}%`);
+                        $(".lblCoupon").html(`$${descuento}`);
                         $(".lblCoupon").parent().removeClass("d-none");
                     }else{
                         descuento = parseFloat( codigo.valor );
-                        $(".lblCoupon").html(`Discount ${formatter.format(descuento)}`);
+                        $(".labelCoupon").html(`Discount`);
+                        $(".lblCoupon").html(`${formatter.format(descuento)}`);
                         $(".lblCoupon").parent().removeClass("d-none");
                     }                    
                 }else{
@@ -224,6 +248,7 @@
         grantotal = 0;
         ship_price = 0;
         orderDetails = [];
+        subTotal = 0;
 
         let currentCart = JSON.parse(localStorage.getItem("currentCart"));
 
@@ -272,17 +297,22 @@
                 grantotal = grantotal - parseFloat(descuento);
             }
 
+            subTotal = grantotal;
+
+            $(".lblsubtotal").html(formatter.format(grantotal));
+
             if(tax || tax != "" || tax > 0){
                 let impuesto = grantotal * (parseFloat(tax) / 100);
                 grantotal = grantotal + impuesto;
 
-                $(".lblTax").html(`${tax}% (${formatter.format(impuesto)})`);
+                $(".labelTax").html(`Tax ${tax}%`);
+                $(".lblTax").html(`${formatter.format(impuesto)}`);
                 $(".lblTax").parent().removeClass("d-none");
             }else{
                 $(".lblTax").parent().addClass("d-none");
             }
 
-            $("#lblTotal").html(`<strong>Pay ${formatter.format(grantotal)}</strong>`);
+            $(".lblTotal").html(`<strong class="text-danger">${formatter.format(grantotal)}</strong>`);
         });
     }
 </script>
