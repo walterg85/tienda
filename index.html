@@ -153,10 +153,11 @@
 
     <script type="text/javascript">
         var formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 2
-        });
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            }),
+            lang = "en";
 
         $(document).ready(function(){
             getProducts();
@@ -211,6 +212,8 @@
                 newItem.id = currentItem.id;
                 newItem.name = currentItem.name;
                 newItem.descriptions = currentItem.descriptions;
+                newItem.name = currentItem.optional_name;
+                newItem.descriptions = currentItem.optional_description;
                 newItem.thumbnail = currentItem.thumbnail;
 
                 if( (currentItem.sale_price).length > 0 && currentItem.sale_price > 0){
@@ -239,11 +242,17 @@
             };
 
             $.post("core/controllers/product.php", objData, function(result) {
+                $("#ListProduct").html("");
                 $.each( result.data, function( index, item){
                     let productCard = $(".itemClone").clone();
 
-                    productCard.find(".card-title").html(item.name);
-                    productCard.find(".card-text").html(item.descriptions);
+                    if(lang == "en"){
+                        productCard.find(".card-title").html(item.name);
+                        productCard.find(".card-text").html(item.descriptions);
+                    }else{
+                        productCard.find(".card-title").html(item.optional_name);
+                        productCard.find(".card-text").html(item.optional_description);
+                    }                    
 
                     if( (item.sale_price).length > 0 && item.sale_price > 0){
                         productCard.find(".lblOldPrice").html( formatter.format(item.price)).removeClass("d-none");
@@ -276,7 +285,9 @@
 
                         newItem.id = currentItem.id;
                         newItem.name = currentItem.name;
+                        newItem.optional_name = currentItem.optional_name;
                         newItem.descriptions = currentItem.descriptions;
+                        newItem.optional_description = currentItem.optional_description;
                         newItem.thumbnail = currentItem.thumbnail;
 
                         if( (currentItem.sale_price).length > 0 && currentItem.sale_price > 0){
@@ -295,8 +306,13 @@
                         localStorage.setItem("currentCart", JSON.stringify(currentCart));
                         countCartItem();
                     }else{
-                        $(".lblMdlName").html(currentItem.name);
-                        $(".lblDescription").html(currentItem.descriptions);
+                        if(lang == "en"){
+                            $(".lblMdlName").html(currentItem.name);
+                            $(".lblDescription").html(currentItem.descriptions);
+                        }else{
+                            $(".lblMdlName").html(currentItem.optional_name);
+                            $(".lblDescription").html(currentItem.optional_description);
+                        }                        
 
                         if( (currentItem.sale_price).length > 0 && currentItem.sale_price > 0){
                             $(".lblMdlPrice").html( formatter.format(currentItem.sale_price) );
@@ -407,7 +423,13 @@
                     color = `${item.color}`;
 
                 listItem.find(".prdImg").attr("src", item.thumbnail);
-                listItem.find(".prodName").html(`${item.name} ${color} ${size}`);
+
+                 if(lang == "en"){
+                    listItem.find(".prodName").html(`${item.name} ${color} ${size}`);
+                }else{
+                    listItem.find(".prodName").html(`${item.optional_name} ${color} ${size}`);
+                }
+
                 listItem.find(".prodPrice").html(formatter.format(item.price));
                 listItem.find(".intQty").val(item.qty);
 

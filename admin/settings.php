@@ -21,6 +21,10 @@
         <label for="inputshipingFree" class="form-label">Free Shipping</label>
         <input type="text" class="form-control" placeholder="Free Shipping" aria-label="Free Shipping" id="inputshipingFree">
     </div>
+    <div class="col-3">
+        <label for="inputtax" class="form-label">Tax</label>
+        <input type="text" class="form-control" placeholder="Tax" aria-label="Tax" id="inputtax">
+    </div>
 </div>
 
 <hr>
@@ -71,8 +75,8 @@
             "shipingFree": $("#inputshipingFree").val(),
             "owner": $("#inputUname").val(),
             "email": $("#inputMail").val(),
-            "password": $("#inputPass").val()
-
+            "password": $("#inputPass").val(),
+            "tax": $("#inputtax").val()
         };
 
         $.post("../core/controllers/setting.php", objData, function(result) {

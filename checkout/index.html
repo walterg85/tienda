@@ -51,6 +51,7 @@
 
                     <p class="text-end mb-0 float-none">Shipping Cost <span class="lblShipCost"></span></p>
                     <p class="text-end mb-0 d-none">Coupon <span class="lblCoupon"></span></p>
+                    <p class="text-end mb-0 d-none">Tax <span class="lblTax"></span></p>
                     <p class="lead text-danger text-end" id="lblTotal"></p>
                 </div>
                 <div class="col-md-5 col-lg-4">
@@ -256,7 +257,8 @@
         $.post("../core/controllers/setting.php", objData, function(result) {
             let data = result.data,
                 shipingCost = parseFloat(data[0].value),
-                shipingFree = parseFloat(data[1].value);
+                shipingFree = parseFloat(data[1].value),
+                tax = parseFloat(data[2].value);
 
             $(".lblShipCost").html("$0.00");
 
@@ -268,6 +270,16 @@
 
             if(parseFloat(descuento) > 0){
                 grantotal = grantotal - parseFloat(descuento);
+            }
+
+            if(tax || tax != "" || tax > 0){
+                let impuesto = grantotal * (parseFloat(tax) / 100);
+                grantotal = grantotal + impuesto;
+
+                $(".lblTax").html(`${tax}% (${formatter.format(impuesto)})`);
+                $(".lblTax").parent().removeClass("d-none");
+            }else{
+                $(".lblTax").parent().addClass("d-none");
             }
 
             $("#lblTotal").html(`<strong>Pay ${formatter.format(grantotal)}</strong>`);
