@@ -80,7 +80,7 @@
 			exit(json_encode($response));
 		} else if($vars['_method'] == 'GET'){
 			$productModel 	= new Productmodel();
-			$productList 	= $productModel->getProduct();
+			$productList 	= $productModel->getProduct($vars['limite']);
 
 			if($productList){
 				foreach ($productList as $key => $value) {

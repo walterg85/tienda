@@ -269,7 +269,8 @@
 
     function getProducts(){
         let objData = {
-            "_method":"GET"
+            "_method":"GET",
+            "limite": 0
         };
 
         if (dataTableProduct != null)
