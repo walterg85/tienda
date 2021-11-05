@@ -9,11 +9,11 @@
     }
 </style>
 
-<!-- cropperCSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.9/cropper.min.css" integrity="sha512-w+u2vZqMNUVngx+0GVZYM21Qm093kAexjueWOv9e9nIeYJb1iEfiHC7Y+VvmP/tviQyA5IR32mwN/5hTEJx6Ng==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Orders</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="input-group mb-3 dvFilter"></div>
+    </div>
 </div>
 
 <div class="table-responsive">
@@ -332,12 +332,35 @@
                         }
                     });
                 },
-                searching: false,
+                searching: true,
                 pageLength: 20,
                 info: false,
                 lengthChange: false,
-                paging: mypaging
+                paging: mypaging,
+                initComplete: function(){
+                    this.api().columns([7]).every( function(){
+                        $(".dvFilter").html(`<label class="input-group-text" for="cboFilter">Filter</label>`);
+                        let column = this,
+                            select = $(`<select class="form-select" id="cboFilter"><option value="">All</option></select>`)
+                                .appendTo(".dvFilter")
+                                .on('change', function(){
+                                    let val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                                    column
+                                    .search( val ? '^'+val+'$' : '', true, false)
+                                    .draw();
+                                });
+
+                        column.cells('', column[0]).render('display').sort().unique().each(function( d, j )
+                        {
+                            select.append(`<option value="${d}">${d}</option>`);
+                        });
+                    });
+                }
             });
+            
+            $(".dataTables_filter").parent().addClass("d-none");
+
         });
     }
 </script>
