@@ -32,6 +32,7 @@
         </div>
  
         <!-- Products -->
+        <h2 class="pb-2 text-center display-6">Top Products</h2>
         <div class="text-center col-lg-3 col-md-4 col-6 my-3 itemClone d-none">
             <div class="card shadow">
                 <div class="badge bg-warning text-white position-absolute d-none brandPrice" style="top: 0.5rem; right: 0.5rem">
@@ -252,7 +253,8 @@
 
         function getProducts() {
             let objData = {
-                "_method":"GET"
+                "_method":"GET",
+                "limite": 20
             };
 
             $.post("core/controllers/product.php", objData, function(result) {

@@ -68,8 +68,13 @@
 			return TRUE;
 		}
 
-		public function getProduct() {
+		public function getProduct($limite) {
 			$pdo = new Conexion();
+			$strLimite = '';
+
+			if($limite > 0)
+				$strLimite = 'LIMIT 0, ' . $limite;
+
 
 			$cmd = '
 				SELECT
@@ -87,6 +92,8 @@
 				FROM 
 					product
 				WHERE active = 1
+				ORDER BY id DESC
+				'. $strLimite .'
 			';
 
 			$sql = $pdo->prepare($cmd);
