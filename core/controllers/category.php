@@ -25,12 +25,24 @@
 		} else if($vars['_method'] == 'POST'){
 			$categoryModel = new Categorymodel();
 
-			$tmpResponse = $categoryModel->register($vars['name']);
+			$categoryId = $categoryModel->register($vars['inputName']);
 
-			if($tmpResponse){
+			if($categoryId){
 				$response = array(
 					'codeResponse' => 200
 				);
+
+				$folder = "assets/img/category";
+				if( !is_dir(dirname(__FILE__, 3) . "/{folder}") )
+					mkdir(dirname(__FILE__, 3) . "/{$folder}", 0777, true);
+
+				if (!empty($_FILES['imageCat'])){
+					$filename = $_FILES['imageCat']['name'];
+					$tempname = $_FILES['imageCat']['tmp_name'];
+					       
+					if (move_uploaded_file($tempname, "../../{$folder}/{$filename}"))
+						$categoryModel->updateThumbnail($categoryId, "{$folder}/{$filename}");
+				}
 			}else{
 				$response = array(
 					'codeResponse' => 0
