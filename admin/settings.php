@@ -4,7 +4,7 @@
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Settings</h1>
+    <h1 class="h2 lblNamePage">Settings</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
             <button type="button" class="btn btn-outline-secondary" id="btnUpdateData"><i class="bi bi-check2"></i> Save changes</button>
@@ -14,15 +14,15 @@
 <form id="configForm" class="needs-validation" novalidate>
     <div class="row g-3">
         <div class="col-3">
-            <label for="inputshipingCost" class="form-label">Shipping Cost</label>
+            <label for="inputshipingCost" class="form-label lblShipCost">Shipping Cost</label>
             <input type="text" class="form-control" placeholder="Shipping Cost" aria-label="Shipping Cost" id="inputshipingCost" required>
         </div>
         <div class="col-3">
-            <label for="inputshipingFree" class="form-label">Free Shipping</label>
+            <label for="inputshipingFree" class="form-label lblShipFree">Free Shipping</label>
             <input type="text" class="form-control" placeholder="Free Shipping" aria-label="Free Shipping" id="inputshipingFree" required>
         </div>
         <div class="col-3">
-            <label for="inputtax" class="form-label">Tax</label>
+            <label for="inputtax" class="form-label lblTax">Tax</label>
             <input type="text" class="form-control" placeholder="Tax" aria-label="Tax" id="inputtax" required>
         </div>
     </div>
@@ -31,21 +31,22 @@
 
     <div class="row g-3">
         <div class="col-3">
-            <label for="inputUname" class="form-label">User name</label>
+            <label for="inputUname" class="form-label lblUname">User name</label>
             <input type="text" class="form-control" placeholder="User name" aria-label="User name" id="inputUname" readonly value="<?php echo $_SESSION['authData']->owner; ?>" required>
         </div>
         <div class="col-4">
-            <label for="inputMail" class="form-label">Email</label>
+            <label for="inputMail" class="form-label lblEmail">Email</label>
             <input type="mail" class="form-control" placeholder="Enter a email" aria-label="Enter a email" id="inputMail" value="<?php echo $_SESSION['authData']->email; ?>" required>
         </div>
         <div class="col-3">
-            <label for="inputPass" class="form-label">Change Password</label>
+            <label for="inputPass" class="form-label lblPassword">Change Password</label>
             <input type="password" class="form-control" placeholder="New Password" aria-label="New Password" id="inputPass">
         </div>
     </div>
 </form>
 
 <script type="text/javascript">
+    var confButonText = "";
     $(document).ready(function(){
         currentPage = "Settings";
 
@@ -99,8 +100,26 @@
             isNew = <?php echo $_SESSION['authData']->isDefault; ?>;
 
             $("#btnUpdateData").removeAttr("disabled");
-            $("#btnUpdateData").html('<i class="bi bi-check2"></i> Save changes');
+            $("#btnUpdateData").html('<i class="bi bi-check2"></i> ' + confButonText);
         });
+    }
+
+    function changePageLang(myLang){
+        $(".lblNamePage").html(myLang.namePage);
+        $("#btnUpdateData").html(`<i class="bi bi-check2"></i> ${myLang.butonText}`);
+        confButonText = myLang.butonText;
+        $(".lblShipCost").html(myLang.labelShipCost);
+        $(".lblShipFree").html(myLang.labelShipFree);
+        $(".lblTax").html(myLang.labelTax);
+        $(".lblUname").html(myLang.labelUname);
+        $(".lblEmail").html(myLang.labelEmail);
+        $(".lblPassword").html(myLang.labelPassword);
+
+        $("#inputshipingCost").attr("placeholder", myLang.labelShipCost);
+        $("#inputshipingFree").attr("placeholder", myLang.labelShipFree);
+        $("#inputtax").attr("placeholder", myLang.labelTax);
+        $("#inputMail").attr("placeholder", myLang.labelEmail);
+        $("#inputPass").attr("placeholder", myLang.labelPassword);
     }
 </script>
 

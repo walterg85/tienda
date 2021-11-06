@@ -160,6 +160,10 @@
             });
         });
     }
+
+    function changePageLang(myLang){
+        
+    }
 </script>
 
 
