@@ -1,0 +1,46 @@
+{
+	"en":{
+		"buttonText": "Español",
+		"main":{
+			"inputSearch":"Search",
+			"linkLogout": "Sign out",
+			"linkCategories": "Categories",
+			"linkProduct": "Products",
+			"linkCoupons": "Coupons",
+			"linkOrders": "Orders",
+			"linkSetting": "Settings"
+		},
+		"Settings":{
+			"namePage":"Settings",
+			"butonText": "Save changes",
+			"labelShipCost": "Shipping Cost",
+			"labelShipFree": "Free Shipping",
+			"labelTax": "Tax",
+			"labelUname": "User name",
+			"labelEmail": "Email",
+			"labelPassword": "Change Password"
+		}
+	},
+	"es":{
+		"buttonText": "English",
+		"main":{
+			"inputSearch":"Buscar",
+			"linkLogout": "Desconectar",
+			"linkCategories": "Categorias",
+			"linkProduct": "Productos",
+			"linkCoupons": "Cupones",
+			"linkOrders": "Pedidos",
+			"linkSetting": "Configuraciones"
+		},
+		"Settings":{
+			"namePage":"Configuraciones",
+			"butonText": "Guardar cambios",
+			"labelShipCost": "Costo de envio",
+			"labelShipFree": "Envío gratis",
+			"labelTax": "Impuesto",
+			"labelUname": "Nombre de usuario",
+			"labelEmail": "Correo electronico",
+			"labelPassword": "Cambiar contraseña"
+		}
+	}
+}

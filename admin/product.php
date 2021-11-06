@@ -623,6 +623,10 @@
             }
         });
     }
+
+    function changePageLang(myLang){
+        
+    }
 </script>
 
 <?php

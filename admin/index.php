@@ -56,7 +56,7 @@
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        <input class="form-control form-control-dark w-100 lblInputSearch" type="text" placeholder="Search" aria-label="Search">
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
                 <a class="nav-link px-3" href="javascript:void(0);" id="btnLogout">Sign out</a>
@@ -70,27 +70,27 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="javascript:void(0);">
+                            <a class="nav-link active changeLang" aria-current="page" href="javascript:void(0);">
                                 <i class="bi bi-globe2"></i> Español
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="categories.php">
+                            <a class="nav-link linkCategories" href="categories.php">
                                 <i class="bi bi-tags"></i> Categories
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="product.php">
+                            <a class="nav-link linkProduct" href="product.php">
                                 <i class="bi bi-bag"></i> Products
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="coupons.php">
+                            <a class="nav-link linkCoupons" href="coupons.php">
                                 <i class="bi bi-award"></i> Coupons
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="orders.php">
+                            <a class="nav-link linkOrders" href="orders.php">
                                 <i class="bi bi-basket"></i> Orders
                             </a>
                         </li>
@@ -117,9 +117,18 @@
 
     <script type="text/javascript">
         var isNew = <?php echo $_SESSION['authData']->isDefault; ?>,
-            currentPage = "";
+            currentPage = "",
+            lang = "en";
 
         $(document).ready(function(){
+            if( localStorage.getItem("currentLag") ){
+                lang = localStorage.getItem("currentLag");
+            }else{
+                localStorage.setItem("currentLag", lang);
+            }
+
+            switchLanguage(lang);
+
             if(isNew == 1 && currentPage != "Settings")
                 document.getElementById("linkSetting").click();
 
@@ -130,6 +139,16 @@
                 }
             });
 
+            $(".changeLang").click( function(){
+                if (localStorage.getItem("currentLag") == "es") {
+                    localStorage.setItem("currentLag", "en");
+                    lang = "en";
+                }else{
+                    localStorage.setItem("currentLag", "es");
+                    lang = "es";
+                }
+                switchLanguage(lang);
+            });
         });
 
         function pad (str, max) {
@@ -140,6 +159,24 @@
         function getData(obj, dtable){
             let tr   = obj.parents("tr");
             return dtable.row( tr ).data();
+        }
+
+        function switchLanguage(lang){
+            $.post("../assets/langAdmin.json", {}, function(data) {
+                $(".changeLang").html('<i class="bi bi-globe2"></i> ' + data[lang]["buttonText"]);
+
+                let myLang = data[lang]["main"];
+
+                $(".lblInputSearch").attr("placeholder", myLang.inputSearch);
+                $("#btnLogout").html(myLang.linkLogout);
+                $(".linkCategories").html(`<i class="bi bi-tags"></i> ${myLang.linkCategories}`);
+                $(".linkProduct").html(`<i class="bi bi-bag"></i> ${myLang.linkProduct}`);
+                $(".linkCoupons").html(`<i class="bi bi-award"></i> ${myLang.linkCoupons}`);
+                $(".linkOrders").html(`<i class="bi bi-basket"></i> ${myLang.linkOrders}`);
+                $("#linkSetting").html(`<i class="bi bi-sliders"></i> ${myLang.linkSetting}`);
+
+                changePageLang(data[lang][currentPage]);
+            });
         }
     </script>
 </body>
