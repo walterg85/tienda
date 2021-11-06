@@ -11,10 +11,10 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Categories</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <form id="frmCategorie">
+        <form id="frmCategorie" class="needs-validation" novalidate>
             <div class="input-group me-2">
-                <input type="text" class="form-control" placeholder="Category name" aria-label="Category name" aria-describedby="btnAddCategory" id="inputName" name="inputName" autocomplete="off">
-                <label class="input-group-text" for="inputPhoto">Click to select a photo</label>
+                <input type="text" class="form-control" placeholder="Category name" aria-label="Category name" aria-describedby="btnAddCategory" id="inputName" name="inputName" autocomplete="off" required>
+                <label class="input-group-text" for="inputPhoto" title="Click to select a photo"><i class="bi bi-camera"></i></label>
                 <input type="file" class="form-control d-none" id="inputPhoto">
                 <button class="btn btn-outline-secondary" type="button" id="btnAddCategory"><i class="bi bi-plus-lg"></i> Add Category</button>
             </div>
@@ -64,8 +64,19 @@
     });
 
     function fnRegisterCategory(){
-        if( $("#inputName").val().length == 0 )
-            return;
+        let forms = document.querySelectorAll('.needs-validation'),
+            continuar = true;
+
+        Array.prototype.slice.call(forms).forEach(function (formv){ 
+            if (!formv.checkValidity()) {
+                    continuar = false;
+            }
+
+            formv.classList.add('was-validated');
+        });
+
+        if(!continuar)
+            return false;
 
         $("#btnAddCategory").attr("disabled","disabled");
         $("#btnAddCategory").html('<i class="bi bi-clock-history"></i> Registering');

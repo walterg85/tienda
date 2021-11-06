@@ -48,30 +48,30 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <form id="addProductForm">
+        <form id="addProductForm" class="needs-validation" novalidate>
             <input type="hidden" name="productId" id="productId" value="0">
             <div class="row">
                 <div class="col mb-3">
                     <label for="inputName" class="form-label">Name</label>
-                    <input type="text" id="inputName" name="inputName" class="form-control" autocomplete="off">
+                    <input type="text" id="inputName" name="inputName" class="form-control" autocomplete="off" required>
                 </div>
                 <div class="col mb-3">
                     <label for="inputNameSp" class="form-label">Name Spanish</label>
-                    <input type="text" id="inputNameSp" name="inputNameSp" class="form-control" autocomplete="off">
+                    <input type="text" id="inputNameSp" name="inputNameSp" class="form-control" autocomplete="off" required>
                 </div>
             </div>
             <div class="mb-3">
                 <label for="inputDescription" class="form-label">Description</label>
-                <input type="text" id="inputDescription" name="inputDescription" class="form-control" autocomplete="off">
+                <input type="text" id="inputDescription" name="inputDescription" class="form-control" autocomplete="off" required>
             </div>
             <div class="mb-3">
                 <label for="inputDescriptionSp" class="form-label">Description Spanish</label>
-                <input type="text" id="inputDescriptionSp" name="inputDescriptionSp" class="form-control" autocomplete="off">
+                <input type="text" id="inputDescriptionSp" name="inputDescriptionSp" class="form-control" autocomplete="off" required>
             </div>
             <div class="row">
                 <div class="col-3 mb-3">
                     <label for="inputPrice" class="form-label">Price</label>
-                    <input type="text" id="inputPrice" name="inputPrice" class="form-control" autocomplete="off">
+                    <input type="text" id="inputPrice" name="inputPrice" class="form-control" autocomplete="off" required>
                 </div>
                 <div class="col-3 mb-3">
                     <label for="inputSalePrice" class="form-label">Sale Price</label>
@@ -79,7 +79,7 @@
                 </div>
                 <div class="col-6 mb-3">
                     <label for="inputCategory" class="form-label">Category</label>
-                    <select class="form-select" id="inputCategory" name="inputCategory"></select>
+                    <select class="form-select" id="inputCategory" name="inputCategory" required></select>
                 </div>
             </div>
             <div class="row">
@@ -214,7 +214,7 @@
         };
 
         $.post("../core/controllers/category.php", objData, function(result) {
-            let optList = '<option value="0" selected>Select Category</option>';
+            let optList = '<option value="" selected>Select Category</option>';
             $.each( result.data, function( index, item){
                 optList += `<option value="${item.id}">${item.name}</option>`;
             });
@@ -223,6 +223,20 @@
     }
 
     function registerProduct(){
+        let forms = document.querySelectorAll('.needs-validation'),
+                    continuar = true;
+
+        Array.prototype.slice.call(forms).forEach(function (formv){ 
+            if (!formv.checkValidity()) {
+                    continuar = false;
+            }
+
+            formv.classList.add('was-validated');
+        });
+
+        if(!continuar)
+            return false;
+
         let mySizes = document.getElementsByName('chsizes'),
             pSizes = [],
             pColors = [$("#inputColors").val()],
