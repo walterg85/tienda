@@ -6,15 +6,17 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Coupons</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="input-group me-2">
-            <input type="text" class="form-control" placeholder="Coupon Code" id="inputCode" autocomplete="off" style="width: 40%;">
-            <input type="text" class="form-control" placeholder="Value" id="inputValue" autocomplete="off">
-            <select class="form-select" id="cboTipo">
-                <option value="1">%</option>
-                <option value="2">$</option>
-            </select>
-            <button class="btn btn-outline-secondary btn-sm" type="button" id="btnAddCoupon"><i class="bi bi-plus-lg"></i> Add coupon</button>
-        </div>
+        <form id="addCouponForm" class="needs-validation" novalidate>
+            <div class="input-group me-2">
+                <input type="text" class="form-control" placeholder="Coupon Code" id="inputCode" autocomplete="off" style="width: 40%;" required>
+                <input type="text" class="form-control" placeholder="Value" id="inputValue" autocomplete="off" required>
+                <select class="form-select" id="cboTipo">
+                    <option value="1">%</option>
+                    <option value="2">$</option>
+                </select>
+                <button class="btn btn-outline-secondary btn-sm" type="button" id="btnAddCoupon"><i class="bi bi-plus-lg"></i> Add coupon</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -38,6 +40,20 @@
     });
 
     function fnRegisterCoupon(){
+        let forms = document.querySelectorAll('.needs-validation'),
+            continuar = true;
+
+        Array.prototype.slice.call(forms).forEach(function (formv){ 
+            if (!formv.checkValidity()) {
+                    continuar = false;
+            }
+
+            formv.classList.add('was-validated');
+        });
+
+        if(!continuar)
+            return false;
+
         $("#btnAddCoupon").attr("disabled","disabled");
         $("#btnAddCoupon").html('<i class="bi bi-clock-history"></i> Registering');
 

@@ -11,38 +11,39 @@
         </div>
     </div>
 </div>
+<form id="configForm" class="needs-validation" novalidate>
+    <div class="row g-3">
+        <div class="col-3">
+            <label for="inputshipingCost" class="form-label">Shipping Cost</label>
+            <input type="text" class="form-control" placeholder="Shipping Cost" aria-label="Shipping Cost" id="inputshipingCost" required>
+        </div>
+        <div class="col-3">
+            <label for="inputshipingFree" class="form-label">Free Shipping</label>
+            <input type="text" class="form-control" placeholder="Free Shipping" aria-label="Free Shipping" id="inputshipingFree" required>
+        </div>
+        <div class="col-3">
+            <label for="inputtax" class="form-label">Tax</label>
+            <input type="text" class="form-control" placeholder="Tax" aria-label="Tax" id="inputtax" required>
+        </div>
+    </div>
 
-<div class="row g-3">
-    <div class="col-3">
-        <label for="inputshipingCost" class="form-label">Shipping Cost</label>
-        <input type="text" class="form-control" placeholder="Shipping Cost" aria-label="Shipping Cost" id="inputshipingCost">
-    </div>
-    <div class="col-3">
-        <label for="inputshipingFree" class="form-label">Free Shipping</label>
-        <input type="text" class="form-control" placeholder="Free Shipping" aria-label="Free Shipping" id="inputshipingFree">
-    </div>
-    <div class="col-3">
-        <label for="inputtax" class="form-label">Tax</label>
-        <input type="text" class="form-control" placeholder="Tax" aria-label="Tax" id="inputtax">
-    </div>
-</div>
+    <hr>
 
-<hr>
-
-<div class="row g-3">
-    <div class="col-3">
-        <label for="inputUname" class="form-label">User name</label>
-        <input type="text" class="form-control" placeholder="User name" aria-label="User name" id="inputUname" readonly value="<?php echo $_SESSION['authData']->owner; ?>">
+    <div class="row g-3">
+        <div class="col-3">
+            <label for="inputUname" class="form-label">User name</label>
+            <input type="text" class="form-control" placeholder="User name" aria-label="User name" id="inputUname" readonly value="<?php echo $_SESSION['authData']->owner; ?>" required>
+        </div>
+        <div class="col-4">
+            <label for="inputMail" class="form-label">Email</label>
+            <input type="mail" class="form-control" placeholder="Enter a email" aria-label="Enter a email" id="inputMail" value="<?php echo $_SESSION['authData']->email; ?>" required>
+        </div>
+        <div class="col-3">
+            <label for="inputPass" class="form-label">Change Password</label>
+            <input type="password" class="form-control" placeholder="New Password" aria-label="New Password" id="inputPass">
+        </div>
     </div>
-    <div class="col-4">
-        <label for="inputMail" class="form-label">Email</label>
-        <input type="mail" class="form-control" placeholder="Enter a email" aria-label="Enter a email" id="inputMail" value="<?php echo $_SESSION['authData']->email; ?>">
-    </div>
-    <div class="col-3">
-        <label for="inputPass" class="form-label">Change Password</label>
-        <input type="password" class="form-control" placeholder="New Password" aria-label="New Password" id="inputPass">
-    </div>
-</div>
+</form>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -66,6 +67,20 @@
     }
 
     function fnUpdateData(){
+        let forms = document.querySelectorAll('.needs-validation'),
+            continuar = true;
+
+        Array.prototype.slice.call(forms).forEach(function (formv){ 
+            if (!formv.checkValidity()) {
+                    continuar = false;
+            }
+
+            formv.classList.add('was-validated');
+        });
+
+        if(!continuar)
+            return false;
+        
         $("#btnUpdateData").attr("disabled","disabled");
         $("#btnUpdateData").html('<i class="bi bi-clock-history"></i> Updating');
 
