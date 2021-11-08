@@ -11,18 +11,51 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Categories</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <form id="frmCategorie" class="needs-validation" novalidate>
-            <div class="input-group me-2">
-                <input type="text" class="form-control" placeholder="Category name" aria-label="Category name" aria-describedby="btnAddCategory" id="inputName" name="inputName" autocomplete="off" required>
-                <label class="input-group-text" for="inputPhoto" title="Click to select a photo"><i class="bi bi-camera"></i></label>
-                <input type="file" class="form-control d-none" id="inputPhoto">
-                <button class="btn btn-outline-secondary" type="button" id="btnAddCategory"><i class="bi bi-plus-lg"></i> Add Category</button>
-            </div>
-        </form>
+        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#modalCategoria"><i class="bi bi-plus-lg"></i> Add Category</button>
     </div>
 </div>
 
 <table class="table" id="categoryList"><thead class="table-light"></thead></table>
+
+<!-- Modal para administrar categorias -->
+<div class="modal fade" id="modalCategoria" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCategorie" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="inputName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Category name" autocomplete="off" required>
+                    </div>
+                    <center>
+                        <figure class="figure d-none" id="imgPreview">
+                            <img src="#" class="figure-img img-fluid rounded imgPreview">
+                            <figcaption class="figure-caption text-end">Preview</figcaption>
+                        </figure>
+                    </center>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="inputPhoto"><i class="bi bi-camera"></i></label>
+                        <input type="file" class="form-control" id="inputPhoto">
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="chkVisible">
+                            <label class="form-check-label" for="chkVisible">Visible on main page</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="btnAddCategory">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal para editar las imagenes -->
 <div class="modal fade" id="modalCrop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -61,6 +94,14 @@
 
         // Iniciar componente de imagen
         initComponent();
+
+        var myModalEl = document.getElementById('modalCategoria')
+        myModalEl.addEventListener('hidden.bs.modal', function (event) {
+            $("#inputPhoto").val("");
+            $("#inputName").val("");
+            $("#chkVisible").prop("checked", false);
+            $("#frmCategorie").removeClass("was-validated");
+        })
     });
 
     function fnRegisterCategory(){
@@ -91,6 +132,9 @@
             formData.append("imageCat", catPhoto, `${namePhoto}.jpg`);
         }
 
+        let visible = ($("#chkVisible").is(':checked')) ? 1 : 0;
+        formData.append("chkVisible", visible);
+
         $.ajax({
             url: '../core/controllers/category.php',
             data: formData,
@@ -101,6 +145,7 @@
                 $("#btnAddCategory").html('<i class="bi bi-plus-lg"></i> Add Category');
 
                 $("#inputName").val("");
+                $("#chkVisible").prop("checked", false);
                 $("#frmCategorie").removeClass("was-validated");
                 
                 fnGetCategories();
@@ -224,7 +269,8 @@
         });
 
         // Image Cropper
-        let image       = $("#previewCrop")[0],
+        let picture = $(".imgPreview"),
+            image       = $("#previewCrop")[0],
             inputFile1   = $("#inputPhoto")[0],
             $modal      = $('#modalCrop'),
             cropper     = null;
@@ -282,6 +328,10 @@
                     width: maxCroppedWidth,
                     height: maxCroppedHeight,
                 });
+
+                picture
+                    .attr("src", canvas.toDataURL())
+                    .parent().removeClass('d-none');
 
                 canvas.toBlob(function (blob){
                     catPhoto = blob;
