@@ -60,7 +60,12 @@
 
 				if( is_dir( dirname(__FILE__, 3) . "/{$folder}" ) ) {
 					$images = getProdutsPhotos(dirname(__FILE__, 3) . "/{$folder}", $productId);
-					$productModel->updateThumbnails($productId, $images[0], json_encode($images, JSON_FORCE_OBJECT));
+
+					$thumbnail = NULL;
+					if( count($images) > 0 )
+						$thumbnail = $images[0];
+
+					$productModel->updateThumbnails($productId, $thumbnail, json_encode($images, JSON_FORCE_OBJECT));
 				}
 
 				$productModel->insertCategory($productId, $vars['inputCategory']);

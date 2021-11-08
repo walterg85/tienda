@@ -324,8 +324,10 @@
                         class: "text-center",
                         width: "100px",
                         render: function ( data, type, row ) {
+                            let img = (data != "" &&  data != "0") ? `../${data}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+
                             return `
-                                <img src="../${data}" class="rounded" alt="Image product" width="100">
+                                <img src="${img}" class="rounded" alt="Image product" width="100">
                             `;
                         }
                     },
