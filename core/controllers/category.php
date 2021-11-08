@@ -33,7 +33,7 @@
 				);
 
 				$folder = "assets/img/category";
-				if( !is_dir(dirname(__FILE__, 3) . "/{folder}") )
+				if( !is_dir(dirname(__FILE__, 3) . "/{$folder}") )
 					mkdir(dirname(__FILE__, 3) . "/{$folder}", 0777, true);
 
 				if (!empty($_FILES['imageCat'])){

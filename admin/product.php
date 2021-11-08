@@ -199,6 +199,8 @@
             $(`#image1, #image2, #image3, #image4`).parent().removeClass('d-none');
             $(`.img1, .img2, .img3, .img4`).addClass('d-none');
             $(`#img1, #img2, #img3, #img4`).attr("src", "#");
+
+            $("#addProductForm").removeClass("was-validated");
         });
 
         $("#addProduct").click( registerProduct);
@@ -237,6 +239,9 @@
         if(!continuar)
             return false;
 
+        $("#addProduct").attr("disabled","disabled");
+        $("#addProduct").html('<i class="bi bi-clock-history"></i> Registering');
+
         let mySizes = document.getElementsByName('chsizes'),
             pSizes = [],
             pColors = [$("#inputColors").val()],
@@ -269,6 +274,9 @@
             type: 'POST',
             dataType: 'json',
             success: function(response){
+                $("#addProduct").removeAttr("disabled");
+                $("#addProduct").html('<i class="bi bi-check2"></i> Save');
+
                 $(".btnPanel").click();
                 getProducts();
             },
@@ -414,7 +422,6 @@
                             let pConfig = JSON.parse(data.dimensions);
 
                             $.each(pConfig, function(index, item){
-                                console.log(item);
                                 if(item.colors)
                                     $("#inputColors").val(item.colors);
 
@@ -587,7 +594,7 @@
                 download    = document.getElementById('download'),
                 actions     = document.getElementById('cropper-buttons'),
                 options     = {
-                    viewMode: 3,
+                    viewMode: 1,
                     aspectRatio: maxCroppedWidth / maxCroppedHeight,
                 };
 

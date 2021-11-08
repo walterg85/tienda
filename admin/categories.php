@@ -101,7 +101,8 @@
                 $("#btnAddCategory").html('<i class="bi bi-plus-lg"></i> Add Category');
 
                 $("#inputName").val("");
-
+                $("#frmCategorie").removeClass("was-validated");
+                
                 fnGetCategories();
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -259,7 +260,7 @@
                 download    = document.getElementById('download'),
                 actions     = document.getElementById('cropper-buttons'),
                 options     = {
-                    viewMode: 3,
+                    viewMode: 1,
                     aspectRatio: maxCroppedWidth / maxCroppedHeight,
                 };
 
