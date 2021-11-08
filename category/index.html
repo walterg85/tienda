@@ -284,7 +284,10 @@
                         productCard.find(".lblPrice").html( formatter.format(item.price) );
                     }
 
-                    productCard.find(".card-img-top").attr("src", `../${item.thumbnail}`);
+                    let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `../${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+
+                    productCard.find(".card-img-top").attr("src", `${img}`);
+
                     productCard.find(".card-img-top").parent().attr("href", `product/index.html?pid=${item.id}`);
 
                     productCard.find(".btnAddtocart").data("item", item);
@@ -428,7 +431,11 @@
                     let cat = $(".catClone").clone();
 
                     cat.find(".catName").html(item.name.toUpperCase());
-                    cat.find(".catImage").attr("src", `../${item.thumbnail}`);
+
+                    let img = (item.thumbnail) ? `../${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+
+                    cat.find(".catImage").attr("src", `${img}`);
+
                     cat.data("catId", item.id);
 
                     cat.removeClass("d-none catClone");
@@ -469,7 +476,9 @@
                 if(item.color)
                     color = `${item.color}`;
 
-                listItem.find(".prdImg").attr("src", `../item.thumbnail`);
+                let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `../${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+
+                listItem.find(".prdImg").attr("src", img);
 
                  if(lang == "en"){
                     listItem.find(".prodName").html(`${item.name} ${color} ${size}`);
