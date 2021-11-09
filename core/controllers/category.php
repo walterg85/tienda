@@ -25,7 +25,13 @@
 		} else if($vars['_method'] == 'POST'){
 			$categoryModel = new Categorymodel();
 
-			$categoryId = $categoryModel->register($vars['inputName'], $vars['chkVisible']);
+			$data = array(
+				'inputName' => $vars['inputName'],
+				'inputNameSp' => $vars['inputNameSp'],
+				'chkVisible' => $vars['chkVisible']
+			);
+
+			$categoryId = $categoryModel->register($data);
 
 			if($categoryId){
 				$response = array(

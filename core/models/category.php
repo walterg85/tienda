@@ -6,7 +6,7 @@
 
 		public function get() {
 			$pdo = new Conexion();
-			$cmd = 'SELECT id, name, thumbnail, parent FROM category WHERE active = 1;';
+			$cmd = 'SELECT id, name, thumbnail, parent, description AS nameSp FROM category WHERE active = 1;';
 
 			$sql = $pdo->prepare($cmd);
 			$sql->execute();
@@ -14,15 +14,16 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 
-		public function register($name, $visible){
+		public function register($data){
 	    	$pdo = new Conexion();
 	    	$cmd = '
-	    		INSERT INTO category (name, parent, active) VALUES (:name, :parent, 1)
+	    		INSERT INTO category (name, parent, description, active) VALUES (:name, :parent, :description, 1)
 	    	';
 
 	    	$parametros = array(
-	    		':name' => $name,
-	    		':parent' => $visible
+	    		':name' => $data['inputName'],
+	    		':parent' => $data['chkVisible'],
+	    		':description' => $data['inputNameSp']
 	    	);
 
 	    	$sql = $pdo->prepare($cmd);

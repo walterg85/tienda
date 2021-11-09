@@ -27,9 +27,14 @@
             </div>
             <div class="modal-body">
                 <form id="frmCategorie" class="needs-validation" novalidate>
+                    <input type="hidden" name="categoryId" id="categoryId">
                     <div class="mb-3">
                         <label for="inputName" class="form-label">Name</label>
                         <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Category name" autocomplete="off" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputNameSp" class="form-label">Name spanish</label>
+                        <input type="text" class="form-control" id="inputNameSp" name="inputNameSp" placeholder="Category name in spanish" autocomplete="off" required>
                     </div>
                     <center>
                         <figure class="figure d-none" id="imgPreview">
@@ -99,6 +104,7 @@
         myModalEl.addEventListener('hidden.bs.modal', function (event) {
             $("#inputPhoto").val("");
             $("#inputName").val("");
+            $("#inputNameSp").val("");
             $("#chkVisible").prop("checked", false);
             $("#frmCategorie").removeClass("was-validated");
         })
@@ -145,6 +151,7 @@
                 $("#btnAddCategory").html('<i class="bi bi-plus-lg"></i> Add Category');
 
                 $("#inputName").val("");
+                $("#inputNameSp").val("");
                 $("#chkVisible").prop("checked", false);
                 $("#frmCategorie").removeClass("was-validated");
                 
@@ -206,11 +213,15 @@
                         title: 'Name'
                     },
                     {
+                        data: 'nameSp',
+                        title: 'Name spanish'
+                    },
+                    {
                         title: '',
                         data: null,
                         orderable: false,
                         class: "text-center",
-                        width: "150px",
+                        width: "200px",
                         render: function ( data, type, row )
                         {
                             let status = (row.parent && row.parent > 0) ? 'checked' : '';
@@ -218,8 +229,9 @@
                                 <div class="row">
                                     <div class="col">
                                         <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteCategory" title="Delete"><i class="bi bi-trash"></i></a>
+                                        <a href="javascript:void(0);" class="btn btn-outline-warning btnModifyCategory" title="Modify"><i class="bi bi-pencil"></i></a>
                                     </div>
-                                    <div class="col">
+                                    <div class="col mt-2">
                                         <div class="form-check form-switch">
                                             <input class="form-check-input chVisible" type="checkbox" ${status} id="chvis${row.id}">
                                             <label class="form-check-label" for="chvis${row.id}">Visible</label>
@@ -266,6 +278,29 @@
                         };
 
                         $.post("../core/controllers/category.php", objData);
+                    });
+
+                    $(".btnModifyCategory").unbind().click(function(){
+                        let data = getData($(this), dataTableCategory),
+                            buton = $(this);
+
+                        if (confirm(`do you want to delete this category (${data.name})?`)){
+                            buton.attr("disabled","disabled");
+                            buton.html('<i class="bi bi-clock-history"></i>');
+
+                            let objData = {
+                                "_method":"Delete",
+                                "categoryId": data.id
+                            };
+
+                            $.post("../core/controllers/category.php", objData, function(result) {
+                                buton.removeAttr("disabled");
+                                buton.html('<i class="bi bi-trash"></i>');
+
+                                fnGetCategories();
+                            });
+
+                        }
                     });
                 },
                 searching: false,
