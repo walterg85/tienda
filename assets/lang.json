@@ -5,7 +5,13 @@
 		"home":{
 			"pageTitle":"Online Store",
 			"checkCart":"Cart",
-			"btnCheckout": "Checkout"
+			"btnCheckout": "Checkout",
+			"search": "Search...",
+			"myCart": "My Cart",
+			"btnKeepShopping": "Keep Shopping",
+			"categories": "Top Categories",
+			"products": "Top Producst"
+
 		},
 		"checkout":{
 			"logout": "Desconectar"
@@ -17,7 +23,12 @@
 		"home":{
 			"pageTitle":"Tienda en line",
 			"checkCart":"Carrito",
-			"btnCheckout": "Pagar"
+			"btnCheckout": "Pagar",
+			"search": "Buscar...",
+			"myCart": "Mi Carrito",
+			"btnKeepShopping": "Seguir Comprando",
+			"categories": "Categorías Populares",
+			"products": "Productos Populares"
 		},
 		"checkout":{
 			"logout": "Desconectar"

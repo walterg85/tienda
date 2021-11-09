@@ -35,7 +35,7 @@
 
         <!-- CATEGORIES -->
         <div class="container px-4 py-5 text-secondary">
-            <h2 class="pb-2 text-center display-6">Categories</h2>
+            <h2 class="pb-2 text-center display-6 categories">Top Categories</h2>
             <div class="row g-4 py-5 row-cols-1 row-cols-2 row-cols-sm-5" id="categoriesList">
                 <div class="feature col catClone d-none">
                     <div class="mb-3">
@@ -47,7 +47,7 @@
         </div>
  
         <!-- Products -->
-        <h2 class="pb-2 text-center display-6">Top Products</h2>
+        <h2 class="pb-2 text-center text-secondary display-6 products">Top Products</h2>
         <div class="text-center col-lg-3 col-md-4 col-6 my-3 itemClone d-none">
             <div class="card shadow">
                 <div class="badge bg-warning text-white position-absolute d-none brandPrice" style="top: 0.5rem; right: 0.5rem">
@@ -66,7 +66,7 @@
                         <span class="price lblPrice"></span>
                     </h5>
                     <input type="hidden">
-                    <button type="button" class="btn btn-success my-3 btnAddtocart">Add To Cart</button>                                                   
+                    <button type="button" class="btn btn-success my-3 btnAddToCart">Add To Cart</button>                                                   
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">My Cart</h5>
+                    <h5 class="modal-title" id="myCart">My Cart</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -103,7 +103,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Keep Shopping</button>
+                    <button type="button" class="btn btn-success btnKeepShopping" data-bs-dismiss="modal">Keep Shopping</button>
                     <button type="button" class="btn btn-primary btnCheckout">Checkout</button>
                 </div>
             </div>
@@ -637,7 +637,12 @@
                 $("#checkCart").html('<i class="bi bi-cart3"></i> ' + myLang.checkCart + ' <span class="badge bg-warning rounded-pill qtyCart">0</span>'); 
 
                 $(".btnCheckout").html(myLang.btnCheckout);
-                $(".btnAddtocart").html(data[lang]["addToCart"]);
+                $("#inputSearch").attr("placeholder", myLang.search);
+                $(".btnAddToCart").html(data[lang]["addToCart"]);
+                $("#myCart").html(myLang.myCart);
+                $(".btnKeepShopping").html(myLang.btnKeepShopping);
+                $(".categories").html(myLang.categories);
+                $(".products").html(myLang.products);
 
                 // Page title
                 document.title = myLang.pageTitle;
