@@ -12,6 +12,11 @@
     <link href="assets/css/product.css" rel="stylesheet"> 
     <title>Online Store</title>
 </head>
+<style type="text/css">
+    .dropdown-menu{
+        width: 100% !important;
+    }
+</style>
 <body>
     <div class="container">
         <div class="row g-3">
@@ -22,12 +27,8 @@
             </div>
             <div class="col-sm-4">
                 <div class="dropdown">
-                    <input type="text" class="form-control dropdown-toggle" id="inputSearch" placeholder="Search..." >
-                    <ul class="dropdown-menu" aria-labelledby="inputSearch">
-                        <li><button class="dropdown-item" type="button">Action</button></li>
-                        <li><button class="dropdown-item" type="button">Another action</button></li>
-                        <li><button class="dropdown-item" type="button">Something else here</button></li>
-                    </ul>
+                    <input type="text" class="form-control dropdown-toggle" id="inputSearch" placeholder="Search..." autocomplete="off" >
+                    <ul class="dropdown-menu" aria-labelledby="inputSearch"></ul>
                 </div>
             </div>
         </div>
@@ -185,7 +186,8 @@
                 currency: 'USD',
                 minimumFractionDigits: 2
             }),
-            lang = "en";
+            lang = "en",
+            searchRequest = null;
 
         $(document).ready(function(){
             getProducts();
@@ -265,7 +267,45 @@
             });
 
             $('#inputSearch').keyup(function(){
-                $(".dropdown-menu").addClass("show");
+                if(searchRequest)
+                    searchRequest.abort();
+
+                searchRequest = $.ajax({
+                    url:"core/controllers/product.php",
+                    method:"POST",
+                    data:{
+                        _method:'search',
+                        strQuery: $('#inputSearch').val()
+                    },
+                    success:function(data){
+                        let items = '';
+                        $.each(data.data, function(index, prod){
+                            let img = (prod.thumbnail != "" &&  prod.thumbnail != "0") ? `${prod.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+
+                            items += `
+                                <li>
+                                    <a class="dropdown-item" href="product/index.html?pid=${prod.id}">
+                                        <img src="${img}" alt="twbs" height="32" class="rounded flex-shrink-0 me-2">
+                                        ${prod.name}
+                                    </a>
+                                </li>
+                            `;
+                        });
+
+                        $(".dropdown-menu")
+                            .html(items)
+                            .addClass("show");
+                    }
+                });
+            });
+
+            $('body').click(function() {
+                if(searchRequest)
+                    searchRequest.abort();
+
+                $(".dropdown-menu")
+                    .html("")
+                    .removeClass("show");
             });
         });
 

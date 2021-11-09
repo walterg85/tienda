@@ -163,7 +163,9 @@
             if(item.color)
                 color = `${item.color}`;
 
-            listItem.find(".prdImg").attr("src", `../${item.thumbnail}`);
+            let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `../${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+
+            listItem.find(".prdImg").attr("src", img);
             listItem.find(".prodName").html(`${item.name} ${color} ${size}`);
             listItem.find(".prodPrice").html(formatter.format(item.price));
             listItem.find(".intQty").val(item.qty);

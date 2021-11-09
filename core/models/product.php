@@ -226,4 +226,33 @@
 
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
+
+		public function search($query) {
+			$pdo = new Conexion();
+
+			$cmd = '
+				SELECT
+					id, 
+					name,
+					optional_name,
+					descriptions, 
+					optional_description,
+					price,
+					sale_price, 
+					thumbnail, 
+					images, 
+					create_date,
+					dimensions
+				FROM 
+					product
+				WHERE active = 1
+					AND name LIKE "%'. str_replace(' ', '%', $query) .'%"
+				ORDER BY id DESC
+			';
+
+			$sql = $pdo->prepare($cmd);
+			$sql->execute();
+
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
 	}
