@@ -25,7 +25,7 @@
 		} else if($vars['_method'] == 'POST'){
 			$categoryModel = new Categorymodel();
 
-			$categoryId = $categoryModel->register($vars['inputName']);
+			$categoryId = $categoryModel->register($vars['inputName'], $vars['chkVisible']);
 
 			if($categoryId){
 				$response = array(
@@ -56,6 +56,18 @@
 		} else if($vars['_method'] == 'Delete'){
 			$categoryModel = new Categorymodel();
 			$categoryModel->delete($vars['categoryId']);
+
+			$response = array(
+				'codeResponse' => 200
+			);
+
+			header('HTTP/1.1 200 Ok');
+			header("Content-Type: application/json; charset=UTF-8");
+			
+			exit(json_encode($response));
+		} else if($vars['_method'] == 'unVisivility'){
+			$categoryModel = new Categorymodel();
+			$categoryModel->unVisivility($vars['categoryId'], $vars['visible']);
 
 			$response = array(
 				'codeResponse' => 200

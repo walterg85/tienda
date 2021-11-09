@@ -14,9 +14,23 @@
 </head>
 <body>
     <div class="container">
-        <a class="text-warning text-decoration-none changeLang" href="javascript:void(0);"></a>
-        <a href="javascript:void(0);" class="ms-2 text-decoration-none" id="checkCart" data-bs-toggle="modal" data-bs-target="#mdlCheckCart">View cart</a>
-        <a href="javascript:void(2);" class="ms-2 text-decoration-none btnCheckout">Checkout</a>
+        <div class="row g-3">
+            <div class="col-auto">
+                <a class="text-warning text-decoration-none changeLang" href="javascript:void(0);"></a>
+                <a href="javascript:void(0);" class="ms-2 text-decoration-none" id="checkCart" data-bs-toggle="modal" data-bs-target="#mdlCheckCart">View cart</a>
+                <a href="javascript:void(2);" class="ms-2 text-decoration-none btnCheckout">Checkout</a>
+            </div>
+            <div class="col-sm-4">
+                <div class="dropdown">
+                    <input type="text" class="form-control dropdown-toggle" id="inputSearch" placeholder="Search..." >
+                    <ul class="dropdown-menu" aria-labelledby="inputSearch">
+                        <li><button class="dropdown-item" type="button">Action</button></li>
+                        <li><button class="dropdown-item" type="button">Another action</button></li>
+                        <li><button class="dropdown-item" type="button">Something else here</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
         <!-- CATEGORIES -->
         <div class="container px-4 py-5 text-secondary">
@@ -249,6 +263,10 @@
 
                 $("#mdlProDetalle").modal("hide");
             });
+
+            $('#inputSearch').keyup(function(){
+                $(".dropdown-menu").addClass("show");
+            });
         });
 
         function getProducts() {
@@ -421,17 +439,19 @@
 
             $.post("core/controllers/category.php", objData, function(result) {
                 $.each( result.data, function( index, item){
-                    let cat = $(".catClone").clone();
+                    if(item.parent == 1){
+                        let cat = $(".catClone").clone();
 
-                    cat.find(".catName").html(item.name.toUpperCase());
+                        cat.find(".catName").html(item.name.toUpperCase());
 
-                    let img = (item.thumbnail) ? `${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                        let img = (item.thumbnail) ? `${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
 
-                    cat.find(".catImage").attr("src", `${img}`);
-                    cat.data("catId", item.id);
+                        cat.find(".catImage").attr("src", `${img}`);
+                        cat.data("catId", item.id);
 
-                    cat.removeClass("d-none catClone");
-                    $(cat).appendTo("#categoriesList");
+                        cat.removeClass("d-none catClone");
+                        $(cat).appendTo("#categoriesList");
+                    }                    
                 });
 
                 $(".feature").click( function () {
