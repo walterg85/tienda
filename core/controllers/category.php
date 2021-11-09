@@ -28,7 +28,8 @@
 			$data = array(
 				'inputName' => $vars['inputName'],
 				'inputNameSp' => $vars['inputNameSp'],
-				'chkVisible' => $vars['chkVisible']
+				'chkVisible' => $vars['chkVisible'],
+				'categoryId' => $vars['categoryId']
 			);
 
 			$categoryId = $categoryModel->register($data);

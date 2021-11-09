@@ -16,20 +16,40 @@
 
 		public function register($data){
 	    	$pdo = new Conexion();
-	    	$cmd = '
-	    		INSERT INTO category (name, parent, description, active) VALUES (:name, :parent, :description, 1)
-	    	';
 
-	    	$parametros = array(
-	    		':name' => $data['inputName'],
-	    		':parent' => $data['chkVisible'],
-	    		':description' => $data['inputNameSp']
-	    	);
+	    	if($data['categoryId'] == 0){
+	    		$cmd = '
+		    		INSERT INTO category (name, parent, description, active) VALUES (:name, :parent, :description, 1)
+		    	';
 
-	    	$sql = $pdo->prepare($cmd);
-			$sql->execute($parametros);
+		    	$parametros = array(
+		    		':name' => $data['inputName'],
+		    		':parent' => $data['chkVisible'],
+		    		':description' => $data['inputNameSp']
+		    	);
 
-			return $pdo->lastInsertId();
+		    	$sql = $pdo->prepare($cmd);
+				$sql->execute($parametros);
+
+				return $pdo->lastInsertId();
+	    	}else{
+	    		$cmd = '
+		    		UPDATE category SET name =:name, parent =:parent, description =:description WHERE id =:categoryId
+		    	';
+
+		    	$parametros = array(
+		    		':name' => $data['inputName'],
+		    		':parent' => $data['chkVisible'],
+		    		':description' => $data['inputNameSp'],
+		    		':categoryId' => $data['categoryId']
+		    	);
+
+		    	$sql = $pdo->prepare($cmd);
+				$sql->execute($parametros);
+
+				return $data['categoryId'];
+	    	}
+	    	
 	    }
 
 	    public function delete($categoryId){
