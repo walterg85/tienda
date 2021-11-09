@@ -108,6 +108,7 @@
             $("#chkVisible").prop("checked", false);
             $("#categoryId").val(0);
             $("#frmCategorie").removeClass("was-validated");
+            $("#imgPreview").addClass("d-none");
         })
     });
 
@@ -156,6 +157,7 @@
                 $("#chkVisible").prop("checked", false);
                 $("#frmCategorie").removeClass("was-validated");
                 $("#categoryId").val(0);
+                $("#imgPreview").addClass("d-none");
                 
                 fnGetCategories();
                 $("#modalCategoria").modal("hide");
