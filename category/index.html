@@ -36,13 +36,12 @@
         <!-- CATEGORIES -->
         <div class="container px-4 py-5 text-secondary">
             <h2 class="pb-2 text-center display-6">Categories</h2>
-            <div class="row g-4 py-5 row-cols-1 row-cols-2 row-cols-sm-5" id="categoriesList">
-                <div class="feature col catClone d-none">
-                    <div class="mb-3">
-                        <img src="#" class="img-fluid rounded-circle border border-3 border-warning catImage">
-                    </div>
-                    <P class="text-center catName"></P>
+            <div class="row g-4 py-5 row-cols-1 row-cols-2 row-cols-sm-5" id="categoriesList"></div>
+            <div class="feature col catClone d-none">
+                <div class="mb-3">
+                    <img src="#" class="img-fluid rounded-circle border border-3 border-warning catImage">
                 </div>
+                <P class="text-center catName"></P>
             </div>
         </div>
  
@@ -485,11 +484,16 @@
             };
 
             $.post("../core/controllers/category.php", objData, function(result) {
+                $("#categoriesList").html("");
                 $.each( result.data, function( index, item){
                     if(item.parent == 1){
                         let cat = $(".catClone").clone();
 
-                        cat.find(".catName").html(item.name.toUpperCase());
+                        if(lang == "en"){
+                            cat.find(".catName").html(item.name.toUpperCase());
+                        }else{
+                            cat.find(".catName").html(item.nameSp.toUpperCase());
+                        }
 
                         let img = (item.thumbnail) ? `../${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
 
@@ -651,6 +655,7 @@
                 // Page title
                 document.title = myLang.pageTitle;
                 getProducts();
+                loadCategories();
             });
         }
 
