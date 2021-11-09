@@ -106,6 +106,7 @@
             $("#inputName").val("");
             $("#inputNameSp").val("");
             $("#chkVisible").prop("checked", false);
+            $("#categoryId").val(0);
             $("#frmCategorie").removeClass("was-validated");
         })
     });
@@ -154,6 +155,7 @@
                 $("#inputNameSp").val("");
                 $("#chkVisible").prop("checked", false);
                 $("#frmCategorie").removeClass("was-validated");
+                $("#categoryId").val(0);
                 
                 fnGetCategories();
                 $("#modalCategoria").modal("hide");
@@ -282,25 +284,19 @@
 
                     $(".btnModifyCategory").unbind().click(function(){
                         let data = getData($(this), dataTableCategory),
-                            buton = $(this);
+                            visible = (data.parent) ? (data.parent == 1) ? true : false : false;
 
-                        if (confirm(`do you want to delete this category (${data.name})?`)){
-                            buton.attr("disabled","disabled");
-                            buton.html('<i class="bi bi-clock-history"></i>');
+                        catPhoto = null;
 
-                            let objData = {
-                                "_method":"Delete",
-                                "categoryId": data.id
-                            };
+                        $("#categoryId").val(data.id);
+                        $("#inputName").val(data.name);
+                        $("#inputNameSp").val(data.nameSp);
+                        $("#chkVisible").prop("checked", visible);
 
-                            $.post("../core/controllers/category.php", objData, function(result) {
-                                buton.removeAttr("disabled");
-                                buton.html('<i class="bi bi-trash"></i>');
+                        let img = (data.thumbnail) ? `../${data.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                        $(".imgPreview").attr("src", img).parent().removeClass("d-none");
 
-                                fnGetCategories();
-                            });
-
-                        }
+                        $("#modalCategoria").modal("show");
                     });
                 },
                 searching: false,
