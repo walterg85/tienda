@@ -6,7 +6,7 @@
 
 		public function get() {
 			$pdo = new Conexion();
-			$cmd = 'SELECT id, name, thumbnail FROM category WHERE active = 1;';
+			$cmd = 'SELECT id, name, thumbnail, parent FROM category WHERE active = 1;';
 
 			$sql = $pdo->prepare($cmd);
 			$sql->execute();
@@ -14,14 +14,15 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 
-		public function register($name){
+		public function register($name, $visible){
 	    	$pdo = new Conexion();
 	    	$cmd = '
-	    		INSERT INTO category (name, active) VALUES (:name, 1)
+	    		INSERT INTO category (name, parent, active) VALUES (:name, :parent, 1)
 	    	';
 
 	    	$parametros = array(
-	    		':name' => $name
+	    		':name' => $name,
+	    		':parent' => $visible
 	    	);
 
 	    	$sql = $pdo->prepare($cmd);
@@ -56,6 +57,23 @@
 			);
 
 			$sql = $pdo->prepare($cmd);
+			$sql->execute($parametros);
+
+			return TRUE;
+	    }
+
+	    public function unVisivility($categoryId, $visible){
+	    	$pdo = new Conexion();
+	    	$cmd = '
+	    		UPDATE category SET parent =:visible WHERE id =:categoryId
+	    	';
+
+	    	$parametros = array(
+	    		':categoryId' => $categoryId,
+	    		':visible' => $visible
+	    	);
+
+	    	$sql = $pdo->prepare($cmd);
 			$sql->execute($parametros);
 
 			return TRUE;

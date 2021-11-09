@@ -149,6 +149,7 @@
                 $("#frmCategorie").removeClass("was-validated");
                 
                 fnGetCategories();
+                $("#modalCategoria").modal("hide");
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(textStatus);
@@ -209,10 +210,22 @@
                         data: null,
                         orderable: false,
                         class: "text-center",
+                        width: "150px",
                         render: function ( data, type, row )
                         {
+                            let status = (row.parent && row.parent > 0) ? 'checked' : '';
                             return `
-                                <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteCategory" title="Delete"><i class="bi bi-trash"></i></a>
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="javascript:void(0);" class="btn btn-outline-danger btnDeleteCategory" title="Delete"><i class="bi bi-trash"></i></a>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input chVisible" type="checkbox" ${status} id="chvis${row.id}">
+                                            <label class="form-check-label" for="chvis${row.id}">Visible</label>
+                                        </div>
+                                    </div>
+                                </div>
                             `;
                         }
                     }
@@ -239,6 +252,20 @@
                             });
 
                         }
+                    });
+
+                    $(".chVisible").unbind().change(function(){
+                        let data = getData($(this), dataTableCategory),
+                            buton = $(this),
+                            visible = ($(this).is(':checked')) ? 1 : 0;
+
+                        let objData = {
+                            "_method":"unVisivility",
+                            "categoryId": data.id,
+                            "visible": visible
+                        };
+
+                        $.post("../core/controllers/category.php", objData);
                     });
                 },
                 searching: false,
