@@ -12,11 +12,26 @@
     <link href="../assets/css/product.css" rel="stylesheet"> 
     <title>Online Store</title>
 </head>
+<style type="text/css">
+    .dropdown-menu{
+        width: 100% !important;
+    }
+</style>
 <body>
     <div class="container">
-        <a class="text-warning text-decoration-none changeLang" href="javascript:void(0);"></a>
-        <a href="javascript:void(0);" class="ms-2 text-decoration-none" id="checkCart" data-bs-toggle="modal" data-bs-target="#mdlCheckCart">View cart</a>
-        <a href="javascript:void(2);" class="ms-2 text-decoration-none btnCheckout">Checkout</a>
+        <div class="row g-3">
+            <div class="col-auto">
+                <a class="text-warning text-decoration-none changeLang" href="javascript:void(0);"></a>
+                <a href="javascript:void(0);" class="ms-2 text-decoration-none" id="checkCart" data-bs-toggle="modal" data-bs-target="#mdlCheckCart">View cart</a>
+                <a href="javascript:void(2);" class="ms-2 text-decoration-none btnCheckout">Checkout</a>
+            </div>
+            <div class="col-sm-4">
+                <div class="dropdown">
+                    <input type="text" class="form-control dropdown-toggle" id="inputSearch" placeholder="Search..." autocomplete="off" >
+                    <ul class="dropdown-menu" aria-labelledby="inputSearch"></ul>
+                </div>
+            </div>
+        </div>
 
         <!-- CATEGORIES -->
         <div class="container px-4 py-5 text-secondary">
@@ -172,7 +187,8 @@
                 minimumFractionDigits: 2
             }),
             lang = "en",
-            categoryId = "";
+            categoryId = "",
+            searchRequest = null;
 
         $(document).ready(function(){
             let queryString = window.location.search,
@@ -255,6 +271,48 @@
 
                 $("#mdlProDetalle").modal("hide");
             });
+
+            $('#inputSearch').keyup(function(){
+                if(searchRequest)
+                    searchRequest.abort();
+
+                searchRequest = $.ajax({
+                    url:"../core/controllers/product.php",
+                    method:"POST",
+                    data:{
+                        _method:'search',
+                        strQuery: $('#inputSearch').val()
+                    },
+                    success:function(data){
+                        let items = '';
+                        $.each(data.data, function(index, prod){
+                            let img = (prod.thumbnail != "" &&  prod.thumbnail != "0") ? `../${prod.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+
+                            items += `
+                                <li>
+                                    <a class="dropdown-item" href="../product/index.html?pid=${prod.id}">
+                                        <img src="${img}" alt="twbs" height="32" class="rounded flex-shrink-0 me-2">
+                                        ${prod.name}
+                                    </a>
+                                </li>
+                            `;
+                        });
+
+                        $(".dropdown-menu")
+                            .html(items)
+                            .addClass("show");
+                    }
+                });
+            });
+
+            $('body').click(function() {
+                if(searchRequest)
+                    searchRequest.abort();
+
+                $(".dropdown-menu")
+                    .html("")
+                    .removeClass("show");
+            });
         });
 
         function getProducts() {
@@ -288,7 +346,7 @@
 
                     productCard.find(".card-img-top").attr("src", `${img}`);
 
-                    productCard.find(".card-img-top").parent().attr("href", `product/index.html?pid=${item.id}`);
+                    productCard.find(".card-img-top").parent().attr("href", `../product/index.html?pid=${item.id}`);
 
                     productCard.find(".btnAddtocart").data("item", item);
 
