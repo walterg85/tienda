@@ -8,35 +8,31 @@
 	header("Access-Control-Allow-Methods: POST");
 
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-		$vars = ($_POST) ? $_POST : json_decode(file_get_contents("php://input"), TRUE);
+		$vars 			= ($_POST) ? $_POST : json_decode(file_get_contents("php://input"), TRUE);
+		$settingsModel 	= new Settingsmodel();
 
 		if($vars['_method'] == 'Get'){
-			$settingsModel = new Settingsmodel();
-
 			$response = array(
-				'codeResponse' => 200,
-				'data' => $settingsModel->get()
+				'codeResponse' 	=> 200,
+				'data' 			=> $settingsModel->get()
 			);
 
 			header('HTTP/1.1 200 Ok');
-			header("Content-Type: application/json; charset=UTF-8");
-			
+			header("Content-Type: application/json; charset=UTF-8");			
 			exit(json_encode($response));
 		} else if($vars['_method'] == 'updateData'){
-			$settingsModel = new Settingsmodel();
-
 			$newPassword = ($vars['password'] == '') ? '' : encryptPass($vars['password']);
 
 			$usData = array(
-				'owner' => $vars['owner'],
-				'email' => $vars['email'],
-				'password' => $newPassword
+				'owner' 	=> $vars['owner'],
+				'email' 	=> $vars['email'],
+				'password' 	=> $newPassword
 			);
 
 			$setData = array(
-				'shipingCost' => $vars['shipingCost'],
-				'shipingFree' => $vars['shipingFree'],
-				'tax' => $vars['tax']
+				'shipingCost' 	=> $vars['shipingCost'],
+				'shipingFree' 	=> $vars['shipingFree'],
+				'tax' 			=> $vars['tax']
 			);
 
 			$tmpResponse = $settingsModel->updateData($usData, $setData);
@@ -51,14 +47,13 @@
 				$_SESSION['authData']->email = $vars['email'];
 			}else{
 				$response = array(
-					'codeResponse' => 0,
-					'message' => 'Outdated information'
+					'codeResponse' 	=> 0,
+					'message' 		=> 'Outdated information'
 				);
 			}
 
 			header('HTTP/1.1 200 Ok');
-			header("Content-Type: application/json; charset=UTF-8");
-			
+			header("Content-Type: application/json; charset=UTF-8");			
 			exit(json_encode($response));
 		}
 	}
@@ -75,8 +70,7 @@
 	header("Content-Type: application/json; charset=UTF-8");
 
 	$response = array(
-		'codeResponse' => 400,
-		'message' => 'Bad Request'
+		'codeResponse'	=> 400,
+		'message' 		=> 'Bad Request'
 	);
-
 	exit( json_encode($response) );
