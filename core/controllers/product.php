@@ -8,7 +8,8 @@
 	header("Access-Control-Allow-Methods: POST");
 
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-		$vars = ($_POST) ? $_POST : json_decode(file_get_contents("php://input"), TRUE);
+		$vars 			= ($_POST) ? $_POST : json_decode(file_get_contents("php://input"), TRUE);
+		$productModel 	= new Productmodel();
 
 		if($vars['_method'] == 'POST'){
 			$prodData = array(
@@ -21,40 +22,39 @@
 				'dimensions'			=> $vars['pConfig']
 			);
 
-			$productModel = new Productmodel();
 			if($vars['productId'] == 0){
 				$tmpResponse = $productModel->register($prodData);
 			} else {
-				$productId = $vars['productId'];
-				$prodData['productId'] = $productId;				
-				$tmpResponse = $productModel->updates($prodData);
+				$productId 					= $vars['productId'];
+				$prodData['productId'] 	= $productId;				
+				$tmpResponse 				= $productModel->updates($prodData);
 
 				$deletesImages = json_decode($vars['deletesImages'], TRUE);
 				foreach ($deletesImages as $key => $value) {
-					$oldImg = dirname(__FILE__, 3) ."/assets/img/product/{$productId}/{$value}";
+					$oldImg = dirname(__FILE__, 3) . "/assets/img/product/{$productId}/{$value}";
 					@unlink( $oldImg );
 				}
 			}
 
 			if($tmpResponse[0]){
-				$productId = $tmpResponse[1];
-				$folder = "assets/img/product/{$productId}";
+				$productId 	= $tmpResponse[1];
+				$folder 		= "assets/img/product/{$productId}";
 
 				if (!empty($_FILES['imagesproduct'])){
 					mkdir(dirname(__FILE__, 3) . "/{$folder}", 0777, true);
 
 					$imagesprod = $_FILES['imagesproduct'];
 					foreach($imagesprod['name'] as $key => $imagesproduct) {
-						$_FILES['imagesproduct[]']['name']		= $imagesprod['name'][$key];
+							$_FILES['imagesproduct[]']['name']		= $imagesprod['name'][$key];
 			            $_FILES['imagesproduct[]']['type']		= $imagesprod['type'][$key];
 			            $_FILES['imagesproduct[]']['tmp_name']	= $imagesprod['tmp_name'][$key];
 			            $_FILES['imagesproduct[]']['error']		= $imagesprod['error'][$key];
 			            $_FILES['imagesproduct[]']['size']		= $imagesprod['size'][$key];
 
-						$filename = $imagesprod['name'][$key];
-						$tempname = $imagesprod['tmp_name'][$key];
+							$filename = $imagesprod['name'][$key];
+							$tempname = $imagesprod['tmp_name'][$key];
 
-						move_uploaded_file($tempname, "../../{$folder}/{$filename}");
+							move_uploaded_file($tempname, "../../{$folder}/{$filename}");
 					}
 				}
 
@@ -80,11 +80,9 @@
 			}
 
 			header('HTTP/1.1 200 Ok');
-			header("Content-Type: application/json; charset=UTF-8");
-			
+			header("Content-Type: application/json; charset=UTF-8");			
 			exit(json_encode($response));
 		} else if($vars['_method'] == 'GET'){
-			$productModel 	= new Productmodel();
 			$productList 	= $productModel->getProduct($vars['limite']);
 
 			if($productList){
@@ -94,23 +92,20 @@
 			}
 
 			$response = array(
-				'codeResponse' => 200,
-				'data' => $productList,
-				'message' => 'Ok'
+				'codeResponse'	=> 200,
+				'data' 			=> $productList,
+				'message' 		=> 'Ok'
 			);
 
 			header('HTTP/1.1 200 Ok');
-			header("Content-Type: application/json; charset=UTF-8");
-			
+			header("Content-Type: application/json; charset=UTF-8");			
 			exit(json_encode($response));
 		} else if($vars['_method'] == 'Delete'){
-			$productModel 	 = new Productmodel();
 			$productModel->deleteProduct($vars['productId']);
 
 			header('HTTP/1.1 200 Ok');		
 			exit();
 		} else if($vars['_method'] == 'getProductId'){
-			$productModel 	= new Productmodel();
 			$productData 	= $productModel->getProductId($vars['productId']);
 
 			if($productData){
@@ -120,17 +115,15 @@
 			}
 
 			$response = array(
-				'codeResponse' => 200,
-				'data' => $productData,
-				'message' => 'Ok'
+				'codeResponse'	=> 200,
+				'data' 			=> $productData,
+				'message' 		=> 'Ok'
 			);
 
 			header('HTTP/1.1 200 Ok');
-			header("Content-Type: application/json; charset=UTF-8");
-			
+			header("Content-Type: application/json; charset=UTF-8");			
 			exit(json_encode($response));
 		} else if($vars['_method'] == 'getProductCat'){
-			$productModel 	= new Productmodel();
 			$productList 	= $productModel->getProductCat($vars['categoryId']);
 
 			if($productList){
@@ -141,16 +134,14 @@
 
 			$response = array(
 				'codeResponse' => 200,
-				'data' => $productList,
-				'message' => 'Ok'
+				'data' 			=> $productList,
+				'message' 		=> 'Ok'
 			);
 
 			header('HTTP/1.1 200 Ok');
-			header("Content-Type: application/json; charset=UTF-8");
-			
+			header("Content-Type: application/json; charset=UTF-8");			
 			exit(json_encode($response));
 		} else if($vars['_method'] == 'search'){
-			$productModel 	= new Productmodel();
 			$productList 	= $productModel->search($vars['strQuery']);
 
 			if($productList){
@@ -161,39 +152,33 @@
 
 			$response = array(
 				'codeResponse' => 200,
-				'data' => $productList,
-				'message' => 'Ok'
+				'data' 			=> $productList,
+				'message' 		=> 'Ok'
 			);
 
 			header('HTTP/1.1 200 Ok');
-			header("Content-Type: application/json; charset=UTF-8");
-			
+			header("Content-Type: application/json; charset=UTF-8");			
 			exit(json_encode($response));
 		}
 	}
 
 	function getProdutsPhotos($dir, $producId) {
-       $result = array();
-       $cdir   = scandir($dir);
+		$result = array();
+		$cdir   = scandir($dir);
 
-       foreach ($cdir as $key => $value)
-       {
-          if (!in_array($value,array(".","..")))
-          {
-             if (is_dir($dir . DIRECTORY_SEPARATOR . $value))
-             {
-                if (!is_dir_empty( $dir . DIRECTORY_SEPARATOR . $value ))
-                    $result[$value] = getProdutsPhotos($dir . DIRECTORY_SEPARATOR . $value, $producId);
-             }
-             else
-             {
-                $result[] = "assets/img/product/{$producId}/{$value}";
-             }
-          }
-       }
+		foreach ($cdir as $key => $value){
+			if (!in_array($value,array(".",".."))){
+				if (is_dir($dir . DIRECTORY_SEPARATOR . $value)){
+					if (!is_dir_empty( $dir . DIRECTORY_SEPARATOR . $value ))
+						$result[$value] = getProdutsPhotos($dir . DIRECTORY_SEPARATOR . $value, $producId);
+				} else {
+					$result[] = "assets/img/product/{$producId}/{$value}";
+				}
+			}
+		}
 
-       return $result;
-    }
+		return $result;
+   }
 
     function is_dir_empty($dir) {
       if (!is_readable($dir)) return NULL;
@@ -207,5 +192,4 @@
 		'codeResponse' => 400,
 		'message' => 'Bad Request'
 	);
-
 	exit( json_encode($response) );
