@@ -30,15 +30,15 @@
               <div class="row">
                     <div class="col-12 mb-3 dvSizes d-none">
                         <label class="form-label">Sizes</label><br>
-                        <div class="form-check form-check-inline d-none chSizes">
-                            <input class="form-check-input chk" type="radio" name="chsizes" value="0">
+                        <div class="form-check form-check-inline d-none chSizesP">
+                            <input class="form-check-input chk" type="radio" name="chSizesP" value="0">
                             <label class="form-check-label lbl">Small</label>
                         </div>
                     </div>
                     <div class="col-12 mb-3 dvColors d-none">
                         <label class="form-label">Colors</label><br>
-                        <div class="form-check form-check-inline d-none chColors">
-                            <input class="form-check-input chk" type="radio"  name="chcolors" value="0">
+                        <div class="form-check form-check-inline d-none chColorsP">
+                            <input class="form-check-input chk" type="radio"  name="chColorsP" value="0">
                             <label class="form-check-label lbl">Small</label>
                         </div>
                     </div>
@@ -76,13 +76,13 @@
 
             if(config !=  "0"){
                 if((config[0].sizes).length > 0){
-                    size = $("input[type=radio][name=chsizes]:checked").val();
+                    size = $("input[type=radio][name=chSizesP]:checked").val();
                     newItemId += `|s-${size}`;
                     newItem.size = size;
                 }
 
                 if(config[1].colors[0] != ""){
-                    color = $("input[type=radio][name=chcolors]:checked").val();
+                    color = $("input[type=radio][name=chColorsP]:checked").val();
                     newItemId += `|c-${color}`;
                     newItem.color = color;
                 }
@@ -109,6 +109,8 @@
             }
 
             localStorage.setItem("currentCart", JSON.stringify(currentCart));
+
+            countCartItem();
         });
     });
 
@@ -156,7 +158,7 @@
                         $(".toRemoves").remove();
 
                         $.each(config[0].sizes, function(index, item){
-                            let dv = $(".chSizes").clone();
+                            let dv = $(".chSizesP").clone();
 
                             dv.find(".chk").val(item).attr("id", `ch${item}`);
 
@@ -177,7 +179,7 @@
                             if(index == 0)
                                 dv.find(".chk").prop("checked", true);
 
-                            dv.removeClass("d-none chSizes");
+                            dv.removeClass("d-none chSizesP");
                             dv.addClass("toRemoves");
                             $(dv).appendTo(".dvSizes");
                         });
@@ -190,7 +192,7 @@
 
                         let items = (config[1].colors[0]).split(",");
                         $.each(items, function(index, item){
-                            let dv = $(".chColors").clone();
+                            let dv = $(".chColorsP").clone();
 
                             dv.find(".chk").val(item).attr("id", `rd${item}`);
                             dv.find(".lbl").html(item).attr("for", `rd${item}`);
@@ -198,7 +200,7 @@
                             if(index == 0)
                                 dv.find(".chk").prop("checked", true);
 
-                            dv.removeClass("d-none chColors");
+                            dv.removeClass("d-none chColorsP");
                             dv.addClass("toRemovec");
                             $(dv).appendTo(".dvColors");
 
@@ -207,11 +209,6 @@
                 }
             }
         });
-    }
-
-    function changeImage(element) {
-        var main_prodcut_image = document.getElementById('main_product_image');
-        main_prodcut_image.src = element.src;
     }
 </script>
 

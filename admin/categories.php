@@ -26,28 +26,28 @@
 </table>
 
 <!-- Modal para administrar categorias -->
-<div class="modal fade" id="modalCategoria" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="modalCategoria" tabindex="-1" role="dialog" aria-labelledby="modalLabelNew" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Category</h5>
+                <h5 class="modal-title" id="modalLabelNew">Category</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="frmCategorie" class="needs-validation" novalidate>
                     <input type="hidden" name="categoryId" id="categoryId">
                     <div class="mb-3">
-                        <label for="inputName" class="form-label">Name</label>
+                        <label for="inputName" class="form-label labelNombreCat">Name</label>
                         <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Category name" autocomplete="off" required>
                     </div>
                     <div class="mb-3">
-                        <label for="inputNameSp" class="form-label">Name spanish</label>
+                        <label for="inputNameSp" class="form-label labelNombreCatSp">Name spanish</label>
                         <input type="text" class="form-control" id="inputNameSp" name="inputNameSp" placeholder="Category name in spanish" autocomplete="off" required>
                     </div>
                     <center>
                         <figure class="figure d-none" id="imgPreview">
                             <img src="#" class="figure-img img-fluid rounded imgPreview">
-                            <figcaption class="figure-caption text-end">Preview</figcaption>
+                            <figcaption class="figure-caption text-end labelImg">Preview</figcaption>
                         </figure>
                     </center>
                     <div class="input-group mb-3">
@@ -57,13 +57,13 @@
                     <div class="mb-3">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="chkVisible">
-                            <label class="form-check-label" for="chkVisible">Visible on main page</label>
+                            <label class="form-check-label labelCheck" for="chkVisible">Visible on main page</label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary btnmdlC" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-success" id="btnAddCategory">Apply</button>
             </div>
         </div>
@@ -71,11 +71,11 @@
 </div>
 
 <!-- Modal para editar las imagenes -->
-<div class="modal fade" id="modalCrop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="modalCrop" tabindex="-1" role="dialog" aria-labelledby="modalLabelP" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Edit / Crop the photo</h5>
+                <h5 class="modal-title" id="modalLabelP">Edit / Crop the photo</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -84,7 +84,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary btnmdlC" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-danger" id="cropImage">Apply</button>
             </div>
         </div>
@@ -95,7 +95,12 @@
     let dataTableCategory = null,
         maxCroppedWidth = 300,
         maxCroppedHeight = 300,
-        catPhoto = null;
+        catPhoto = null,
+        mesages = {//Control de mensajes para los ALERTS
+            "ctrImage1":"Your selected file is larger than 5MB",
+            "ctrImage2":"files not allowed, only images",
+            "ctrtoRemove":"do you want to delete this category"
+        };
 
     $(document).ready(function(){
         currentPage = "Categories";
@@ -254,7 +259,7 @@
                         let data = getData($(this), dataTableCategory),
                             buton = $(this);
 
-                        if (confirm(`do you want to delete this category (${data.name})?`)){
+                        if (confirm(`${mesages.ctrtoRemove} (${data.name})?`)){
                             buton.attr("disabled","disabled");
                             buton.html('<i class="bi bi-clock-history"></i>');
 
@@ -322,11 +327,11 @@
                 if($.inArray(ext, ["jpg", "jpeg", "png", "bmp", "raw", "tiff"]) != -1){
                     if($(this)[0].files[0].size > 5242880){
                         $( this ).val('');
-                        alert('Your selected file is larger than 5MB');
+                        alert(mesages.ctrImage1);
                     }
                 }else{
                     $( this ).val('');
-                    alert(`${ext} files not allowed, only images`);
+                    alert(`${ext} ${mesages.ctrImage2}`);
                 }
             }
         });
@@ -409,6 +414,22 @@
         $(".colB").html(myLang.colB);
         $(".colC").html(myLang.colC);
         $(".colD").html(myLang.colD);
+
+        $("#modalLabelNew").html(myLang.labelModal1);
+        $(".labelNombreCat").html(myLang.labelNombreCat);
+        $(".labelNombreCatSp").html(myLang.labelNombreCatSp);
+        $(".labelImg").html(myLang.labelImg);
+        $(".labelCheck").html(myLang.labelCheck);
+        $("#inputName").attr("placeholder", myLang.inputName);
+        $("#inputNameSp").attr("placeholder", myLang.inputNameSp);
+
+        $("#modalLabelP").html(myLang.modalLabelP);
+        $(".btnmdlC").html(myLang.btnmdlC);
+        $("#cropImage, #btnAddCategory").html(myLang.cropImage);
+
+        mesages.ctrImage1 = myLang.ctrImage1;
+        mesages.ctrImage2 = myLang.ctrImage2;
+        mesages.ctrtoRemove = myLang.ctrtoRemove;
     }
 </script>
 
