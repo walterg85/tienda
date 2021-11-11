@@ -1,5 +1,5 @@
 Aqui se imprime todo el contedido de las paginas secundarias capturados del buffer
-Tienda/masterPage.php linea 49
+Tienda/masterPage.php linea 58
 
 Se inicia el metodo para encapsular todo el contenido de las paginas (bufering), para dar salida al HTML 
 Tienda/index.php linea 2
@@ -15,3 +15,15 @@ Tienda/index.php linea 43
 
 Se carga la pagina maestra para imprimir la pagina global
 Tienda/index.php linea 46
+
+Url raiz, para todas las coneciones al controlador, este se debe cambiar cuando se publica el proecto con una DNS
+Tienda/masterPage.php linea 2
+
+A todas las referencias de directorios locales se le concatena la variable base_url, para indicar la ruta absoluta
+Tienda/masterPage.php linea 187
+
+Recuperar el id de la categoria seleccionada
+Tienda/category.php linea 36
+
+Metodo para listar los productos de la categoria seleccionada
+Tienda/category.php linea 44

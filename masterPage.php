@@ -1,3 +1,8 @@
+<?php
+    // Url raiz, para todas las coneciones al controlador, este se debe cambiar cuando se publica el proecto con una DNS
+    $base_url = 'http://localhost/tienda';
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
 
-    <link href="assets/css/product.css" rel="stylesheet">
+    <link href="<?php echo $base_url; ?>/assets/css/product.css" rel="stylesheet">
 
     <!-- Jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -172,13 +177,15 @@
         }),
         lang = "en",
         searchRequest = null,
-        productLimite = 0;
+        productLimite = 0,
+        base_url = "<?php echo $base_url; ?>";
 
     $(document).ready(function(){
         loadCategories();
 
         $(".btnCheckout").click( function(){
-            window.location.href = "checkout/index.html"
+            // A todas las referencias de directorios locales se le concatena la variable base_url, para indicar la ruta absoluta
+            window.location.href = `${base_url}/checkout/index.html`
         });
 
         if( localStorage.getItem("currentLag") ){
@@ -229,8 +236,8 @@
             newItem.id = currentItem.id;
             newItem.name = currentItem.name;
             newItem.descriptions = currentItem.descriptions;
-            newItem.name = currentItem.optional_name;
-            newItem.descriptions = currentItem.optional_description;
+            newItem.optional_name = currentItem.optional_name;
+            newItem.optional_description = currentItem.optional_description;
             newItem.thumbnail = currentItem.thumbnail;
 
             if( (currentItem.sale_price).length > 0 && currentItem.sale_price > 0){
@@ -257,7 +264,7 @@
                 searchRequest.abort();
 
             searchRequest = $.ajax({
-                url:"core/controllers/product.php",
+                url:`${base_url}/core/controllers/product.php`,
                 method:"POST",
                 data:{
                     _method:'search',
@@ -266,11 +273,11 @@
                 success:function(data){
                     let items = '';
                     $.each(data.data, function(index, prod){
-                        let img = (prod.thumbnail != "" &&  prod.thumbnail != "0") ? `${prod.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                        let img = (prod.thumbnail != "" &&  prod.thumbnail != "0") ? `${base_url}/${prod.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
 
                         items += `
                             <li>
-                                <a class="dropdown-item" href="product/index.html?pid=${prod.id}">
+                                <a class="dropdown-item" href="${base_url}/product/index.php?pid=${prod.id}">
                                     <img src="${img}" alt="twbs" height="32" class="rounded flex-shrink-0 me-2">
                                     ${prod.name}
                                 </a>
@@ -297,13 +304,13 @@
 
     function getProducts(limite) {
         productLimite = limite;
-        
+
         let objData = {
             "_method":"GET",
             "limite": productLimite
         };
 
-        $.post("core/controllers/product.php", objData, function(result) {
+        $.post(`${base_url}/core/controllers/product.php`, objData, function(result) {
             $("#ListProduct").html("");
             $.each( result.data, function( index, item){
                 let productCard = $(".itemClone").clone();
@@ -324,10 +331,10 @@
                     productCard.find(".lblPrice").html( formatter.format(item.price) );
                 }
 
-                let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `${base_url}/${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
 
                 productCard.find(".card-img-top").attr("src", `${img}`);
-                productCard.find(".card-img-top").parent().attr("href", `product/index.html?pid=${item.id}`);
+                productCard.find(".card-img-top").parent().attr("href", `${base_url}/product/index.php?pid=${item.id}`);
 
                 productCard.find(".btnAddtocart").data("item", item);
 
@@ -465,7 +472,7 @@
             "_method":"Get"
         };
 
-        $.post("core/controllers/category.php", objData, function(result) {
+        $.post(`${base_url}/core/controllers/category.php`, objData, function(result) {
             $("#categoriesList").html("");
             $.each( result.data, function( index, item){
                 if(item.parent == 1){
@@ -477,7 +484,7 @@
                         cat.find(".catName").html(item.nameSp.toUpperCase());
                     }
 
-                    let img = (item.thumbnail) ? `${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                    let img = (item.thumbnail) ? `${base_url}/${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
 
                     cat.find(".catImage").attr("src", `${img}`);
                     cat.data("catId", item.id);
@@ -489,7 +496,7 @@
 
             $(".feature").click( function () {
                 let catId = $(this).data("catId");
-                window.location.href ="category/index.html?cid=" + catId;
+                window.location.href = `${base_url}/category/index.php?cid=${catId}`;
             });
         });
     }
@@ -520,7 +527,7 @@
             if(item.color)
                 color = `${item.color}`;
 
-            let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+            let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `${base_url}/${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
 
             listItem.find(".prdImg").attr("src", img);
 
@@ -621,7 +628,7 @@
     }
 
     function switchLanguage(lang){
-        $.post("assets/lang.json", {}, function(data) {
+        $.post(`${base_url}/assets/lang.json`, {}, function(data) {
             $(".changeLang").html('<i class="bi bi-globe2"></i> ' + data[lang]["buttonText"]);
 
             let myLang = data[lang]["home"];
@@ -639,8 +646,11 @@
 
             // Page title
             document.title = myLang.pageTitle;
-            getProducts(productLimite);
+            if(productLimite > 0)
+                getProducts(productLimite);
+
             loadCategories();
+            countCartItem();
         });
     }
 
