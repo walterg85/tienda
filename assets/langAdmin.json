@@ -19,6 +19,49 @@
 			"labelUname": "User name",
 			"labelEmail": "Email",
 			"labelPassword": "Change Password"
+		},
+		"Orders":{
+			"namePage":"Orders",
+			"labelFilter": "Filter",
+			"panelTitle": "Order detail",
+			"pnlColA": "Thumbnail",
+			"pnlColB": "Name",
+			"pnlColC": "Quantity",
+			"pnlColD": "Price",
+			"pnlColE": "Amount",
+			"pnlColF": "Options",
+			"colB": "Order date",
+			"colC": "Amount",
+			"colD": "Ship price",
+			"colE": "Ship to",
+			"colF": "Receive",
+			"colG": "Paypal reference",
+			"colH": "Status"
+		},
+		"Coupon":{
+			"namePage":"Coupons",
+			"inputCode": "Coupon Code",
+			"inputValue": "Value",
+			"inputBtn": "Add coupon",
+			"colB": "Code",
+			"colC": "Discount"
+		},
+		"Products":{
+			"namePage": "Products",
+			"inputBtn": "Add product",
+			"colB": "Thumbnails",
+			"colC": "Name",
+			"colD": "Descriptions",
+			"colE": "Category",
+			"colF": "Price",
+			"colG": "Sale price"
+		},
+		"Categories":{
+			"namePage": "Categories",
+			"inputBtn": "Add Category",
+			"colB": "Thumbnails",
+			"colC": "Name",
+			"colD": "Name spanish"
 		}
 	},
 	"es":{
@@ -41,6 +84,49 @@
 			"labelUname": "Nombre de usuario",
 			"labelEmail": "Correo electronico",
 			"labelPassword": "Cambiar contraseña"
+		},
+		"Orders":{
+			"namePage":"Pedidos",
+			"labelFilter": "Filtrar",
+			"panelTitle": "Detalles del pedido",
+			"pnlColA": "Miniatura",
+			"pnlColB": "Nombre",
+			"pnlColC": "Cantidad",
+			"pnlColD": "Precio",
+			"pnlColE": "Importe",
+			"pnlColF": "Opciones",
+			"colB": "Fecha de orden",
+			"colC": "Total",
+			"colD": "Costo de envio",
+			"colE": "Enviar a",
+			"colF": "Recibe",
+			"colG": "Referencia de paypal",
+			"colH": "Estatus"
+		},
+		"Coupon":{
+			"namePage":"Cupones",
+			"inputCode": "Codigo del cupon",
+			"inputValue": "Valor",
+			"inputBtn": "Registrar cupon",
+			"colB": "Codigo de cupon",
+			"colC": "Descuento"
+		},
+		"Products":{
+			"namePage": "Productos",
+			"inputBtn": "Registrar producto",
+			"colB": "Miniatura",
+			"colC": "Nombre",
+			"colD": "Descripcion",
+			"colE": "Categoria",
+			"colF": "Precio",
+			"colG": "Oferta"
+		},
+		"Categories":{
+			"namePage": "Categorias",
+			"inputBtn": "Registrar categoria",
+			"colB": "Miniatura",
+			"colC": "Nombre",
+			"colD": "Nombre en español"
 		}
 	}
 }

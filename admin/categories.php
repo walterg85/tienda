@@ -9,13 +9,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.9/cropper.min.js" integrity="sha512-9pGiHYK23sqK5Zm0oF45sNBAX/JqbZEP7bSDHyt+nT3GddF+VFIcYNqREt0GDpmFVZI3LZ17Zu9nMMc9iktkCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Categories</h1>
+    <h1 class="h2 lblNamePage">Categories</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#modalCategoria"><i class="bi bi-plus-lg"></i> Add Category</button>
+        <button class="btn btn-outline-secondary btnPanel" type="button" data-bs-toggle="modal" data-bs-target="#modalCategoria"><i class="bi bi-plus-lg"></i> Add Category</button>
     </div>
 </div>
 
-<table class="table" id="categoryList"><thead class="table-light"></thead></table>
+<table class="table" id="categoryList">
+    <thead class="table-light">
+        <th class="colA">#</th>
+        <th class="colB">Thumbnails</th>
+        <th class="colC">Name</th>
+        <th class="colD">Name spanish</th>
+        <th class="colE"></th>
+    </thead>
+</table>
 
 <!-- Modal para administrar categorias -->
 <div class="modal fade" id="modalCategoria" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -192,14 +200,12 @@
                 [
                     {
                         data: 'id',
-                        title: '#',
                         width: "20px",
                         render: function(data, type, row){
                             return pad(data, 5);
                         }
                     },
                     {
-                        title: 'thumbnails',
                         data: 'thumbnail',
                         orderable: false,
                         class: "text-center",
@@ -214,14 +220,11 @@
                     },
                     {
                         data: 'name',
-                        title: 'Name'
                     },
                     {
                         data: 'nameSp',
-                        title: 'Name spanish'
                     },
                     {
-                        title: '',
                         data: null,
                         orderable: false,
                         class: "text-center",
@@ -401,7 +404,11 @@
     }
 
     function changePageLang(myLang){
-        
+        $(".lblNamePage").html(myLang.namePage);
+        $(".btnPanel").html(`<i class="bi bi-plus-lg"></i> ${myLang.inputBtn}`);
+        $(".colB").html(myLang.colB);
+        $(".colC").html(myLang.colC);
+        $(".colD").html(myLang.colD);
     }
 </script>
 
