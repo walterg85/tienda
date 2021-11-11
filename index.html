@@ -28,8 +28,8 @@
     <header class="p-1 mt-1 bg-light">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a class="navbar-brand text-warning" href="#">OFFERS</a>
-                <a href="#"><img class="img-fluid logo-sm d-block d-sm-none" src="/assets/img/logo.png"></a>
+                <a class="navbar-brand text-warning" href="javascript:void(0);">OFFERS</a>
+                <a href="#"><img class="img-fluid logo-sm d-block d-sm-none" src="assets/img/logoChapi.png"></a>
                 <ul class="nav col-sm-auto me-lg-auto justify-content-center mb-md-0">
                     <li><a href="tel:18324390684" class="nav-link px-2 text-secondary"><i class="bi bi-telephone-fill"></i></a></li>
                     <li><a href="javascript:void(0);" class="nav-link px-2 text-secondary"><i class="bi bi-facebook"></i></a></li>
@@ -118,7 +118,7 @@
                         <span class="price lblPrice"></span>
                     </h5>
                     <input type="hidden">
-                    <button type="button" class="btn btn-success my-3 btnAddToCart">Add To Cart</button>                                                   
+                    <button type="button" class="btn btn-success my-3 btnAddtocart">Add To Cart</button>                                                   
                 </div>
             </div>
         </div>
@@ -174,7 +174,7 @@
                 <div class="modal-body">
                     <ul class="list-group mb-3" id="cartListItem"></ul>
                     <li class="list-group-item d-flex justify-content-between lh-sm cartItemClone d-none">
-                        <img src="#" alt="twbs" height="32" class="rounded flex-shrink-0 prdImg">
+                        <img src="#" alt="twbs" height="32" width="32" class="rounded flex-shrink-0 prdImg">
 
                         <div class="input-group input-group-sm contBtn ms-2" style="width:90px; height: fit-content;">
                             <button class="btn btn-outline-secondary btnDown" type="button">-</button>
@@ -733,7 +733,7 @@
 
                 $(".btnCheckout").html(myLang.btnCheckout);
                 $("#inputSearch").attr("placeholder", myLang.search);
-                $(".btnAddToCart").html(data[lang]["addToCart"]);
+                $(".btnAddtocart").html(data[lang]["addToCart"]);
                 $("#myCart").html(myLang.myCart);
                 $(".btnKeepShopping").html(myLang.btnKeepShopping);
                 $(".categories").html(myLang.categories);
