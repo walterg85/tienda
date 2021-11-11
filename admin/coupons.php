@@ -4,7 +4,7 @@
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Coupons</h1>
+    <h1 class="h2 lblNamePage">Coupons</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <form id="addCouponForm" class="needs-validation" novalidate>
             <div class="input-group me-2">
@@ -20,7 +20,14 @@
     </div>
 </div>
 
-<table class="table" id="couponList"><thead class="table-light"></thead></table>
+<table class="table" id="couponList">
+    <thead class="table-light">
+        <th class="colA">#</th>
+        <th class="colB">Code</th>
+        <th class="colC">Discount</th>
+        <th class="colD"></th>
+    </thead>
+</table>
 
 <script type="text/javascript">
     let dataTableCoupon = null,
@@ -97,16 +104,13 @@
                 [
                     {
                         data: 'id',
-                        title: '#',
                         width: "20px"
                     },
                     {
                         data: 'codigo',
-                        title: 'Code'
                     },
                     {
                         data: null,
-                        title: 'Discount',
                         render: function(data, type, row){
                             if(row.tipo == 1){
                                 return `%${row.valor}`;
@@ -161,8 +165,13 @@
         });
     }
 
-    function changePageLang(myLang){
-        
+    function changePageLang(myLang){        
+        $(".lblNamePage").html(myLang.namePage);
+        $("#inputCode").attr("placeholder", myLang.inputCode);
+        $("#inputValue").attr("placeholder", myLang.inputValue);
+        $("#btnAddCoupon").html(`<i class="bi bi-plus-lg"></i> ${myLang.inputBtn}`);
+        $(".colB").html(myLang.colB);
+        $(".colC").html(myLang.colC);
     }
 </script>
 

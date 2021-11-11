@@ -10,14 +10,26 @@
 </style>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Orders</h1>
+    <h1 class="h2 lblNamePage">Orders</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="input-group mb-3 dvFilter"></div>
     </div>
 </div>
 
 <div class="table-responsive">
-    <table class="table" id="orderList"><thead class="table-light"></thead></table>
+    <table class="table" id="orderList">
+        <thead class="table-light">
+            <th class="colA">#</th>
+            <th class="colB">Order date</th>
+            <th class="colC">Amount</th>
+            <th class="colD">Ship price</th>
+            <th class="colE">Ship to</th>
+            <th class="colF">Receive</th>
+            <th class="colG">Paypal reference</th>
+            <th class="colH">Status</th>
+            <th class="colI"></th>
+        </thead>
+    </table>
 </div>
 
 <!-- Panel lateral para ver detalles del envio -->
@@ -31,12 +43,12 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Thumbnail</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Options</th>
+                    <th scope="col" class="pnlColA">Thumbnail</th>
+                    <th scope="col" class="pnlColB">Name</th>
+                    <th scope="col" class="pnlColC">Quantity</th>
+                    <th scope="col" class="pnlColD">Price</th>
+                    <th scope="col" class="pnlColE">Amount</th>
+                    <th scope="col" class="pnlColF">Options</th>
                 </tr>
             </thead>
             <tbody id="tblDetalle"></tbody>
@@ -65,6 +77,7 @@
         });
 
     $(document).ready(function(){
+        currentPage = "Orders";
         var myOffcanvas = document.getElementById('offcanvasOrder');
         myOffcanvas.addEventListener('hidden.bs.offcanvas', function () {
         });
@@ -93,33 +106,28 @@
                 [
                     {
                         data: 'id',
-                        title: '#',
                         width: "20px",
                         render: function(data, type, row) {
                             return pad(data, 5);
                         }
                     },
                     {
-                        data: 'order_date',
-                        title: 'Order date'
+                        data: 'order_date'
                     },
                     {
                         data: 'amount',
-                        title: 'Amount',
                         render: function(data, type, row) {
                             return formatter.format(data);
                         }
                     },
                     {
                         data: 'ship_price',
-                        title: 'Ship price',
                         render: function(data, type, row) {
                             return formatter.format(data);
                         }
                     },
                     {
                         data: 'shipping_address',
-                        title: 'Ship to',
                         render: function(data, type, row) {
                             let objAddress = JSON.parse(data),
                                 strAddress = "";
@@ -133,7 +141,6 @@
                     },
                     {
                         data: 'payment_data',
-                        title: 'Receive',
                         render: function(data, type, row) {
                             let paypalorder = JSON.parse(data),
                                 str = `${paypalorder.purchase_units[0].shipping.name.full_name}`
@@ -143,7 +150,6 @@
                     },
                     {
                         data: 'payment_data',
-                        title: 'Paypal reference',
                         render: function(data, type, row) {
                             let paypalorder = JSON.parse(data),
                                 str = `${paypalorder.purchase_units[0].payments.captures[0].id}`
@@ -152,7 +158,6 @@
                     },
                     {
                         data: 'status',
-                        title: 'Status',
                         render: function(data, type, row) {
                             if(data == 0)
                                 return "Canceled";
@@ -168,7 +173,6 @@
                         }
                     },
                     {
-                        title: '',
                         data: null,
                         orderable: false,
                         class: "text-center",
@@ -339,7 +343,7 @@
                 paging: mypaging,
                 initComplete: function(){
                     this.api().columns([7]).every( function(){
-                        $(".dvFilter").html(`<label class="input-group-text" for="cboFilter">Filter</label>`);
+                        $(".dvFilter").html(`<label class="input-group-text labelFilter" for="cboFilter">Filter</label>`);
                         let column = this,
                             select = $(`<select class="form-select" id="cboFilter"><option value="">All</option></select>`)
                                 .appendTo(".dvFilter")
@@ -364,8 +368,24 @@
         });
     }
 
-    function changePageLang(myLang){
-        
+    function changePageLang(myLang){        
+        $(".lblNamePage").html(myLang.namePage);
+        $("#offcanvasWithBackdropLabel").html(myLang.panelTitle);
+        $(".pnlColA").html(myLang.pnlColA);
+        $(".pnlColB").html(myLang.pnlColB);
+        $(".pnlColC").html(myLang.pnlColC);
+        $(".pnlColD").html(myLang.pnlColD);
+        $(".pnlColE").html(myLang.pnlColE);
+        $(".pnlColF").html(myLang.pnlColF);
+        $(".colB").html(myLang.colB);
+        $(".colC").html(myLang.colC);
+        $(".colD").html(myLang.colD);
+        $(".colE").html(myLang.colE);
+        $(".colF").html(myLang.colF);
+        $(".colG").html(myLang.colG);
+        $(".colH").html(myLang.colH);
+
+        $(".labelFilter").html(myLang.labelFilter);
     }
 </script>
 
