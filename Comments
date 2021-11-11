@@ -1,0 +1,17 @@
+Aqui se imprime todo el contedido de las paginas secundarias capturados del buffer
+Tienda/masterPage.php linea 49
+
+Se inicia el metodo para encapsular todo el contenido de las paginas (bufering), para dar salida al HTML 
+Tienda/index.php linea 2
+
+Invoca al metodo de listar productos declarada en la pagina maestra, se setea un patrametro que indica la cantidad de prodcuto a listar
+Tienda/index.php linea 35
+
+Se obtiene el contenido del bufer
+Tienda/index.php linea 40
+
+Limpiar el bufer para liberar
+Tienda/index.php linea 43
+
+Se carga la pagina maestra para imprimir la pagina global
+Tienda/index.php linea 46
