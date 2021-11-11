@@ -185,7 +185,12 @@
             currency: 'USD',
             minimumFractionDigits: 2
         }),
-        deletesImages = [];
+        deletesImages = [],
+        mesages = {//Control de mensajes para los ALERTS
+            "ctrImage1":"Your selected file is larger than 5MB",
+            "ctrImage2":"files not allowed, only images",
+            "ctrtoRemove":"do you want to delete this product"
+        };
 
     $(document).ready(function(){
         currentPage = "Products";
@@ -383,7 +388,7 @@
                         let data = getData($(this), dataTableProduct),
                             buton = $(this);
 
-                        if (confirm(`do you want to delete this product (${data.name})?`)){
+                        if (confirm(`${mesages.ctrtoRemove} (${data.name})?`)){
                             buton.attr("disabled","disabled");
                             buton.html('<i class="bi bi-clock-history"></i>');
 
@@ -459,11 +464,11 @@
                 if($.inArray(ext, ["jpg", "jpeg", "png", "bmp", "raw", "tiff"]) != -1){
                     if($(this)[0].files[0].size > 5242880){
                         $( this ).val('');
-                        alert('Your selected file is larger than 1MB');
+                        alert(mesages.ctrImage1);
                     }
                 }else{
                     $( this ).val('');
-                    alert(`${ext} files not allowed, only images`);
+                    alert(`${ext} ${mesages.ctrImage2}`);
                 }
             }
         });
@@ -664,6 +669,10 @@
         $(".labelLarge").html(myLang.labelLarge);
         $(".labelXLarge").html(myLang.labelXLarge);
         $("#inputColors").attr("placeholder", myLang.inputColors);
+
+        mesages.ctrImage1 = myLang.ctrImage1;
+        mesages.ctrImage2 = myLang.ctrImage2;
+        mesages.ctrtoRemove = myLang.ctrtoRemove;
     }
 </script>
 

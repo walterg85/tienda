@@ -27,3 +27,9 @@ Tienda/category.php linea 36
 
 Metodo para listar los productos de la categoria seleccionada
 Tienda/category.php linea 44
+
+Cuando el modal se inicia, se procesa la lista de productos en el carrito
+Tienda/masterPage.php linea 304
+
+Control de mensajes para los ALERTS
+Tienda/admin/product.php linea 189

@@ -300,6 +300,11 @@
                 .html("")
                 .removeClass("show");
         });
+
+        // Cuando el modal se inicia, se procesa la lista de productos en el carrito
+        $("#mdlCheckCart").unbind().on('shown.bs.modal', function(){
+            printList();
+        });
     });
 
     function getProducts(limite) {
@@ -460,10 +465,6 @@
             });
 
             countCartItem();
-        });
-
-        $("#mdlCheckCart").unbind().on('shown.bs.modal', function(){
-            printList();
         });
     }
 

@@ -71,14 +71,30 @@
 			"labelMed":"Medium",
 			"labelLarge":"Large",
 			"labelXLarge":"Extra Large",
-			"inputColors": "Red, Orange, Gray"
+			"inputColors": "Red, Orange, Gray",
+			"ctrImage1":"Your selected file is larger than 5MB",
+			"ctrImage2": "files not allowed, only images",
+			"ctrtoRemove": "do you want to delete this product"
 		},
 		"Categories":{
 			"namePage": "Categories",
 			"inputBtn": "Add Category",
 			"colB": "Thumbnails",
 			"colC": "Name",
-			"colD": "Name spanish"
+			"colD": "Name spanish",
+			"labelModal1": "Category detail",
+			"labelNombreCat": "Name",
+			"labelNombreCatSp": "Name spanish",
+			"labelImg": "Preview",
+			"labelCheck": "Visible on main page",
+			"inputName": "Category name",
+			"inputNameSp": "Category name in spanish",
+			"modalLabelP": "Edit / Crop the photo",
+			"btnmdlC": "Cancel",
+			"cropImage": "Apply",
+			"ctrImage1":"Your selected file is larger than 5MB",
+			"ctrImage2": "files not allowed, only images",
+			"ctrtoRemove": "do you want to delete this category"
 		}
 	},
 	"es":{
@@ -153,14 +169,30 @@
 			"labelMed":"Mediano",
 			"labelLarge":"Grande",
 			"labelXLarge":"Extra Grande",
-			"inputColors": "Rojo, Naranja, Gris"
+			"inputColors": "Rojo, Naranja, Gris",
+			"ctrImage1":"El archivo seleccionado tiene un tamaño superior a 5 MB",
+			"ctrImage2": "archivos no permitidos, solo imágenes",
+			"ctrtoRemove": "quieres eliminar este producto"
 		},
 		"Categories":{
 			"namePage": "Categorias",
 			"inputBtn": "Registrar categoria",
 			"colB": "Miniatura",
 			"colC": "Nombre",
-			"colD": "Nombre en español"
+			"colD": "Nombre en español",
+			"labelModal1": "Detalles de la categoria",
+			"labelNombreCat": "Nombre",
+			"labelNombreCatSp": "Nombre en español",
+			"labelImg": "Vista previa",
+			"labelCheck": "Visible en la pagina principal",
+			"inputName": "Nombre de la categoria",
+			"inputNameSp": "Nombre de la categoria en español",
+			"modalLabelP": "Editar y recortar fotografia",
+			"btnmdlC": "Cancelar",
+			"cropImage": "Aplicar",
+			"ctrImage1":"El archivo seleccionado tiene un tamaño superior a 5 MB",
+			"ctrImage2": "archivos no permitidos, solo imágenes",
+			"ctrtoRemove": "quieres eliminar esta categoria"
 		}
 	}
 }
