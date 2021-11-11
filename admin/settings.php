@@ -46,7 +46,8 @@
 </form>
 
 <script type="text/javascript">
-    var confButonText = "";
+    var confButonText = "",
+        strMesage = "";
     $(document).ready(function(){
         currentPage = "Settings";
 
@@ -96,7 +97,7 @@
         };
 
         $.post("../core/controllers/setting.php", objData, function(result) {
-            alert(result.message);
+            alert(strMesage);
             isNew = <?php echo $_SESSION['authData']->isDefault; ?>;
 
             $("#btnUpdateData").removeAttr("disabled");
@@ -120,6 +121,8 @@
         $("#inputtax").attr("placeholder", myLang.labelTax);
         $("#inputMail").attr("placeholder", myLang.labelEmail);
         $("#inputPass").attr("placeholder", myLang.labelPassword);
+
+        strMesage = myLang.ctrMessage;
     }
 </script>
 
