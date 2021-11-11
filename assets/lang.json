@@ -11,10 +11,16 @@
 			"btnKeepShopping": "Keep Shopping",
 			"categories": "Top Categories",
 			"products": "Top Producst"
-
 		},
 		"checkout":{
-			"logout": "Desconectar"
+			"labelSeccion": "Checkout",
+			"lblLetrero": "You have 14 days to return your product if not satisfied.",
+			"labelCart": "Your cart",
+			"labelCoupon": "Apply coupon",
+			"inputCode": "Coupon code",
+			"lalelShip": "Shipping Cost",
+			"strCupon": "Discount",
+			"strTax": "Tax"
 		}
 	},
 	"es":{
@@ -31,7 +37,14 @@
 			"products": "Productos Populares"
 		},
 		"checkout":{
-			"logout": "Desconectar"
+			"labelSeccion": "Verificar y pagar",
+			"lblLetrero": "Tiene 14 días para devolver su producto si no está satisfecho.",
+			"labelCart": "Tu pedido",
+			"labelCoupon": "Apicar cupon",
+			"inputCode": "Codigo de cupon",
+			"lalelShip": "Costo de envio",
+			"strCupon": "Descuento",
+			"strTax": "Impuesto"
 		}
 	}
 }

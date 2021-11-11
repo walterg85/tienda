@@ -35,7 +35,8 @@
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 2
-        });
+        }),
+        strMesage = "do you want to delete this coupon";
 
     $(document).ready(function(){
         currentPage = "Coupon";
@@ -137,7 +138,7 @@
                         let data = getData($(this), dataTableCoupon),
                             buton = $(this);
 
-                        if (confirm(`do you want to delete this coupon (${data.codigo})?`)){
+                        if (confirm(`${strMesage} (${data.codigo})?`)){
                             buton.attr("disabled","disabled");
                             buton.html('<i class="bi bi-clock-history"></i>');
 
@@ -172,6 +173,8 @@
         $("#btnAddCoupon").html(`<i class="bi bi-plus-lg"></i> ${myLang.inputBtn}`);
         $(".colB").html(myLang.colB);
         $(".colC").html(myLang.colC);
+
+        strMesage = myLang.ctrtoRemove;
     }
 </script>
 

@@ -18,7 +18,8 @@
 			"labelTax": "Tax",
 			"labelUname": "User name",
 			"labelEmail": "Email",
-			"labelPassword": "Change Password"
+			"labelPassword": "Change Password",
+			"ctrMessage": "Updated information."
 		},
 		"Orders":{
 			"namePage":"Orders",
@@ -44,7 +45,8 @@
 			"inputValue": "Value",
 			"inputBtn": "Add coupon",
 			"colB": "Code",
-			"colC": "Discount"
+			"colC": "Discount",
+			"ctrtoRemove": "do you want to delete this coupon"
 		},
 		"Products":{
 			"namePage": "Products",
@@ -116,7 +118,8 @@
 			"labelTax": "Impuesto",
 			"labelUname": "Nombre de usuario",
 			"labelEmail": "Correo electronico",
-			"labelPassword": "Cambiar contraseña"
+			"labelPassword": "Cambiar contraseña",
+			"ctrMessage": "Informacion actualizada."
 		},
 		"Orders":{
 			"namePage":"Pedidos",
@@ -142,7 +145,8 @@
 			"inputValue": "Valor",
 			"inputBtn": "Registrar cupon",
 			"colB": "Codigo de cupon",
-			"colC": "Descuento"
+			"colC": "Descuento",
+			"ctrtoRemove": "quieres eliminar este cupón"
 		},
 		"Products":{
 			"namePage": "Productos",
