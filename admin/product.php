@@ -608,6 +608,7 @@
                 options     = {
                     viewMode: 1,
                     aspectRatio: maxCroppedWidth / maxCroppedHeight,
+                    background: false
                 };
 
             cropper = new Cropper(image, options);

@@ -44,13 +44,22 @@ Ejecutar para redirigir al checkout
 Tienda/product/index.php linea 15
 
 Metodo patra iniciar session
-Tienda/admin/index.html linea 54
+Tienda/admin/login.html linea 54
 
 Cuando se hace click en el boton se ejecuta el metodo de validar login
-Tienda/admin/index.html linea 43
+Tienda/admin/login.html linea 43
 
 Cuando se hace enter en el inputpassword se ejecuta el metodo de validar login
-Tienda/admin/index.html linea 46
+Tienda/admin/login.html linea 46
 
 se envia el foco al input password para coregir la contraseña
-Tienda/admin/index.html linea 70
+Tienda/admin/login.html linea 70
+
+Metodo para ocultar el resultado de la busqueda si se hace click en cualquier parte
+Tienda/admin/index.html linea 197
+
+Metodo para buscar lo escrito en el inputsearch, si ya existe una busqueda previa que no se termina, se cancela y se reinicia
+Tienda/admin/index.html linea 164
+
+Forzar a que se muestre el fondo blanco en el modal del cropperJS
+Tienda/admin/index.html linea 52

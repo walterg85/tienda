@@ -48,6 +48,12 @@
         .offcanvas-end {
             width: 750px;
         }
+
+        /*Forzar a que se muestre el fondo blanco en el modal del cropperJS*/
+        .cropper-modal{
+            background-color: #fff !important;
+            opacity: .7 !important;
+        }
     </style>
 </head>
 <body>
@@ -56,7 +62,11 @@
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <input class="form-control form-control-dark w-100 lblInputSearch" type="text" placeholder="Search" aria-label="Search">
+        <!-- <input class="form-control form-control-dark w-100 lblInputSearch" type="text" placeholder="Search" aria-label="Search"> -->
+        <div class="dropdown w-100">
+            <input type="text" class="form-control dropdown-toggle form-control-dark w-100 lblInputSearch" id="inputSearch" placeholder="Search..." autocomplete="off" >
+            <ul class="dropdown-menu" aria-labelledby="inputSearch"></ul>
+        </div>
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
                 <a class="nav-link px-3" href="javascript:void(0);" id="btnLogout">Sign out</a>
@@ -124,7 +134,8 @@
     <script type="text/javascript">
         var isNew = <?php echo $_SESSION['authData']->isDefault; ?>,
             currentPage = "",
-            lang = "en";
+            lang = "en",
+            searchRequest = null;
 
         $(document).ready(function(){
             if( localStorage.getItem("currentLag") ){
@@ -154,6 +165,50 @@
                     lang = "es";
                 }
                 switchLanguage(lang);
+            });
+
+            // Metodo para buscar lo escrito en el inputsearch, si ya existe una busqueda previa que no se termina, se cancela y se reinicia
+            $('#inputSearch').keyup(function(){
+                if(searchRequest)
+                    searchRequest.abort();
+
+                searchRequest = $.ajax({
+                    url:`../core/controllers/product.php`,
+                    method:"POST",
+                    data:{
+                        _method:'search',
+                        strQuery: $('#inputSearch').val()
+                    },
+                    success:function(data){
+                        let items = '';
+                        $.each(data.data, function(index, prod){
+                            let img = (prod.thumbnail != "" &&  prod.thumbnail != "0") ? `../${prod.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+
+                            items += `
+                                <li>
+                                    <a class="dropdown-item" href="../product/index.php?pid=${prod.id}">
+                                        <img src="${img}" alt="twbs" height="32" class="rounded flex-shrink-0 me-2">
+                                        ${prod.name}
+                                    </a>
+                                </li>
+                            `;
+                        });
+
+                        $(".dropdown-menu")
+                            .html(items)
+                            .addClass("show");
+                    }
+                });
+            });
+
+            // Metodo para ocultar el resultado de la busqueda si se hace click en cualquier parte
+            $('body').click(function() {
+                if(searchRequest)
+                    searchRequest.abort();
+
+                $(".dropdown-menu")
+                    .html("")
+                    .removeClass("show");
             });
         });
 
