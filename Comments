@@ -33,3 +33,24 @@ Tienda/masterPage.php linea 304
 
 Control de mensajes para los ALERTS
 Tienda/admin/product.php linea 189
+
+Ejecutar para redirigir al checkout
+Tienda/masterPage.php linea 261
+
+Ejecutar para redirigir al checkout
+Tienda/category/index.php linea 119
+
+Ejecutar para redirigir al checkout
+Tienda/product/index.php linea 15
+
+Metodo patra iniciar session
+Tienda/admin/index.html linea 54
+
+Cuando se hace click en el boton se ejecuta el metodo de validar login
+Tienda/admin/index.html linea 43
+
+Cuando se hace enter en el inputpassword se ejecuta el metodo de validar login
+Tienda/admin/index.html linea 46
+
+se envia el foco al input password para coregir la contraseña
+Tienda/admin/index.html linea 70
