@@ -40,30 +40,42 @@
             (function ($) {
                 "use strict";
 
-                $("#btnLogin").on("click", function(){
-                    $.ajax({
-                        url: '../core/controllers/user.php',
-                        data: {
-                            _method: 'VALIDATE',
-                            uname: $('#floatingInput').val(),
-                            password: $('#floatingPassword').val()
-                        },
-                        type: 'POST',
-                        dataType: 'json',
-                        success: function(response){
-                            if(response.codeResponse == 200){
-                                window.location.replace("index.php");
-                            }else{
-                                alert(response.message);
-                            }
-                        },
-                        error: function(xhr, status) {
-                            alert('There is a problem');
-                        }
-                    });
+                // Cuando se hace click en el boton se ejecuta el metodo de validar login
+                $("#btnLogin").on("click", validateLogin);
+
+                // Cuando se hace enter en el inputpassword se ejecuta el metodo de validar login
+                $(document).on('keypress',function(e) {
+                    if(e.which == 13)
+                        validateLogin();
                 });
 
             })(jQuery)
+
+            // Metodo patra iniciar session
+            function validateLogin(){
+                $.ajax({
+                    url: '../core/controllers/user.php',
+                    data: {
+                        _method: 'VALIDATE',
+                        uname: $('#floatingInput').val(),
+                        password: $('#floatingPassword').val()
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.codeResponse == 200){
+                            window.location.replace("index.php");
+                        }else{
+                            alert(response.message);
+                            // se envia el foco al input password para coregir la contraseña
+                            $( "#floatingPassword" ).focus();
+                        }
+                    },
+                    error: function(xhr, status) {
+                        alert('There is a problem');
+                    }
+                });
+            }
         </script>
     </body>
 </html>

@@ -257,6 +257,9 @@
             countCartItem();
 
             $("#mdlProDetalle").modal("hide");
+
+            // Ejecutar para redirigir al checkout
+            $(".btnCheckout").click();
         });
 
         $('#inputSearch').keyup(function(){
@@ -381,6 +384,9 @@
 
                     localStorage.setItem("currentCart", JSON.stringify(currentCart));
                     countCartItem();
+
+                    // Ejecutar para redirigir al checkout
+                    $(".btnCheckout").click();
                 }else{
                     if(lang == "en"){
                         $(".lblMdlName").html(currentItem.name);

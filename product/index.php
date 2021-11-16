@@ -111,6 +111,9 @@
             localStorage.setItem("currentCart", JSON.stringify(currentCart));
 
             countCartItem();
+
+            // Ejecutar para redirigir al checkout
+            $(".btnCheckout").click();
         });
     });
 
