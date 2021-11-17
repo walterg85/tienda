@@ -55,19 +55,19 @@
     $(document).ready(function(){
         // Recuperar el id del producto seleccionado
         let queryString = window.location.search,
-            urlParams = new URLSearchParams(queryString),
-            productId = urlParams.get('pid');
+            urlParams   = new URLSearchParams(queryString),
+            productId   = urlParams.get('pid');
 
         productDetail(productId);
 
         $(".btnAddtocart").click(function(){
             let currentItem = $(this).data("item"),
-                newItem = {},
+                newItem     = {},
                 currentCart = JSON.parse(localStorage.getItem("currentCart")),
-                config = JSON.parse(currentItem.dimensions),
-                size = null,
-                color = null,
-                newItemId = currentItem.id;
+                config      = JSON.parse(currentItem.dimensions),
+                size        = null,
+                color       = null,
+                newItemId   = currentItem.id;
 
             if(!currentCart){
                 localStorage.setItem("currentCart", "{}");
@@ -88,18 +88,19 @@
                 }
             }
 
-            newItem.id = currentItem.id;
-            newItem.name = currentItem.name;
-            newItem.optional_name = currentItem.optional_name;
-            newItem.descriptions = currentItem.descriptions;
-            newItem.optional_description = currentItem.optional_description;
-            newItem.thumbnail = currentItem.thumbnail;
+            newItem.id                      = currentItem.id;
+            newItem.name                    = currentItem.name;
+            newItem.optional_name           = currentItem.optional_name;
+            newItem.descriptions            = currentItem.descriptions;
+            newItem.optional_description    = currentItem.optional_description;
+            newItem.thumbnail               = currentItem.thumbnail;
+            newItem.price                   = ((currentItem.sale_price).length > 0 && currentItem.sale_price > 0) ? currentItem.sale_price : currentItem.price;
 
-            if( (currentItem.sale_price).length > 0 && currentItem.sale_price > 0){
-                newItem.price = currentItem.sale_price;
-            }else{
-                newItem.price = currentItem.price;
-            }
+            // if( (currentItem.sale_price).length > 0 && currentItem.sale_price > 0){
+            //     newItem.price = currentItem.sale_price;
+            // }else{
+            //     newItem.price = currentItem.price;
+            // }
 
             if(currentCart[newItemId]){
                 currentCart[newItemId].qty = currentCart[newItemId].qty + 1;
@@ -140,7 +141,7 @@
                 $(".btnAddtocart").data("item", info);
 
                 let images = JSON.parse(info.images);
-                if(images){
+                if(images[0]){
                     $.each( images, function( index, item){
                         $(`.img${index}`)
                             .attr("src", `${base_url}/${item}`)
