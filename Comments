@@ -63,3 +63,12 @@ Tienda/admin/index.html linea 164
 
 Forzar a que se muestre el fondo blanco en el modal del cropperJS
 Tienda/admin/index.html linea 52
+
+Se requiere el modelo de setting para recuperar el id de paypal
+Tienda/checkout/index.php linea 2
+
+Se agrega esta validacion para controlar error de directorios
+Tienda/core/models/setting.php linea 4
+
+Estructura de control para validar que exista el id de paypal
+Tienda/checkout/index.php linea 12

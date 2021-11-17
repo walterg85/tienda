@@ -32,7 +32,8 @@
 			$setData = array(
 				'shipingCost' 	=> $vars['shipingCost'],
 				'shipingFree' 	=> $vars['shipingFree'],
-				'tax' 			=> $vars['tax']
+				'tax' 			=> $vars['tax'],
+				'paypalid'		=> $vars['paypalid']
 			);
 
 			$tmpResponse = $settingsModel->updateData($usData, $setData);

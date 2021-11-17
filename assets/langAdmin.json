@@ -19,7 +19,9 @@
 			"labelUname": "User name",
 			"labelEmail": "Email",
 			"labelPassword": "Change Password",
-			"ctrMessage": "Updated information."
+			"ctrMessage": "Updated information.",
+			"lblApiKey": "Paypal cliente ID",
+			"inputApiKey": "Client ID"
 		},
 		"Orders":{
 			"namePage":"Orders",
@@ -119,7 +121,9 @@
 			"labelUname": "Nombre de usuario",
 			"labelEmail": "Correo electrónico",
 			"labelPassword": "Cambiar contraseña",
-			"ctrMessage": "Informacion actualizada."
+			"ctrMessage": "Informacion actualizada.",
+			"lblApiKey": "ID de cliente de paypal",
+			"inputApiKey": "ID de cliente"
 		},
 		"Orders":{
 			"namePage":"Pedidos",

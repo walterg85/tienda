@@ -1,7 +1,12 @@
 <?php
 	class Settingsmodel {
 		public function __construct() {
-	        require_once '../dbConnection.php';
+			// Se agrega esta validacion para controlar error de directorios
+			if(is_file('../dbConnection.php')){
+				require_once '../dbConnection.php';
+			}else{
+				require_once '../core/dbConnection.php';
+			}
 	    }
 
 		public function get() {
@@ -35,7 +40,7 @@
 			$sql->execute($parametros);
 
 	    	$cmd = '
-	    		DELETE FROM setting WHERE parameter in("shipingCost", "shipingFree", "tax");
+	    		DELETE FROM setting WHERE parameter in("shipingCost", "shipingFree", "tax", "paypalid");
 	    	';
 
 	    	$sql = $pdo->prepare($cmd);
@@ -43,13 +48,14 @@
 
 			$cmd = '
 				INSERT INTO setting (parameter, value) 
-				VALUES ("shipingCost", :shipingCost), ("shipingFree", :shipingFree), ("tax", :tax);
+				VALUES ("shipingCost", :shipingCost), ("shipingFree", :shipingFree), ("tax", :tax), ("paypalid", :paypalid);
 	    	';
 
 			$parametros = array(
 				':shipingCost' => $setData['shipingCost'],
 				':shipingFree' => $setData['shipingFree'],
-				':tax' => $setData['tax']
+				':tax' => $setData['tax'],
+				':paypalid' => $setData['paypalid']
 			);
 
 	    	$sql = $pdo->prepare($cmd);
