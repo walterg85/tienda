@@ -491,7 +491,7 @@
                         cat.find(".catName").html(item.nameSp.toUpperCase());
                     }
 
-                    let img = (item.thumbnail) ? `${base_url}/${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                    let img = (item.thumbnail) ? `${base_url}/${item.thumbnail}` : `${base_url}/assets/img/defaultCat.jpg`;
 
                     cat.find(".catImage").attr("src", `${img}`);
                     cat.data("catId", item.id);
@@ -534,7 +534,7 @@
             if(item.color)
                 color = `${item.color}`;
 
-            let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `${base_url}/${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+            let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `${base_url}/${item.thumbnail}` : `${base_url}/assets/img/default.jpg`;
 
             listItem.find(".prdImg").attr("src", img);
 

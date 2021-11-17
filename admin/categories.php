@@ -216,7 +216,7 @@
                         class: "text-center",
                         width: "100px",
                         render: function ( data, type, row ) {
-                            let img = (data) ? `../${data}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                            let img = (data) ? `../${data}` : "../assets/img/defaultCat.jpg";
 
                             return `
                                 <img src="${img}" class="rounded" alt="Image cat" width="100">
@@ -303,7 +303,7 @@
                         $("#inputNameSp").val(data.nameSp);
                         $("#chkVisible").prop("checked", visible);
 
-                        let img = (data.thumbnail) ? `../${data.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                        let img = (data.thumbnail) ? `../${data.thumbnail}` : "../assets/img/defaultCat.jpg";
                         $(".imgPreview").attr("src", img).parent().removeClass("d-none");
 
                         $("#modalCategoria").modal("show");

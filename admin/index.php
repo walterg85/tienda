@@ -182,7 +182,7 @@
                     success:function(data){
                         let items = '';
                         $.each(data.data, function(index, prod){
-                            let img = (prod.thumbnail != "" &&  prod.thumbnail != "0") ? `../${prod.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                            let img = (prod.thumbnail != "" &&  prod.thumbnail != "0") ? `../${prod.thumbnail}` : "../assets/img/default.jpg";
 
                             items += `
                                 <li>
