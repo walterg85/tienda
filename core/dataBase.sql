@@ -91,10 +91,17 @@ CREATE TABLE `product_category` (
 
 DROP TABLE IF EXISTS `setting`;
 CREATE TABLE `setting` (
-  `id` int(11) NOT NULL,
-  `parameter` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
-  `value` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Auxiliar para sistema';
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `parameter` VARCHAR(50) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
+  `value` VARCHAR(250) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
+  PRIMARY KEY (`id`) USING BTREE
+)
+COMMENT='Auxiliar para sistema'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=101
+;
+
 
 -- --------------------------------------------------------
 

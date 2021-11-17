@@ -72,3 +72,6 @@ Tienda/core/models/setting.php linea 4
 
 Estructura de control para validar que exista el id de paypal
 Tienda/checkout/index.php linea 12
+
+Si no existe el id de paypal, se redirige al index de la tienda
+Tienda/checkout/index.php linea 21

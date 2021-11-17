@@ -339,7 +339,7 @@
                     productCard.find(".lblPrice").html( formatter.format(item.price) );
                 }
 
-                let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `${base_url}/${item.thumbnail}` : "assets/img/default.jpg";
+                let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `${base_url}/${item.thumbnail}` : `${base_url}/assets/img/default.jpg`;
 
                 productCard.find(".card-img-top").attr("src", `${img}`);
                 productCard.find(".card-img-top").parent().attr("href", `${base_url}/product/index.php?pid=${item.id}`);
@@ -664,6 +664,11 @@
     function changeImage(element) {
         var main_prodcut_image = document.getElementById('main_product_image');
         main_prodcut_image.src = element.src;
+    }
+
+    function pad (str, max) {
+        str = str.toString();
+        return str.length < max ? pad("0" + str, max) : str;
     }
 </script>
 </html>

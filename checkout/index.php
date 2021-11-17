@@ -7,21 +7,21 @@
 
     // Se recuperan los parametros de configuracion
     $configs = $settingsModel->get();
-    $existeId = FALSE;
+    $data['existeId'] = FALSE;
 
     // Estructura de control para validar que exista el id de paypal
     foreach ($configs as $key => $value) {
         if($value['parameter'] == 'paypalid'){
-            $existeId = TRUE;
+            $data['existeId'] = TRUE;
+            $data['paypalId'] = $value['value'];
             break;
         }
     }
 
-    echo "<pre>".$existeId."</pre>";
-
-
-    exit();
-
+    // Si no existe el id de paypal, se redirige al index de la tienda
+    if(!$data['existeId']){
+        header('Location: ../index.php');
+    }
 ?>
 <!doctype html>
 <html lang="en">
@@ -38,7 +38,7 @@
 </head>
 <body> 
     <!-- Include the PayPal JavaScript SDK; replace "test" with your own sandbox Business account app client ID -->
-    <script src="https://www.paypal.com/sdk/js?client-id=ATTvB3Pjt7K6c0Pm7km72twwH3GI-3FnaqZvgwWbqfRU-RmndDwSuRXN21dFmc0-hpDxQC4P3MP_wC2H&currency=USD&disable-funding=credit"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=<?php echo $data['paypalId']; ?>&currency=USD&disable-funding=credit"></script>
     <div class="container">
         <main>
             <div class="py-5 text-center">
@@ -405,7 +405,7 @@
 
                     $.post("../core/controllers/checkout.php", objData, function(result) {
                         localStorage.removeItem("currentCart");
-                        window.location.replace(`../order/index.html?orderId=${result.id}`);
+                        window.location.replace(`../order/index.php?orderId=${result.id}`);
                     });
                 }else{
                     alert("Payment was not processed correctly, please try again.");
