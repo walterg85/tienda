@@ -185,7 +185,7 @@
 
         $(".btnCheckout").click( function(){
             // A todas las referencias de directorios locales se le concatena la variable base_url, para indicar la ruta absoluta
-            window.location.href = `${base_url}/checkout/index.html`
+            window.location.href = `${base_url}/checkout/index.php`
         });
 
         if( localStorage.getItem("currentLag") ){
@@ -276,7 +276,7 @@
                 success:function(data){
                     let items = '';
                     $.each(data.data, function(index, prod){
-                        let img = (prod.thumbnail != "" &&  prod.thumbnail != "0") ? `${base_url}/${prod.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                        let img = (prod.thumbnail != "" &&  prod.thumbnail != "0") ? `${base_url}/${prod.thumbnail}` : `${base_url}/assets/img/default.jpg`;
 
                         items += `
                             <li>

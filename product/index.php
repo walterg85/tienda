@@ -149,7 +149,7 @@
                     });
                 }else{
                     $(`.img0`)
-                        .attr("src", `https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png`)
+                        .attr("src", `${base_url}/assets/img/default.jpg`)
                         .parent().removeClass("d-none");
                 }
 

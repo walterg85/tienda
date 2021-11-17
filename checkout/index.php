@@ -1,3 +1,28 @@
+<?php
+    // Se requiere el modelo de setting para recuperar el id de paypal    
+    require_once '../core/models/setting.php';
+
+    // Se instancia la clase
+    $settingsModel  = new Settingsmodel();
+
+    // Se recuperan los parametros de configuracion
+    $configs = $settingsModel->get();
+    $existeId = FALSE;
+
+    // Estructura de control para validar que exista el id de paypal
+    foreach ($configs as $key => $value) {
+        if($value['parameter'] == 'paypalid'){
+            $existeId = TRUE;
+            break;
+        }
+    }
+
+    echo "<pre>".$existeId."</pre>";
+
+
+    exit();
+
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -174,7 +199,7 @@
             if(item.color)
                 color = `${item.color}`;
 
-            let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `../${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+            let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `../${item.thumbnail}` : "../assets/img/default.jpg";
 
             listItem.find(".prdImg").attr("src", img);
 
