@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
 
     <link href="<?php echo $base_url; ?>/assets/css/product.css" rel="stylesheet">
+    <link href="<?php echo $base_url; ?>/assets/css/style.css" rel="stylesheet">
 
     <!-- Jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -27,22 +28,62 @@
     }
 </style>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="row g-3">
-            <div class="col-auto">
-                <a class="text-warning text-decoration-none changeLang" href="javascript:void(0);"></a>
-                <a href="javascript:void(0);" class="ms-2 text-decoration-none" id="checkCart" data-bs-toggle="modal" data-bs-target="#mdlCheckCart">View cart</a>
-                <a href="javascript:void(2);" class="ms-2 text-decoration-none btnCheckout">Checkout</a>
-            </div>
-            <div class="col-sm-4">
-                <div class="dropdown">
-                    <input type="text" class="form-control dropdown-toggle" id="inputSearch" placeholder="Search..." autocomplete="off" >
-                    <ul class="dropdown-menu" aria-labelledby="inputSearch"></ul>
+    <!-- TOP BAR -->
+    <div class="first-bar text-center bg-secondary text-light">
+        <p><i class="bi bi-truck"></i> Free shipping on all orders over $150!</p>
+    </div>
+
+    <!-- NAV BAR -->
+    <header class="p-1 mt-1 bg-light">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a class="navbar-brand text-warning" href="#">OFFERS</a>
+                <a href="javascript:void(0);"><img class="img-fluid logo-sm d-block d-sm-none" src="/assets/img/logo.png"></a>
+                <ul class="nav col-sm-auto me-lg-auto justify-content-center mb-md-0">
+                    <li><a href="tel:18324390684" class="nav-link px-2 text-secondary"><i class="bi bi-telephone-fill"></i></a></li>
+                    <li><a href="javascript:void(0);" class="nav-link px-2 text-secondary"><i class="bi bi-facebook"></i></a></li>
+                    <li><a href="javascript:void(0);" class="nav-link px-2 text-secondary changeLang"><i class="bi bi-globe"></i> Español</a></li>
+                </ul>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-none d-sm-block">
+                    <div class="input-group">
+                        <div class="dropdown">
+                            <input type="text" class="form-control dropdown-toggle" id="inputSearch" placeholder="Search..." autocomplete="off" >
+                            <ul class="dropdown-menu" aria-labelledby="inputSearch"></ul>
+                        </div>
+                        <button class="btn btn-info" type="button"><i class="bi bi-search text-primary"></i></button>
+                    </div>
+                </form>
+
+                <div>
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a type="button" data-bs-toggle="modal" data-bs-target="#mdlCheckCart" class="nav-link px-2 text-secondary" id="checkCart"><i class="bi bi-cart3"></i> Cart</a></li>
+                        <li><a href="javascript:void(2);" class="nav-link px-2 text-secondary d-block d-sm-none"><i class="bi bi-search text-info"></i></a></li>
+                        <li><a href="javascript:void(2);" class="nav-link px-2 text-secondary btnCheckout">Checkout</a></li>
+                        <li><a href="javascript:void(2);" class="nav-link px-2 text-secondary"><i class="bi bi-person-circle"></i> My Account</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
+    </header>
 
+    <!-- LANDING -->
+    <div class="p-3 bg-warning bg-mix text-light">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-4 center-column d-none d-sm-block">
+                    <a href="javascript:void(0);"><img class="img-fluid logo" src="<?php echo $base_url; ?>/assets/img/logoChapi.png"></a>
+                </div>
+                <div class="col center-column">
+                    <h1 class="display-6 fw-bold">Take 20% OFF on all handcraft!</h1>
+                    <p class="col-md-8 fs-4">Contact us for wholesale prices!</p>
+                    <button class="btn btn-warning text-light" type="button">Call Now!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
         <!-- CATEGORIES -->
         <div class="container px-4 py-5 text-secondary">
             <h2 class="pb-2 text-center display-6 categories">Top Categories</h2>
