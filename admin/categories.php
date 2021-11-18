@@ -35,7 +35,7 @@
             </div>
             <div class="modal-body">
                 <form id="frmCategorie" class="needs-validation" novalidate>
-                    <input type="hidden" name="categoryId" id="categoryId">
+                    <input type="hidden" name="categoryId" id="categoryId" value="0">
                     <div class="mb-3">
                         <label for="inputName" class="form-label labelNombreCat">Name</label>
                         <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Category name" autocomplete="off" required>
