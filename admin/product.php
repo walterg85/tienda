@@ -63,59 +63,59 @@
             <input type="hidden" name="productId" id="productId" value="0">
             <div class="row">
                 <div class="col mb-3">
-                    <label for="inputName" class="form-label">Name</label>
+                    <label for="inputName" class="form-label labelName">Name</label>
                     <input type="text" id="inputName" name="inputName" class="form-control" autocomplete="off" required>
                 </div>
                 <div class="col mb-3">
-                    <label for="inputNameSp" class="form-label">Name Spanish</label>
+                    <label for="inputNameSp" class="form-label labelNameSp">Name Spanish</label>
                     <input type="text" id="inputNameSp" name="inputNameSp" class="form-control" autocomplete="off" required>
                 </div>
             </div>
             <div class="mb-3">
-                <label for="inputDescription" class="form-label">Description</label>
+                <label for="inputDescription" class="form-label labelDescription">Description</label>
                 <input type="text" id="inputDescription" name="inputDescription" class="form-control" autocomplete="off" required>
             </div>
             <div class="mb-3">
-                <label for="inputDescriptionSp" class="form-label">Description Spanish</label>
+                <label for="inputDescriptionSp" class="form-label labelDescriptionSp">Description Spanish</label>
                 <input type="text" id="inputDescriptionSp" name="inputDescriptionSp" class="form-control" autocomplete="off" required>
             </div>
             <div class="row">
                 <div class="col-3 mb-3">
-                    <label for="inputPrice" class="form-label">Price</label>
+                    <label for="inputPrice" class="form-label labelPrice">Price</label>
                     <input type="text" id="inputPrice" name="inputPrice" class="form-control" autocomplete="off" required>
                 </div>
                 <div class="col-3 mb-3">
-                    <label for="inputSalePrice" class="form-label">Sale Price</label>
+                    <label for="inputSalePrice" class="form-label labelSalePrice">Sale Price</label>
                     <input type="text" id="inputSalePrice" name="inputSalePrice" class="form-control" autocomplete="off">
                 </div>
                 <div class="col-6 mb-3">
-                    <label for="inputCategory" class="form-label">Category</label>
+                    <label for="inputCategory" class="form-label labelCategory">Category</label>
                     <select class="form-select" id="inputCategory" name="inputCategory" required></select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 mb-3">
-                    <label class="form-label">Sizes</label><br>
+                    <label class="form-label labelSizes">Sizes</label><br>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="chsm" name="chsizes" value="sm">
-                        <label class="form-check-label" for="chsm">Small</label>
+                        <label class="form-check-label labelSm" for="chsm">Small</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="chm" name="chsizes" value="m">
-                        <label class="form-check-label" for="chm">Medium</label>
+                        <label class="form-check-label labelMed" for="chm">Medium</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="chl" name="chsizes" value="l">
-                        <label class="form-check-label" for="chl">Large</label>
+                        <label class="form-check-label labelLarge" for="chl">Large</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="chxl" name="chsizes" value="xl">
-                        <label class="form-check-label" for="chxl">Extra large</label>
+                        <label class="form-check-label labelXLarge" for="chxl">Extra large</label>
                     </div>
                 </div>
             </div>
             <div class="mb-3">
-                <label for="inputColors" class="form-label">Colors (separated by commas)</label>
+                <label for="inputColors" class="form-label labelColors">Colors (separated by commas)</label>
                 <input type="text" id="inputColors" name="inputColors" class="form-control" autocomplete="off" placeholder="Red, Orange, Gray">
             </div>
 
@@ -147,22 +147,22 @@
             </div>
 
             <div class="mb-3">
-                <label for="image1" class="form-label">Add Image</label>
+                <label for="image1" class="form-label labelImage">Add Image</label>
                 <input class="form-control" type="file" id="image1">
             </div>
 
             <div class="mb-3">
-                <label for="image2" class="form-label">Add Image</label>
+                <label for="image2" class="form-label labelImage">Add Image</label>
                 <input class="form-control" type="file" id="image2">
             </div>
 
             <div class="mb-3">
-                <label for="image3" class="form-label">Add Image</label>
+                <label for="image3" class="form-label labelImage">Add Image</label>
                 <input class="form-control" type="file" id="image3">
             </div>
 
             <div class="mb-3">
-                <label for="image4" class="form-label">Add Image</label>
+                <label for="image4" class="form-label labelImage">Add Image</label>
                 <input class="form-control" type="file" id="image4">
             </div>
 
@@ -185,7 +185,12 @@
             currency: 'USD',
             minimumFractionDigits: 2
         }),
-        deletesImages = [];
+        deletesImages = [],
+        mesages = {//Control de mensajes para los ALERTS
+            "ctrImage1":"Your selected file is larger than 5MB",
+            "ctrImage2":"files not allowed, only images",
+            "ctrtoRemove":"do you want to delete this product"
+        };
 
     $(document).ready(function(){
         currentPage = "Products";
@@ -335,7 +340,7 @@
                         class: "text-center",
                         width: "100px",
                         render: function ( data, type, row ) {
-                            let img = (data != "" &&  data != "0") ? `../${data}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+                            let img = (data != "" &&  data != "0") ? `../${data}` : "../assets/img/default.jpg";
 
                             return `
                                 <img src="${img}" class="rounded" alt="Image product" width="100">
@@ -383,7 +388,7 @@
                         let data = getData($(this), dataTableProduct),
                             buton = $(this);
 
-                        if (confirm(`do you want to delete this product (${data.name})?`)){
+                        if (confirm(`${mesages.ctrtoRemove} (${data.name})?`)){
                             buton.attr("disabled","disabled");
                             buton.html('<i class="bi bi-clock-history"></i>');
 
@@ -459,11 +464,11 @@
                 if($.inArray(ext, ["jpg", "jpeg", "png", "bmp", "raw", "tiff"]) != -1){
                     if($(this)[0].files[0].size > 5242880){
                         $( this ).val('');
-                        alert('Your selected file is larger than 1MB');
+                        alert(mesages.ctrImage1);
                     }
                 }else{
                     $( this ).val('');
-                    alert(`${ext} files not allowed, only images`);
+                    alert(`${ext} ${mesages.ctrImage2}`);
                 }
             }
         });
@@ -603,6 +608,7 @@
                 options     = {
                     viewMode: 1,
                     aspectRatio: maxCroppedWidth / maxCroppedHeight,
+                    background: false
                 };
 
             cropper = new Cropper(image, options);
@@ -647,6 +653,27 @@
         $(".colE").html(myLang.colE);
         $(".colF").html(myLang.colF);
         $(".colG").html(myLang.colG);
+        $("#offcanvasWithBackdropLabel").html(myLang.panelTitle);
+        $(".labelName").html(myLang.labelName);
+        $(".labelNameSp").html(myLang.labelNameSp);
+        $(".labelDescription").html(myLang.labelDescription);
+        $(".labelDescriptionSp").html(myLang.labelDescriptionSp);
+        $(".labelPrice").html(myLang.labelPrice);
+        $(".labelSalePrice").html(myLang.labelSalePrice);
+        $(".labelCategory").html(myLang.labelCategory);
+        $(".labelSizes").html(myLang.labelSizes);
+        $(".labelColors").html(myLang.labelColors);
+        $(".labelImage").html(myLang.labelImage);
+        $("#addProduct").html(`<i class="bi bi-check2"></i> ${myLang.labelBtnSave}`);
+        $(".labelSm").html(myLang.labelSm);
+        $(".labelMed").html(myLang.labelMed);
+        $(".labelLarge").html(myLang.labelLarge);
+        $(".labelXLarge").html(myLang.labelXLarge);
+        $("#inputColors").attr("placeholder", myLang.inputColors);
+
+        mesages.ctrImage1 = myLang.ctrImage1;
+        mesages.ctrImage2 = myLang.ctrImage2;
+        mesages.ctrtoRemove = myLang.ctrtoRemove;
     }
 </script>
 

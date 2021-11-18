@@ -43,10 +43,20 @@
             <input type="password" class="form-control" placeholder="New Password" aria-label="New Password" id="inputPass">
         </div>
     </div>
+
+    <hr>
+
+    <div class="row g-3">
+        <div class="col-6">
+            <label for="inputpaypalid" class="form-label lblApiKey">Paypal cliente ID</label>
+            <input type="text" class="form-control" placeholder="Client ID" id="inputpaypalid" value="" required>
+        </div>
+    </div>
 </form>
 
 <script type="text/javascript">
-    var confButonText = "";
+    var confButonText = "",
+        strMesage = "";
     $(document).ready(function(){
         currentPage = "Settings";
 
@@ -92,11 +102,12 @@
             "owner": $("#inputUname").val(),
             "email": $("#inputMail").val(),
             "password": $("#inputPass").val(),
-            "tax": $("#inputtax").val()
+            "tax": $("#inputtax").val(),
+            "paypalid": $("#inputpaypalid").val()
         };
 
         $.post("../core/controllers/setting.php", objData, function(result) {
-            alert(result.message);
+            alert(strMesage);
             isNew = <?php echo $_SESSION['authData']->isDefault; ?>;
 
             $("#btnUpdateData").removeAttr("disabled");
@@ -114,12 +125,16 @@
         $(".lblUname").html(myLang.labelUname);
         $(".lblEmail").html(myLang.labelEmail);
         $(".lblPassword").html(myLang.labelPassword);
+        $(".lblApiKey").html(myLang.lblApiKey);
+        $("#inputpaypalid").attr("placeholder", myLang.inputApiKey);
 
         $("#inputshipingCost").attr("placeholder", myLang.labelShipCost);
         $("#inputshipingFree").attr("placeholder", myLang.labelShipFree);
         $("#inputtax").attr("placeholder", myLang.labelTax);
         $("#inputMail").attr("placeholder", myLang.labelEmail);
         $("#inputPass").attr("placeholder", myLang.labelPassword);
+
+        strMesage = myLang.ctrMessage;
     }
 </script>
 

@@ -1,3 +1,28 @@
+<?php
+    // Se requiere el modelo de setting para recuperar el id de paypal    
+    require_once '../core/models/setting.php';
+
+    // Se instancia la clase
+    $settingsModel  = new Settingsmodel();
+
+    // Se recuperan los parametros de configuracion
+    $configs = $settingsModel->get();
+    $data['existeId'] = FALSE;
+
+    // Estructura de control para validar que exista el id de paypal
+    foreach ($configs as $key => $value) {
+        if($value['parameter'] == 'paypalid'){
+            $data['existeId'] = TRUE;
+            $data['paypalId'] = $value['value'];
+            break;
+        }
+    }
+
+    // Si no existe el id de paypal, se redirige al index de la tienda
+    if(!$data['existeId']){
+        header('Location: ../index.php');
+    }
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,18 +38,18 @@
 </head>
 <body> 
     <!-- Include the PayPal JavaScript SDK; replace "test" with your own sandbox Business account app client ID -->
-    <script src="https://www.paypal.com/sdk/js?client-id=ATTvB3Pjt7K6c0Pm7km72twwH3GI-3FnaqZvgwWbqfRU-RmndDwSuRXN21dFmc0-hpDxQC4P3MP_wC2H&currency=USD&disable-funding=credit"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=<?php echo $data['paypalId']; ?>&currency=USD&disable-funding=credit"></script>
     <div class="container">
         <main>
             <div class="py-5 text-center">
                 <a href="javascript:void(0);"><img class="d-block mx-auto mb-4" src="../assets/img/logo.png" alt="logo" height="100"></a>
-                <h2>Checkout</h2>
-                <p class="lead">You have 14 days to return your product if not satisfied.</p>
+                <h2 class="labelSeccion">Checkout</h2>
+                <p class="lead lblLetrero">You have 14 days to return your product if not satisfied.</p>
             </div>
             <div class="row g-5">
                 <div class="col-md-7 col-lg-8">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-primary">Your cart</span>
+                        <span class="text-primary labelCart">Your cart</span>
                         <span class="badge bg-primary rounded-pill qtyCart">2</span>
                     </h4>
                     <ul class="list-group mb-3" id="cartListItem"></ul>
@@ -46,13 +71,13 @@
 
                     <div class="input-group mb-2 w-50 float-end">
                         <input type="text" class="form-control" placeholder="Coupon Code" id="inputCode" autocomplete="off">
-                        <button class="btn btn-outline-secondary" type="button" id="applyCoupon"><i class="bi bi-check2"></i> Apply coupon</button>
+                        <button class="btn btn-outline-secondary" type="button" id="applyCoupon"><i class="bi bi-check2"></i> <texto class="tdLabelCoupon">Apply coupon</texto></button>
                     </div><br><br>
                     
                     <table class="table w-50 float-end">
                         <tbody>
                             <tr>
-                                <td class="text-end">Shipping Cost</td>
+                                <td class="text-end lalelShip">Shipping Cost</td>
                                 <td class="lblShipCost text-end"></td>
                             </tr>
                             <tr class="rowCoupon d-none">
@@ -101,10 +126,12 @@
         grantotal = 0,
         ship_price = 0,
         orderDetails = [],
-        descuento = 0;
+        descuento = 0,
+        lang = "en",
+        strCupon = "",
+        strTax = "";
 
     $(document).ready(function(){
-        printList();
         countCartItem();
 
         $("#applyCoupon").click( function(){
@@ -118,12 +145,12 @@
                     let codigo = result.data;
                     if(codigo.tipo == 1){
                         descuento = (subTotal * parseFloat( codigo.valor / 100)).toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
-                        $(".labelCoupon").html(`Discount ${codigo.valor}%`);
+                        $(".labelCoupon").html(`${strCupon} ${codigo.valor}%`);
                         $(".lblCoupon").html(`$${descuento}`);
                         $(".lblCoupon").parent().removeClass("d-none");
                     }else{
                         descuento = parseFloat( codigo.valor );
-                        $(".labelCoupon").html(`Discount`);
+                        $(".labelCoupon").html(strCupon);
                         $(".lblCoupon").html(`${formatter.format(descuento)}`);
                         $(".lblCoupon").parent().removeClass("d-none");
                     }                    
@@ -135,6 +162,15 @@
                 resumen();
             });
         });
+
+        if( localStorage.getItem("currentLag") ){
+            lang = localStorage.getItem("currentLag");
+        }else{
+            localStorage.setItem("currentLag", lang);
+        }
+
+        switchLanguage(lang);
+        printList();
     });
 
     function printList() {
@@ -163,10 +199,16 @@
             if(item.color)
                 color = `${item.color}`;
 
-            let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `../${item.thumbnail}` : "https://www.newneuromarketing.com/media/zoo/images/NNM-2015-019-Cost-consciousness-increase-product-sales-with-Price-Primacy_6a73d15598e2d828b0e141642ebb5de3.png";
+            let img = (item.thumbnail != "" &&  item.thumbnail != "0") ? `../${item.thumbnail}` : "../assets/img/default.jpg";
 
             listItem.find(".prdImg").attr("src", img);
-            listItem.find(".prodName").html(`${item.name} ${color} ${size}`);
+
+            if(lang == "en"){
+                listItem.find(".prodName").html(`${item.name} ${color} ${size}`);
+            }else{
+                listItem.find(".prodName").html(`${item.optional_name} ${color} ${size}`);
+            }
+
             listItem.find(".prodPrice").html(formatter.format(item.price));
             listItem.find(".intQty").val(item.qty);
 
@@ -307,7 +349,7 @@
                 let impuesto = grantotal * (parseFloat(tax) / 100);
                 grantotal = grantotal + impuesto;
 
-                $(".labelTax").html(`Tax ${tax}%`);
+                $(".labelTax").html(`${strTax} ${tax}%`);
                 $(".lblTax").html(`${formatter.format(impuesto)}`);
                 $(".lblTax").parent().removeClass("d-none");
             }else{
@@ -315,6 +357,22 @@
             }
 
             $(".lblTotal").html(`<strong class="text-danger">${formatter.format(grantotal)}</strong>`);
+        });
+    }
+
+    function switchLanguage(lang){
+        $.post(`../assets/lang.json`, {}, function(data) {
+            let myLang = data[lang]["checkout"];
+
+            $(".labelSeccion").html(myLang.labelSeccion);
+            $(".lblLetrero").html(myLang.lblLetrero);
+            $(".labelCart").html(myLang.labelCart);
+            $(".tdLabelCoupon").html(myLang.labelCoupon);
+            strCupon = myLang.strCupon;
+
+            $("#inputCode").attr("placeholder", myLang.inputCode);
+            $(".lalelShip").html(myLang.lalelShip);
+            strTax = myLang.strTax;
         });
     }
 </script>
@@ -347,7 +405,7 @@
 
                     $.post("../core/controllers/checkout.php", objData, function(result) {
                         localStorage.removeItem("currentCart");
-                        window.location.replace(`../order/index.html?orderId=${result.id}`);
+                        window.location.replace(`../order/index.php?orderId=${result.id}`);
                     });
                 }else{
                     alert("Payment was not processed correctly, please try again.");
