@@ -60,7 +60,7 @@
                         <li><a type="button" data-bs-toggle="modal" data-bs-target="#mdlCheckCart" class="nav-link px-2 text-secondary" id="checkCart"><i class="bi bi-cart3"></i> Cart</a></li>
                         <li><a href="javascript:void(2);" class="nav-link px-2 text-secondary d-block d-sm-none"><i class="bi bi-search text-info"></i></a></li>
                         <li><a href="javascript:void(2);" class="nav-link px-2 text-secondary btnCheckout">Checkout</a></li>
-                        <li><a href="javascript:void(2);" class="nav-link px-2 text-secondary"><i class="bi bi-person-circle"></i> My Account</a></li>
+                        <!-- <li><a href="javascript:void(2);" class="nav-link px-2 text-secondary"><i class="bi bi-person-circle"></i> My Account</a></li> -->
                     </ul>
                 </div>
             </div>
@@ -83,6 +83,19 @@
         </div>
     </div>
 
+    <!-- CATEGORIES -->
+    <div class="nav-scroller py-1 mb-2 bg-info">
+        <nav class="nav d-flex justify-content-between">
+            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Clothes</a>
+            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Toys</a>
+            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Handcraft</a>
+            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Textiles</a>
+            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Ornaments</a>
+            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Jewelry</a>
+            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Guatemalan Atire</a>
+        </nav>
+    </div>
+
     <div class="container">
         <!-- CATEGORIES -->
         <div class="container px-4 py-5 text-secondary">
@@ -98,11 +111,44 @@
 
         <!-- Aqui se imprime todo el contedido de las paginas secundarias capturados del buffer -->
         <?php echo $content; ?>
+    </div>
 
-        <!-- Footer -->
-        <div>
-            <hr>
-        </div>
+    <!-- Footer-->
+    <div class="container">
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <img class="mb-2" src="<?php echo $base_url; ?>/assets/img/logoChapi.png" alt="" width="50">
+                    <small class="d-block mb-3 text-muted">&copy; 2017–2021</small>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Categorias</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Clothes</a></li>
+                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Toys</a></li>
+                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Handcraft</a></li>
+                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Textiles</a></li>
+                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Ornaments</a></li>
+                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Jewelry</a></li>
+                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Guatemalan Atire</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Contact</h5>
+                    <ul class="list-unstyled text-small">
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="tel:18324390684">+18324390684</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Houston, TX.</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Company Info</h5>
+                    <ul class="list-unstyled text-small">
+                        <li class="mb-1">Contact us for cash payments!</li>
+                        <li class="mb-1"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" class="img-fluid" alt="PayPal Logo"></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- Modal para ver items agregados al carrito -->
