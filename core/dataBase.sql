@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 27-10-2021 a las 00:04:57
+-- Tiempo de generación: 18-11-2021 a las 20:11:58
 -- Versión del servidor: 8.0.17
 -- Versión de PHP: 7.3.10
 
@@ -40,6 +40,77 @@ CREATE TABLE `category` (
   `parent` int(11) DEFAULT NULL,
   `active` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Administracion de categorias';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `coupon`
+--
+
+DROP TABLE IF EXISTS `coupon`;
+CREATE TABLE `coupon` (
+  `id` int(11) NOT NULL,
+  `codigo` varchar(50) DEFAULT NULL,
+  `valor` float DEFAULT NULL,
+  `tipo` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `order`
+--
+
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `amount` float DEFAULT NULL,
+  `ship_price` float DEFAULT NULL,
+  `shipping_address` varchar(500) DEFAULT NULL,
+  `order_date` datetime DEFAULT NULL,
+  `ship_date` datetime DEFAULT NULL,
+  `shipper_id` int(11) DEFAULT NULL,
+  `shipper_tracking` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `payment_data` varchar(10000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `coupon` varchar(50) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='lista de pedidos';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `order_detail`
+--
+
+DROP TABLE IF EXISTS `order_detail`;
+CREATE TABLE `order_detail` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL DEFAULT '0',
+  `product_id` int(11) NOT NULL DEFAULT '0',
+  `price` float NOT NULL DEFAULT '0',
+  `discount` int(11) NOT NULL DEFAULT '0',
+  `discount_available` float NOT NULL DEFAULT '0',
+  `quantity` int(11) NOT NULL DEFAULT '0',
+  `amount` float NOT NULL DEFAULT '0',
+  `selected_options` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='detalles de la orden generada';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `order_log`
+--
+
+DROP TABLE IF EXISTS `order_log`;
+CREATE TABLE `order_log` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '0',
+  `update_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `comments` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Herramienta para seguimiento de cambio de estado';
 
 -- --------------------------------------------------------
 
@@ -91,17 +162,10 @@ CREATE TABLE `product_category` (
 
 DROP TABLE IF EXISTS `setting`;
 CREATE TABLE `setting` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `parameter` VARCHAR(50) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
-  `value` VARCHAR(250) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
-  PRIMARY KEY (`id`) USING BTREE
-)
-COMMENT='Auxiliar para sistema'
-COLLATE='utf8mb4_general_ci'
-ENGINE=InnoDB
-AUTO_INCREMENT=101
-;
-
+  `id` int(11) NOT NULL,
+  `parameter` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `value` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Auxiliar para sistema';
 
 -- --------------------------------------------------------
 
@@ -125,87 +189,6 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Catalogo de usuarios de sistema' ROW_FORMAT=DYNAMIC;
 
 --
--- Estructura de tabla para la tabla `order`
---
-
-CREATE TABLE `order` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `customer_id` INT(11) NULL DEFAULT NULL,
-  `amount` FLOAT NULL DEFAULT NULL,
-  `ship_price` FLOAT NULL DEFAULT NULL,
-  `shipping_address` VARCHAR(500) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
-  `order_date` DATETIME NULL DEFAULT NULL,
-  `ship_date` DATETIME NULL DEFAULT NULL,
-  `shipper_id` INT(11) NULL DEFAULT NULL,
-  `shipper_tracking` VARCHAR(250) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
-  `payment_data` VARCHAR(10000) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
-  `coupon` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
-  `status` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-)
-COMMENT='lista de pedidos'
-COLLATE='utf8mb4_general_ci'
-ENGINE=InnoDB
-AUTO_INCREMENT=8
-;
-
-
---
--- Estructura de tabla para la tabla `order_detail`
---
-CREATE TABLE `order_detail` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `order_id` INT(11) NOT NULL DEFAULT '0',
-  `product_id` INT(11) NOT NULL DEFAULT '0',
-  `price` FLOAT NOT NULL DEFAULT '0',
-  `discount` INT(11) NOT NULL DEFAULT '0',
-  `discount_available` FLOAT NOT NULL DEFAULT '0',
-  `quantity` INT(11) NOT NULL DEFAULT '0',
-  `amount` FLOAT NOT NULL DEFAULT '0',
-  `selected_options` VARCHAR(1000) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
-  PRIMARY KEY (`id`) USING BTREE
-)
-COMMENT='detalles de la orden generada'
-COLLATE='utf8mb4_general_ci'
-ENGINE=InnoDB
-;
-
---
--- Estructura de tabla para la tabla `order_log`
---
-CREATE TABLE `order_log` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `order_id` INT(11) NOT NULL DEFAULT '0',
-  `status` INT(11) NOT NULL DEFAULT '0',
-  `update_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `comments` VARCHAR(250) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
-  PRIMARY KEY (`id`) USING BTREE
-)
-COMMENT='Herramienta para seguimiento de cambio de estado'
-COLLATE='utf8mb4_general_ci'
-ENGINE=InnoDB
-;
-
---
--- Estructura de tabla para la tabla `coupon`
---
-CREATE TABLE `coupon` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `codigo` VARCHAR(50) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci',
-  `valor` FLOAT NULL DEFAULT NULL,
-  `tipo` INT(11) NULL DEFAULT NULL,
-  `status` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-)
-COLLATE='latin1_swedish_ci'
-ENGINE=InnoDB
-AUTO_INCREMENT=2
-;
-
-
-
-
---
 -- Índices para tablas volcadas
 --
 
@@ -213,6 +196,30 @@ AUTO_INCREMENT=2
 -- Indices de la tabla `category`
 --
 ALTER TABLE `category`
+  ADD PRIMARY KEY (`id`) USING BTREE;
+
+--
+-- Indices de la tabla `coupon`
+--
+ALTER TABLE `coupon`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `order`
+--
+ALTER TABLE `order`
+  ADD PRIMARY KEY (`id`) USING BTREE;
+
+--
+-- Indices de la tabla `order_detail`
+--
+ALTER TABLE `order_detail`
+  ADD PRIMARY KEY (`id`) USING BTREE;
+
+--
+-- Indices de la tabla `order_log`
+--
+ALTER TABLE `order_log`
   ADD PRIMARY KEY (`id`) USING BTREE;
 
 --
@@ -247,6 +254,30 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `category`
 --
 ALTER TABLE `category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `coupon`
+--
+ALTER TABLE `coupon`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `order`
+--
+ALTER TABLE `order`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `order_detail`
+--
+ALTER TABLE `order_detail`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `order_log`
+--
+ALTER TABLE `order_log`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
