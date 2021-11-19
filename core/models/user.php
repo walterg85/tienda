@@ -22,7 +22,7 @@
 				INSERT INTO setting (parameter, value) 
 				VALUES ("shipingCost", :shipingCost), ("shipingFree", :shipingFree), ("tax", :tax), ("paypalid", :paypalid);
 
-				INSERT INTO category (name, active) VALUES ("Uncategorized", 1);
+				INSERT INTO category (name, description, active) VALUES ("Uncategorized", "Sin categoria", 1);
 	    	';
 
 			$parametros = array(
