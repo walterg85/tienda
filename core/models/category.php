@@ -6,7 +6,7 @@
 
 		public function get() {
 			$pdo = new Conexion();
-			$cmd = 'SELECT id, name, thumbnail, parent, description AS nameSp FROM category WHERE active = 1;';
+			$cmd = 'SELECT id, name, thumbnail, parent, description AS nameSp FROM category WHERE active = 1 order by name ASC, description ASC;';
 
 			$sql = $pdo->prepare($cmd);
 			$sql->execute();

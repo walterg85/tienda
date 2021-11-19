@@ -38,7 +38,7 @@
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <a class="navbar-brand text-warning" href="#">OFFERS</a>
-                <a href="javascript:void(0);"><img class="img-fluid logo-sm d-block d-sm-none" src="/assets/img/logo.png"></a>
+                <a href="javascript:void(0);"><img class="img-fluid logo-sm d-block d-sm-none" src="<?php echo $base_url; ?>/assets/img/logo.png"></a>
                 <ul class="nav col-sm-auto me-lg-auto justify-content-center mb-md-0">
                     <li><a href="tel:18324390684" class="nav-link px-2 text-secondary"><i class="bi bi-telephone-fill"></i></a></li>
                     <li><a href="javascript:void(0);" class="nav-link px-2 text-secondary"><i class="bi bi-facebook"></i></a></li>
@@ -85,15 +85,7 @@
 
     <!-- CATEGORIES -->
     <div class="nav-scroller py-1 mb-2 bg-info">
-        <nav class="nav d-flex justify-content-between">
-            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Clothes</a>
-            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Toys</a>
-            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Handcraft</a>
-            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Textiles</a>
-            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Ornaments</a>
-            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Jewelry</a>
-            <a class="p-2 link-secondary text-decoration-none" href="javascript:void(0);">Guatemalan Atire</a>
-        </nav>
+        <nav class="nav d-flex justify-content-between listCategories"></nav>
     </div>
 
     <div class="container">
@@ -123,15 +115,7 @@
                 </div>
                 <div class="col-6 col-md">
                     <h5>Categorias</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Clothes</a></li>
-                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Toys</a></li>
-                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Handcraft</a></li>
-                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Textiles</a></li>
-                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Ornaments</a></li>
-                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Jewelry</a></li>
-                        <li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);">Guatemalan Atire</a></li>
-                    </ul>
+                    <ul class="list-unstyled text-small footCategorie"></ul>
                 </div>
                 <div class="col-6 col-md">
                     <h5>Contact</h5>
@@ -568,6 +552,8 @@
 
         $.post(`${base_url}/core/controllers/category.php`, objData, function(result) {
             $("#categoriesList").html("");
+            $(".listCategories, .footCategorie").html("");
+            
             $.each( result.data, function( index, item){
                 if(item.parent == 1){
                     let cat = $(".catClone").clone();
@@ -581,15 +567,19 @@
                     let img = (item.thumbnail) ? `${base_url}/${item.thumbnail}` : `${base_url}/assets/img/defaultCat.jpg`;
 
                     cat.find(".catImage").attr("src", `${img}`);
-                    cat.data("catId", item.id);
+                    cat.data("catid", item.id);
 
                     cat.removeClass("d-none catClone");
                     $(cat).appendTo("#categoriesList");
-                }                    
+                }
+
+                let curName = (lang == "en") ? item.name.toUpperCase() : item.nameSp.toUpperCase();
+                $(`<a class="p-2 link-secondary text-decoration-none feature" href="javascript:void(0);" data-catid="${item.id}">${curName}</a>`).appendTo(".listCategories");
+                $(`<li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);" data-catid="${item.id}">${curName}</a></li>`).appendTo(".footCategorie");
             });
 
             $(".feature").click( function () {
-                let catId = $(this).data("catId");
+                let catId = $(this).data("catid");
                 window.location.href = `${base_url}/category/index.php?cid=${catId}`;
             });
         });
