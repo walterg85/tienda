@@ -553,8 +553,24 @@
         $.post(`${base_url}/core/controllers/category.php`, objData, function(result) {
             $("#categoriesList").html("");
             $(".listCategories, .footCategorie").html("");
-            
-            $.each( result.data, function( index, item){
+
+            let jsonData        = result.data;
+
+            if(lang == "es"){
+                jsonData.sort(function (a, b) {
+                    if (a.nameSp > b.nameSp) {
+                        return 1;
+                    }
+
+                    if (a.nameSp < b.nameSp) {
+                        return -1;
+                    }
+
+                    return 0;
+                });
+            }
+
+            $.each( jsonData, function( index, item){
                 if(item.parent == 1){
                     let cat = $(".catClone").clone();
 
