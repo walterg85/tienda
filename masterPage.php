@@ -494,7 +494,7 @@
                     let images = JSON.parse(currentItem.images);
                     $.each( images, function( index, item){
                         $(`.img${index}`)
-                            .attr("src", `${item}`)
+                            .attr("src", `${base_url}/${item}`)
                             .parent().removeClass("d-none");
                     });
 
