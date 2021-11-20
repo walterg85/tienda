@@ -734,7 +734,7 @@
             let myLang = data[lang]["home"];
 
             // Formulario principal
-            $(".freeShipping").html(myLang["freeShipping"]);
+            $(".freeShipping").html(myLang.freeShipping);
             $("#checkCart").html('<i class="bi bi-cart3"></i> ' + myLang.checkCart + ' <span class="badge bg-warning rounded-pill qtyCart">0</span>'); 
 
             $(".btnCheckout").html(myLang.btnCheckout);

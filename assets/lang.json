@@ -14,7 +14,7 @@
 			"myCart": "My Cart",
 			"btnKeepShopping": "Keep Shopping",
 			"categories": "Top Categories",
-			"products": "Top Producst"
+			"products": "Top Products"
 		},
 		"checkout":{
 			"labelSeccion": "Checkout",
@@ -48,7 +48,7 @@
 			"labelSeccion": "Verificar y pagar",
 			"lblLetrero": "Tiene 14 días para devolver su producto si no está satisfecho.",
 			"labelCart": "Tu pedido",
-			"labelCoupon": "Apicar cupon",
+			"labelCoupon": "Aplicar cupon",
 			"inputCode": "Codigo de cupon",
 			"lalelShip": "Costo de envio",
 			"strCupon": "Descuento",
