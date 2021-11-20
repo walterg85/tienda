@@ -30,7 +30,7 @@
 <body>
     <!-- TOP BAR -->
     <div class="first-bar text-center bg-secondary text-light">
-        <p><i class="bi bi-truck"></i> Free shipping on all orders over $150!</p>
+        <p><i class="bi bi-truck"></i> <text class="freeShipping">Free shipping on all orders over $150!</text></p>
     </div>
 
     <!-- NAV BAR -->
@@ -75,9 +75,9 @@
                     <a href="javascript:void(0);"><img class="img-fluid logo" src="<?php echo $base_url; ?>/assets/img/logoChapi.png"></a>
                 </div>
                 <div class="col center-column">
-                    <h1 class="display-6 fw-bold">Take 20% OFF on all handcraft!</h1>
-                    <p class="col-md-8 fs-4">Contact us for wholesale prices!</p>
-                    <button class="btn btn-warning text-light" type="button">Call Now!</button>
+                    <h1 class="display-6 fw-bold punchLine">Take 20% OFF on all handcraft!</h1>
+                    <p class="col-md-8 fs-4 contactLine">Contact us for wholesale prices!</p>
+                    <a class="btn btn-warning text-light btnContact" href="tel:8324390684">Call Now!</a>
                 </div>
             </div>
         </div>
@@ -734,9 +734,13 @@
             let myLang = data[lang]["home"];
 
             // Formulario principal
+            $(".freeShipping").html(myLang["freeShipping"]);
             $("#checkCart").html('<i class="bi bi-cart3"></i> ' + myLang.checkCart + ' <span class="badge bg-warning rounded-pill qtyCart">0</span>'); 
 
             $(".btnCheckout").html(myLang.btnCheckout);
+            $(".punchLine").html(myLang.punchLine);
+            $(".contactLine").html(myLang.contactLine);
+            $(".btnContact").html(myLang.btnContact);
             $("#inputSearch").attr("placeholder", myLang.search);
             $(".btnAddtocart").html(data[lang]["addToCart"]);
             $("#myCart").html(myLang.myCart);
