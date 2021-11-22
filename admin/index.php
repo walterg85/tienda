@@ -105,6 +105,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link linkChat" href="chat.php">
+                                <i class="bi bi-at"></i> Chat
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" id="linkSetting" href="settings.php">
                                 <i class="bi bi-sliders"></i> Settings
                             </a>

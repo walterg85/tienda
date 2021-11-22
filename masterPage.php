@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-    
+
         <!-- Header -->
         <div class="row g-3">
             <div class="col-auto">
@@ -204,13 +204,88 @@
             currency: 'USD',
             minimumFractionDigits: 2
         }),
-        lang = "en",
         searchRequest = null,
         productLimite = 0,
-        base_url = "<?php echo $base_url; ?>";
+        base_url = "<?php echo $base_url; ?>",
+        refreshLog          = null,
+        lang                = (window.navigator.language).substring(0,2),
+        intervalContador    = null, // Contador para establecer los 20 segundos para lanzar el chat
+        contador            = 0;
 
     $(document).ready(function(){
         loadCategories();
+
+        $("#btnStart").on("click", function(){
+            // Validar que se hayan ingresado todos los datos adecuadamente
+            if(($("#inputMail").val()).length == 0 || ($("#inputName").val()).length == 0 || ($("#inputInitialMessage").val()).length == 0)
+                return false;
+
+            $(".lblWelcome").addClass("d-none");
+            $("#divRegistro").addClass("d-none");
+            $("#divConversasion").removeClass("d-none");
+            $("#chatLog").removeClass("d-none");
+            $(".lblControl").removeClass("d-none");
+
+            sendMessage($("#inputInitialMessage").val(), 1);
+        });
+
+        $("#btnSendmessage").on("click", function(){
+            sendMessage($("#inputNewMessage").val(), 2);
+        });
+
+        $(".lblControl").on("click", function(){
+            if (confirm('Do you really want to end the chat with tech support?')){
+                $(".lblWelcome").removeClass("d-none");
+                $("#divRegistro").removeClass("d-none");
+                $("#divConversasion").addClass("d-none");
+                $("#chatLog").addClass("d-none");
+                $(".lblControl").addClass("d-none");
+
+                $("#chatLog").html("");
+                clearInterval(refreshLog);
+                localStorage.removeItem("cliData");
+
+                let dt = new Date(),
+                    time = dt.getHours() + ":" + dt.getMinutes();
+
+                let objData = {
+                    email: $("#inputMail").val(),
+                    name: $("#inputName").val(),
+                    _method: "POST",
+                    _action: "closeChat",
+                    _time: time
+                };
+
+                $.post(`${base_url}/core/controllers/chat.php`, objData);
+            }
+        });
+
+        let cliData = JSON.parse( localStorage.getItem("cliData") );
+        if(cliData){
+            $("#inputMail").val(cliData.mail);
+            $("#inputName").val(cliData.name);
+
+            $(".lblWelcome").addClass("d-none");
+            $("#divRegistro").addClass("d-none");
+            $("#divConversasion").removeClass("d-none");
+            $("#chatLog").removeClass("d-none");
+            $(".lblControl").removeClass("d-none");
+
+            loadLog();
+            refreshLog = setInterval(loadLog, 2500);
+        }else{
+            intervalContador = setInterval( function(){
+                // Incrementar el contador en 1
+                contador += 1;
+
+                // Verificar si pasaron los 20 segundos, detener el contador y mostrar el formulario del chat
+                if(contador > 20){
+                    clearInterval(intervalContador);
+                    $(".chat-btn").click();
+                }
+
+            }, 1000);
+        }
 
         $(".btnCheckout").click( function(){
             // A todas las referencias de directorios locales se le concatena la variable base_url, para indicar la ruta absoluta
@@ -698,6 +773,66 @@
     function pad (str, max) {
         str = str.toString();
         return str.length < max ? pad("0" + str, max) : str;
+    }
+
+    function sendMessage(strMessage, round){
+        let dt = new Date(),
+            time = dt.getHours() + ":" + dt.getMinutes();
+
+        let objData = {
+            message: strMessage,
+            email: $("#inputMail").val(),
+            name: $("#inputName").val(),
+            round: round,
+            _method: "POST",
+            _time: time
+        };
+
+        $.post(`${base_url}/core/controllers/chat.php`, objData);
+
+        if(round == 1){
+            localStorage.setItem("cliData", JSON.stringify({name: $("#inputName").val(), mail: $("#inputMail").val()}));
+            $("#inputInitialMessage").val("");
+            refreshLog = setInterval(loadLog, 2500);
+        }else{
+            $("#inputNewMessage").val("");
+        }
+
+        loadLog();
+        return false;
+    }
+
+    function loadLog(){
+        let objData = {
+            email: $("#inputMail").val(),
+            name: $("#inputName").val(),
+            _method: "GET"
+        },
+        oldscrollHeight = $("#chatLog")[0].scrollHeight - 20;
+
+        $.post(`${base_url}/core/controllers/chat.php`, objData, function(result) {
+            $("#chatLog").html(result);
+
+            let newscrollHeight = $("#chatLog")[0].scrollHeight - 20;
+            if(newscrollHeight > oldscrollHeight)
+                $("#chatLog").animate({ scrollTop: newscrollHeight }, 'normal');
+
+            let isClose = $("#inputClose").val();
+            if(isClose){
+                clearInterval(refreshLog);
+                localStorage.removeItem("cliData");
+            }
+        }).fail(function() {
+            $(".lblWelcome").removeClass("d-none");
+            $("#divRegistro").removeClass("d-none");
+            $("#divConversasion").addClass("d-none");
+            $("#chatLog").addClass("d-none");
+            $(".lblControl").addClass("d-none");
+
+            $("#chatLog").html("");
+            clearInterval(refreshLog);
+            localStorage.removeItem("cliData");
+        });
     }
 </script>
 </html>
