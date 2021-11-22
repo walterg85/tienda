@@ -16,6 +16,9 @@
 
     <link href="<?php echo $base_url; ?>/assets/css/product.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/chat.css?v=1.1">
+
     <!-- Jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -28,6 +31,32 @@
 </style>
 <body>
     <div class="container">
+        <input type="checkbox" id="check"><label class="chat-btn" for="check"><i class="fa fa-commenting-o comment"></i><i class="fa fa-close close"></i></label>
+        <div class="wrapper">
+            <div class="header">
+                <h6 class="labelChatTitle">Let's Chat - Online</h6>
+            </div>
+            <a href="javascript:void(0);"class="list-group-item lblControl d-none">
+                <span><i class="fa fa-power-off"></i> <text class="labelFinish">Finish chatting</text></span>
+            </a>
+            <div class="text-center p-2">
+                <span class="lblWelcome">Please fill out the form to start chat!</span>
+                <div id="chatLog" class="d-none"></div>
+            </div>
+            <div class="chat-form">
+                <div id="divRegistro">
+                    <input type="text" class="form-control" placeholder="Name" id="inputName">
+                    <input type="text" class="form-control" placeholder="Email" id="inputMail">
+                    <textarea class="form-control" placeholder="Your Text Message" id="inputInitialMessage"></textarea>
+                    <button class="btn btn-success btn-block pull-right" id="btnStart">Submit</button>
+                </div>
+                <div id="divConversasion" class="d-none">
+                    <textarea class="form-control" placeholder="Your Message" id="inputNewMessage"></textarea>
+                    <button class="btn btn-success btn-block pull-right" id="btnSendmessage">Send</button>
+                </div>
+            </div>
+        </div>
+    
         <!-- Header -->
         <div class="row g-3">
             <div class="col-auto">
