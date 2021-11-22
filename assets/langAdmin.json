@@ -99,6 +99,14 @@
 			"ctrImage1":"Your selected file is larger than 5MB",
 			"ctrImage2": "files not allowed, only images",
 			"ctrtoRemove": "Delete this category?"
+		},
+		"chat":{
+			"pageTitle": "Welcome to chat support!",
+			"btnFinish": "Finish chatting",
+			"btnMovetoFile": "Move to fila",
+			"btnSenToMail": "Finish and send by email",
+			"labelMesage": "New Message",
+			"btnSend": "Send"
 		}
 	},
 	"es":{
@@ -201,6 +209,14 @@
 			"ctrImage1":"Selecciona una imagen menor que 5 MB",
 			"ctrImage2": "archivos no permitidos, solo imágenes",
 			"ctrtoRemove": "quieres eliminar esta categoria"
+		},
+		"chat":{
+			"pageTitle": "¡Bienvenido al soporte por chat!",
+			"btnFinish": "Terminar de charlar",
+			"btnMovetoFile": "Mover a archivo",
+			"btnSenToMail": "Terminar y enviar por correo electronico",
+			"labelMesage": "Nuevo mensaje",
+			"btnSend": "Enviar"
 		}
 	}
 }

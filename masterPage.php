@@ -762,6 +762,18 @@
 
             loadCategories();
             countCartItem();
+
+            myLang = data[lang]["chat"];
+
+            $(".labelChatTitle").html(myLang.chatTitle);
+            $(".lblWelcome").html(myLang.chatSubTitle);
+            $("#inputName").attr("placeholder", myLang.inputName);
+            $("#inputMail").attr("placeholder", myLang.inputMail);
+            $("#inputInitialMessage").attr("placeholder", myLang.inputInitialMessage);
+            $("#btnStart").html(myLang.btnStart);
+            $("#inputNewMessage").attr("placeholder", myLang.inputNewMessage);
+            $("#btnSendmessage").html(myLang.btnSendmessage);
+            $(".labelFinish").html(myLang.labelFinish);
         });
     }
 

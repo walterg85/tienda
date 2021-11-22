@@ -21,6 +21,17 @@
 			"lalelShip": "Shipping Cost",
 			"strCupon": "Discount",
 			"strTax": "Tax"
+		},
+		"chat":{
+			"chatTitle":"Let's Chat - Online",
+			"chatSubTitle": "Please fill out the form to start chat!",
+			"inputName": "Name",
+			"inputMail": "Email",
+			"inputInitialMessage": "Your Text Message",
+			"btnStart": "Submit",
+			"btnSendmessage":"Send",
+			"inputNewMessage": "Your Message",
+			"labelFinish": "Finish chatting"
 		}
 	},
 	"es":{
@@ -45,6 +56,17 @@
 			"lalelShip": "Costo de envio",
 			"strCupon": "Descuento",
 			"strTax": "Impuesto"
+		},
+		"chat":{
+			"chatTitle":"Vamos a charlar - en línea",
+			"chatSubTitle": "¡Complete el formulario para comenzar a chatear!",
+			"inputName": "Nombre",
+			"inputMail": "Correo electronico",
+			"inputInitialMessage": "Tu mensaje de texto",
+			"btnStart": "Enviar",
+			"btnSendmessage":"Enviar mensaje",
+			"inputNewMessage": "Tu mensaje",
+			"labelFinish": "Terminar de charlar"
 		}
 	}
 }
