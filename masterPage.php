@@ -38,7 +38,7 @@
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <a class="navbar-brand text-warning" href="#">OFFERS</a>
-                <a href="javascript:void(0);"><img class="img-fluid logo-sm d-block d-sm-none" src="<?php echo $base_url; ?>/assets/img/logo.png"></a>
+                <a href="<?php echo $base_url; ?>"><img class="img-fluid logo-sm d-block d-sm-none" src="<?php echo $base_url; ?>/assets/img/logo.png"></a>
                 <ul class="nav col-sm-auto me-lg-auto justify-content-center mb-md-0">
                     <li><a href="tel:18324390684" class="nav-link px-2 text-secondary"><i class="bi bi-telephone-fill"></i></a></li>
                     <li><a href="javascript:void(0);" class="nav-link px-2 text-secondary"><i class="bi bi-facebook"></i></a></li>
@@ -72,7 +72,7 @@
         <div class="container-fluid py-4">
             <div class="row">
                 <div class="col-4 center-column d-none d-sm-block">
-                    <a href="javascript:void(0);"><img class="img-fluid logo" src="<?php echo $base_url; ?>/assets/img/logoChapi.png"></a>
+                    <a href="<?php echo $base_url; ?>"><img class="img-fluid logo" src="<?php echo $base_url; ?>/assets/img/logoChapi.png"></a>
                 </div>
                 <div class="col center-column">
                     <h1 class="display-6 fw-bold punchLine">Take 20% OFF on all handcraft!</h1>
@@ -90,7 +90,7 @@
 
     <div class="container">
         <!-- CATEGORIES -->
-        <div class="container px-4 py-5 text-secondary">
+        <div class="container px-4 py-5 text-secondary d-none">
             <h2 class="pb-2 text-center display-6 categories">Top Categories</h2>
             <div class="row g-4 py-5 row-cols-1 row-cols-2 row-cols-sm-5" id="categoriesList"></div>
             <div class="feature col catClone d-none">
@@ -251,8 +251,7 @@
         productLimite = 0,
         base_url = "<?php echo $base_url; ?>";
 
-    $(document).ready(function(){
-        loadCategories();
+    $(document).ready(function(){       
 
         $(".btnCheckout").click( function(){
             // A todas las referencias de directorios locales se le concatena la variable base_url, para indicar la ruta absoluta
@@ -379,6 +378,7 @@
         $("#mdlCheckCart").unbind().on('shown.bs.modal', function(){
             printList();
         });
+        loadCategoriesBar();
     });
 
     function getProducts(limite) {
@@ -546,6 +546,7 @@
     }
 
     function loadCategories(){
+        $('#categoriesList').parent().removeClass('d-none');
         let objData = {
             "_method":"Get"
         };
@@ -588,6 +589,45 @@
                     cat.removeClass("d-none catClone");
                     $(cat).appendTo("#categoriesList");
                 }
+
+                let curName = (lang == "en") ? item.name.toUpperCase() : item.nameSp.toUpperCase();
+                $(`<a class="p-2 link-secondary text-decoration-none feature" href="javascript:void(0);" data-catid="${item.id}">${curName}</a>`).appendTo(".listCategories");
+                $(`<li><a class="mb-1"><a class="link-secondary text-decoration-none" href="javascript:void(0);" data-catid="${item.id}">${curName}</a></li>`).appendTo(".footCategorie");
+            });
+
+            $(".feature").click( function () {
+                let catId = $(this).data("catid");
+                window.location.href = `${base_url}/category/index.php?cid=${catId}`;
+            });
+        });
+    }
+
+    function loadCategoriesBar(){
+        $('#categoriesList').parent().removeClass('d-none');
+        let objData = {
+            "_method":"Get"
+        };
+
+        $.post(`${base_url}/core/controllers/category.php`, objData, function(result) {
+            $(".listCategories, .footCategorie").html("");
+
+            let jsonData        = result.data;
+
+            if(lang == "es"){
+                jsonData.sort(function (a, b) {
+                    if (a.nameSp > b.nameSp) {
+                        return 1;
+                    }
+
+                    if (a.nameSp < b.nameSp) {
+                        return -1;
+                    }
+
+                    return 0;
+                });
+            }
+
+            $.each( jsonData, function( index, item){
 
                 let curName = (lang == "en") ? item.name.toUpperCase() : item.nameSp.toUpperCase();
                 $(`<a class="p-2 link-secondary text-decoration-none feature" href="javascript:void(0);" data-catid="${item.id}">${curName}</a>`).appendTo(".listCategories");
@@ -728,7 +768,7 @@
     }
 
     function switchLanguage(lang){
-        $.post(`${base_url}/assets/lang.json`, {}, function(data) {
+        $.post(`${base_url}/assets/language.php`, {}, function(data) {
             $(".changeLang").html('<i class="bi bi-globe2"></i> ' + data[lang]["buttonText"]);
 
             let myLang = data[lang]["home"];
@@ -753,8 +793,8 @@
             if(productLimite > 0)
                 getProducts(productLimite);
 
-            loadCategories();
             countCartItem();
+            loadCategoriesBar();
         });
     }
 

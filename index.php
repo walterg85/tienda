@@ -33,6 +33,7 @@
     $(document).ready(function(){
         // Invoca al metodo de listar productos declarada en la pagina maestra, se setea un patrametro que indica la cantidad de prodcuto a listar
         getProducts(20);
+        loadCategories();
     });
 </script>
 
