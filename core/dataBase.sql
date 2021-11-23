@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 18-11-2021 a las 20:11:58
+-- Tiempo de generación: 23-11-2021 a las 02:13:38
 -- Versión del servidor: 8.0.17
 -- Versión de PHP: 7.3.10
 
@@ -40,6 +40,28 @@ CREATE TABLE `category` (
   `parent` int(11) DEFAULT NULL,
   `active` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Administracion de categorias';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `client`
+--
+
+DROP TABLE IF EXISTS `client`;
+CREATE TABLE `client` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(250) NOT NULL,
+  `apellido` varchar(250) NOT NULL,
+  `direccion_a` varchar(500) NOT NULL,
+  `direccion_b` varchar(500) NOT NULL,
+  `telefono` varchar(20) NOT NULL,
+  `ciudad` varchar(50) NOT NULL,
+  `estado` varchar(50) NOT NULL,
+  `codigo_postal` varchar(10) NOT NULL,
+  `adicional` varchar(500) NOT NULL,
+  `registro` datetime NOT NULL,
+  `estatus` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -199,6 +221,12 @@ ALTER TABLE `category`
   ADD PRIMARY KEY (`id`) USING BTREE;
 
 --
+-- Indices de la tabla `client`
+--
+ALTER TABLE `client`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `coupon`
 --
 ALTER TABLE `coupon`
@@ -254,6 +282,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `category`
 --
 ALTER TABLE `category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `client`
+--
+ALTER TABLE `client`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

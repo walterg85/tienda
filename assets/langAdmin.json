@@ -107,6 +107,9 @@
 			"btnSenToMail": "Finish and send by email",
 			"labelMesage": "New Message",
 			"btnSend": "Send"
+		},
+		"Clients":{
+			"label": "value"
 		}
 	},
 	"es":{
@@ -217,6 +220,9 @@
 			"btnSenToMail": "Terminar y enviar por correo electronico",
 			"labelMesage": "Nuevo mensaje",
 			"btnSend": "Enviar"
+		},
+		"Clients":{
+			"label": "value"
 		}
 	}
 }

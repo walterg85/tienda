@@ -105,6 +105,16 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link linkClients" href="client.php">
+                                <i class="bi bi-person-fill"></i> Clients
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link linkInvoice" href="invoice.php">
+                                <i class="bi bi-receipt"></i> Invoice
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link linkChat" href="chat.php">
                                 <i class="bi bi-at"></i> Chat
                             </a>
